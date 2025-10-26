@@ -211,8 +211,5 @@
   --spacing-ga-20: 112px;
   --spacing-ga-21: 144px;
   --spacing-ga-22: 200px;
-}
-
-body {
-  font-family: 'Poppins', sans-serif;
+  --type-font-family-body: 'Poppins', sans-serif;
 }
