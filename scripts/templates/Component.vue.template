@@ -1,0 +1,90 @@
+<script setup>
+/**
+ * {{componentName}} Component
+ *
+ * TODO: Add component description
+ */
+
+defineProps({
+  /**
+   * Visual variant of the component
+   */
+  variant: {
+    type: String,
+    default: 'primary',
+    validator: (value) => [{{variants}}].includes(value),
+  },
+  /**
+   * Size of the component
+   */
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => [{{sizes}}].includes(value),
+  },
+  /**
+   * Disabled state
+   */
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
+
+<template>
+  <div
+    :class="[
+      'scuba-{{componentName}}',
+      `scuba-{{componentName}}--${variant}`,
+      `scuba-{{componentName}}--${size}`,
+    ]"
+  >
+    <slot />
+  </div>
+</template>
+
+<style scoped>
+.scuba-{{componentName}} {
+  /* Base styles using design tokens */
+  display: inline-block;
+  font-family: var(--font-family-base);
+  transition: all var(--transition-base);
+}
+
+/* Sizes */
+.scuba-{{componentName}}--sm {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.scuba-{{componentName}}--md {
+  padding: var(--spacing-md);
+  font-size: var(--font-size-base);
+}
+
+.scuba-{{componentName}}--lg {
+  padding: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+}
+
+/* Variants - TODO: Customize these */
+.scuba-{{componentName}}--primary {
+  background: var(--color-primary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-base);
+}
+
+.scuba-{{componentName}}--secondary {
+  background: var(--color-secondary-500);
+  color: var(--color-white);
+  border-radius: var(--radius-base);
+}
+
+.scuba-{{componentName}}--ghost {
+  background: transparent;
+  color: var(--color-primary-500);
+  border: 2px solid var(--color-primary-500);
+  border-radius: var(--radius-base);
+}
+</style>

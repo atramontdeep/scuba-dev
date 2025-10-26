@@ -1,0 +1,261 @@
+{
+  "primitives": {
+    "color": {
+      "blue": {
+        "100": "#eaf8ff",
+        "200": "#c2eaff",
+        "300": "#99dbff",
+        "400": "#70cdff",
+        "500": "#0086cd",
+        "600": "#0942a1",
+        "700": "#06327a",
+        "800": "#111660",
+        "900": "#060a2d"
+      },
+      "gray": {
+        "0": "#fafafa",
+        "100": "#f6f6f6",
+        "200": "#eeeeee",
+        "300": "#e5e5e5",
+        "400": "#d4d4d4",
+        "500": "#aaaaaa",
+        "600": "#7f7f7f",
+        "700": "#555555",
+        "800": "#2a2a2a",
+        "900": "#191919"
+      },
+      "orange": {
+        "200": "#ffe5b4",
+        "500": "#ffa145",
+        "900": "#792d0d"
+      },
+      "red": {
+        "200": "#ffc7b4",
+        "400": "#fe7e71",
+        "600": "#ea2255",
+        "800": "#921535"
+      },
+      "white": "#ffffff",
+      "green": {
+        "200": "#deffc8",
+        "500": "#7fe13d",
+        "900": "#245900"
+      },
+      "purple-blue": {
+        "100": "#d7ddff",
+        "200": "#adbafe",
+        "700": "#1b28b5"
+      }
+    }
+  },
+  "scale": {
+    "0": 0,
+    "25": 1,
+    "50": 2,
+    "100": 4,
+    "200": 8,
+    "250": 12,
+    "300": 16,
+    "400": 20,
+    "500": 24,
+    "550": 28,
+    "600": 32,
+    "700": 40,
+    "800": 48,
+    "900": 56,
+    "1000": 64,
+    "1100": 72,
+    "1200": 80,
+    "1400": 96,
+    "1600": 112,
+    "2000": 144,
+    "3000": 200
+  },
+  "semantic": {
+    "color": {
+      "primary": {
+        "100": "#eaf8ff",
+        "200": "#c2eaff",
+        "300": "#99dbff",
+        "500": "#0086cd",
+        "600": "#0942a1",
+        "700": "#06327a",
+        "800": "#111660",
+        "900": "#060a2d",
+        "default": "#70cdff"
+      },
+      "neutral": {
+        "0": "#fafafa",
+        "100": "#f6f6f6",
+        "200": "#eeeeee",
+        "300": "#e5e5e5",
+        "400": "#d4d4d4",
+        "500": "#aaaaaa",
+        "600": "#7f7f7f",
+        "700": "#555555",
+        "800": "#2a2a2a",
+        "900": "#191919",
+        "white": "#ffffff"
+      },
+      "warning": {
+        "light": "#ffe5b4",
+        "dark": "#792d0d",
+        "normal": "#ffa145"
+      },
+      "error": {
+        "light": "#ffc7b4",
+        "dark": "#921535",
+        "normal": "#fe7e71"
+      },
+      "success": {
+        "light": "#deffc8",
+        "dark": "#245900",
+        "normal": "#7fe13d"
+      },
+      "info": {
+        "light": "#d7ddff",
+        "dark": "#1b28b5",
+        "normal": "#adbafe"
+      }
+    }
+  },
+  "border": {
+    "width": {
+      "border-0": "{scale.0}",
+      "border-sm": 1,
+      "border-md": 2,
+      "border-lg": 4
+    },
+    "radius": {
+      "rounded-0": "{scale.0}",
+      "rounded": 8,
+      "rounded-md": 16,
+      "rounded-lg": 20,
+      "rounded-pill": 64,
+      "rounded-sm": 12
+    }
+  },
+  "context": {
+    "color": {
+      "text": {
+        "primary": "#2a2a2a",
+        "action": "#0086cd",
+        "action-hover": "#0942a1",
+        "disabled": "#aaaaaa",
+        "information": "#1b28b5",
+        "success": "#245900",
+        "warning": "#792d0d",
+        "error": "#921535",
+        "inverted": "#fafafa",
+        "secondary": "#555555",
+        "focus": "#0942a1",
+        "button-color": "#111660"
+      },
+      "surface": {
+        "page": "#fafafa",
+        "primary": "#ffffff",
+        "success": "#deffc8",
+        "disabled": "#e5e5e5",
+        "error": "#ffc7b4",
+        "info": "#d7ddff",
+        "warning": "#ffe5b4",
+        "action": "#eeeeee",
+        "action-hover": "#c2eaff",
+        "inverted": "#191919",
+        "secondary": "#f6f6f6",
+        "focus": "#99dbff",
+        "focus-light": "#eaf8ff"
+      },
+      "icon": {
+        "primary": "#2a2a2a",
+        "warning": "#792d0d",
+        "success": "#245900",
+        "error": "#921535",
+        "info": "#1b28b5",
+        "disabled": "#aaaaaa",
+        "action": "#0086cd",
+        "action-hover": "#0942a1",
+        "inverted": "#fafafa",
+        "secondary": "#555555",
+        "focus": "#0942a1"
+      },
+      "border": {
+        "primary": "#2a2a2a",
+        "action": "#555555",
+        "action-hover": "#0086cd",
+        "disabled": "#e5e5e5",
+        "focus": "#70cdff",
+        "error": "#921535",
+        "secondary": "#e5e5e5"
+      }
+    }
+  },
+  "String": "String value",
+  "spacing": {
+    "4xs": 4,
+    "2xs": 12,
+    "xs": 16,
+    "sm": 20,
+    "md": 24,
+    "lg": 40,
+    "xl": 56,
+    "2xl": 64,
+    "3xl": 80,
+    "3xs": 8,
+    "huge": 144,
+    "pa-1": 4,
+    "pa-2": 8,
+    "pa-3": 12,
+    "pa-4": 16,
+    "pa-5": 20,
+    "pa-6": 24,
+    "pa-7": 28,
+    "pa-8": 32,
+    "pa-10": 40,
+    "pa-12": 48,
+    "pa-14": 56,
+    "pa-16": 64,
+    "px-1": 4,
+    "px-2": 8,
+    "px-3": 12,
+    "px-4": 16,
+    "px-5": 20,
+    "px-6": 24,
+    "px-7": 28,
+    "px-8": 32,
+    "px-10": 40,
+    "px-12": 48,
+    "px-14": 56,
+    "px-16": 64,
+    "py-1": 4,
+    "py-2": 8,
+    "py-3": 12,
+    "py-4": 16,
+    "py-5": 20,
+    "py-6": 24,
+    "py-7": 28,
+    "py-8": 32,
+    "py-10": 40,
+    "py-12": 48,
+    "py-14": 56,
+    "py-16": 64,
+    "ga-1": 4,
+    "ga-2": 8,
+    "ga-3": 12,
+    "ga-4": 16,
+    "ga-5": 20,
+    "ga-6": 24,
+    "ga-7": 28,
+    "ga-8": 32,
+    "ga-10": 40,
+    "ga-12": 48,
+    "ga-14": 56,
+    "ga-16": 64,
+    "ga-17": 72,
+    "ga-18": 80,
+    "ga-19": 96,
+    "ga-20": 112,
+    "ga-21": 144,
+    "ga-22": 200
+  }
+}

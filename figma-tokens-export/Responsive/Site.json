@@ -1,0 +1,416 @@
+{
+  "type": {
+    "font-size": {
+      "body": {
+        "sm": {
+          "value": 14,
+          "type": "number"
+        },
+        "md": {
+          "value": 16,
+          "type": "number"
+        },
+        "lg": {
+          "value": 18,
+          "type": "number"
+        },
+        "xs": {
+          "value": 12,
+          "type": "number"
+        },
+        "2xs": {
+          "value": 10,
+          "type": "number"
+        }
+      },
+      "heading": {
+        "h6": {
+          "value": 20,
+          "type": "number"
+        },
+        "h5": {
+          "value": 24,
+          "type": "number"
+        },
+        "h4": {
+          "value": 32,
+          "type": "number"
+        },
+        "h3": {
+          "value": 40,
+          "type": "number"
+        },
+        "h2": {
+          "value": 48,
+          "type": "number"
+        },
+        "h1": {
+          "value": 64,
+          "type": "number"
+        },
+        "h6 2": {
+          "value": 20,
+          "type": "number"
+        },
+        "h6 3": {
+          "value": 20,
+          "type": "number"
+        }
+      }
+    },
+    "line-height": {
+      "body": {
+        "sm": {
+          "value": 20,
+          "type": "number"
+        },
+        "md": {
+          "value": 24,
+          "type": "number"
+        },
+        "lg": {
+          "value": 32,
+          "type": "number"
+        },
+        "xs": {
+          "value": 16,
+          "type": "number"
+        }
+      },
+      "heading": {
+        "h6": {
+          "value": 32,
+          "type": "number"
+        },
+        "h5": {
+          "value": 32,
+          "type": "number"
+        },
+        "h4": {
+          "value": 40,
+          "type": "number"
+        },
+        "h3": {
+          "value": 48,
+          "type": "number"
+        },
+        "h2": {
+          "value": 56,
+          "type": "number"
+        },
+        "h1": {
+          "value": 72,
+          "type": "number"
+        }
+      }
+    },
+    "paragraph spacing": {
+      "body": {
+        "sm": {
+          "value": 16,
+          "type": "number"
+        },
+        "md": {
+          "value": 16,
+          "type": "number"
+        },
+        "lg": {
+          "value": 20,
+          "type": "number"
+        },
+        "xs": {
+          "value": 14,
+          "type": "number"
+        }
+      },
+      "heading": {
+        "h6": {
+          "value": 24,
+          "type": "number"
+        },
+        "h5": {
+          "value": 28,
+          "type": "number"
+        },
+        "h4": {
+          "value": 32,
+          "type": "number"
+        },
+        "h3": {
+          "value": 36,
+          "type": "number"
+        },
+        "h2": {
+          "value": 40,
+          "type": "number"
+        },
+        "h1": {
+          "value": 48,
+          "type": "number"
+        }
+      }
+    }
+  },
+  "spacing": {
+    "4xs": {
+      "value": "{scale.100}",
+      "type": "number"
+    },
+    "2xs": {
+      "value": "{scale.250}",
+      "type": "number"
+    },
+    "xs": {
+      "value": "{scale.300}",
+      "type": "number"
+    },
+    "sm": {
+      "value": "{scale.400}",
+      "type": "number"
+    },
+    "md": {
+      "value": "{scale.500}",
+      "type": "number"
+    },
+    "lg": {
+      "value": "{scale.700}",
+      "type": "number"
+    },
+    "xl": {
+      "value": "{scale.900}",
+      "type": "number"
+    },
+    "2xl": {
+      "value": "{scale.1000}",
+      "type": "number"
+    },
+    "3xl": {
+      "value": "{scale.1200}",
+      "type": "number"
+    },
+    "3xs": {
+      "value": "{scale.200}",
+      "type": "number"
+    },
+    "huge": {
+      "value": "{scale.2000}",
+      "type": "number"
+    },
+    "pa-1": {
+      "value": "{scale.100}",
+      "type": "number"
+    },
+    "pa-2": {
+      "value": "{scale.200}",
+      "type": "number"
+    },
+    "pa-3": {
+      "value": "{scale.250}",
+      "type": "number"
+    },
+    "pa-4": {
+      "value": "{scale.300}",
+      "type": "number"
+    },
+    "pa-5": {
+      "value": "{scale.400}",
+      "type": "number"
+    },
+    "pa-6": {
+      "value": "{scale.500}",
+      "type": "number"
+    },
+    "pa-7": {
+      "value": "{scale.550}",
+      "type": "number"
+    },
+    "pa-8": {
+      "value": "{scale.600}",
+      "type": "number"
+    },
+    "pa-10": {
+      "value": "{scale.700}",
+      "type": "number"
+    },
+    "pa-12": {
+      "value": "{scale.800}",
+      "type": "number"
+    },
+    "pa-14": {
+      "value": "{scale.900}",
+      "type": "number"
+    },
+    "pa-16": {
+      "value": "{scale.1000}",
+      "type": "number"
+    },
+    "px-1": {
+      "value": "{scale.100}",
+      "type": "number"
+    },
+    "px-2": {
+      "value": "{scale.200}",
+      "type": "number"
+    },
+    "px-3": {
+      "value": "{scale.250}",
+      "type": "number"
+    },
+    "px-4": {
+      "value": "{scale.300}",
+      "type": "number"
+    },
+    "px-5": {
+      "value": "{scale.400}",
+      "type": "number"
+    },
+    "px-6": {
+      "value": "{scale.500}",
+      "type": "number"
+    },
+    "px-7": {
+      "value": "{scale.550}",
+      "type": "number"
+    },
+    "px-8": {
+      "value": "{scale.600}",
+      "type": "number"
+    },
+    "px-10": {
+      "value": "{scale.700}",
+      "type": "number"
+    },
+    "px-12": {
+      "value": "{scale.800}",
+      "type": "number"
+    },
+    "px-14": {
+      "value": "{scale.900}",
+      "type": "number"
+    },
+    "px-16": {
+      "value": "{scale.1000}",
+      "type": "number"
+    },
+    "py-1": {
+      "value": "{scale.100}",
+      "type": "number"
+    },
+    "py-2": {
+      "value": "{scale.200}",
+      "type": "number"
+    },
+    "py-3": {
+      "value": "{scale.250}",
+      "type": "number"
+    },
+    "py-4": {
+      "value": "{scale.300}",
+      "type": "number"
+    },
+    "py-5": {
+      "value": "{scale.400}",
+      "type": "number"
+    },
+    "py-6": {
+      "value": "{scale.500}",
+      "type": "number"
+    },
+    "py-7": {
+      "value": "{scale.550}",
+      "type": "number"
+    },
+    "py-8": {
+      "value": "{scale.600}",
+      "type": "number"
+    },
+    "py-10": {
+      "value": "{scale.700}",
+      "type": "number"
+    },
+    "py-12": {
+      "value": "{scale.800}",
+      "type": "number"
+    },
+    "py-14": {
+      "value": "{scale.900}",
+      "type": "number"
+    },
+    "py-16": {
+      "value": "{scale.1000}",
+      "type": "number"
+    },
+    "ga-1": {
+      "value": "{scale.100}",
+      "type": "number"
+    },
+    "ga-2": {
+      "value": "{scale.200}",
+      "type": "number"
+    },
+    "ga-3": {
+      "value": "{scale.250}",
+      "type": "number"
+    },
+    "ga-4": {
+      "value": "{scale.300}",
+      "type": "number"
+    },
+    "ga-5": {
+      "value": "{scale.400}",
+      "type": "number"
+    },
+    "ga-6": {
+      "value": "{scale.500}",
+      "type": "number"
+    },
+    "ga-7": {
+      "value": "{scale.550}",
+      "type": "number"
+    },
+    "ga-8": {
+      "value": "{scale.600}",
+      "type": "number"
+    },
+    "ga-10": {
+      "value": "{scale.700}",
+      "type": "number"
+    },
+    "ga-12": {
+      "value": "{scale.800}",
+      "type": "number"
+    },
+    "ga-14": {
+      "value": "{scale.900}",
+      "type": "number"
+    },
+    "ga-16": {
+      "value": "{scale.1000}",
+      "type": "number"
+    },
+    "ga-17": {
+      "value": "{scale.1100}",
+      "type": "number"
+    },
+    "ga-18": {
+      "value": "{scale.1200}",
+      "type": "number"
+    },
+    "ga-19": {
+      "value": "{scale.1400}",
+      "type": "number"
+    },
+    "ga-20": {
+      "value": "{scale.1600}",
+      "type": "number"
+    },
+    "ga-21": {
+      "value": "{scale.2000}",
+      "type": "number"
+    },
+    "ga-22": {
+      "value": "{scale.3000}",
+      "type": "number"
+    }
+  }
+}

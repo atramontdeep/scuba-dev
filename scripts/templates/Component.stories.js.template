@@ -1,0 +1,55 @@
+import {{componentName}} from './{{componentName}}.vue';
+
+export default {
+  title: 'Scuba/{{componentName}}',
+  component: {{componentName}},
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: [{{variants}}],
+      description: 'Visual style variant',
+    },
+    size: {
+      control: 'select',
+      options: [{{sizes}}],
+      description: 'Size of the component',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Disabled state',
+    },
+  },
+};
+
+// Default story
+export const Default = {
+  args: {
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+  },
+  render: (args) => ({
+    components: { {{componentName}} },
+    setup() {
+      return { args };
+    },
+    template: '<{{componentName}} v-bind="args">{{componentName}} Content</{{componentName}}>',
+  }),
+};
+
+{{variantStories}}
+
+// All variants comparison
+export const AllVariants = {
+  render: () => ({
+    components: { {{componentName}} },
+    template: `
+      <div style="display: flex; flex-direction: column; gap: 16px; max-width: 300px;">
+        <{{componentName}} variant="primary">Primary</{{componentName}}>
+        <{{componentName}} variant="secondary">Secondary</{{componentName}}>
+        <{{componentName}} variant="ghost">Ghost</{{componentName}}>
+      </div>
+    `,
+  }),
+};

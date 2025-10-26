@@ -1,0 +1,192 @@
+{
+  "semantic": {
+    "color": {
+      "primary": {
+        "100": {
+          "value": "{primitives.color.blue.100}",
+          "type": "color"
+        },
+        "200": {
+          "value": "{primitives.color.blue.200}",
+          "type": "color"
+        },
+        "300": {
+          "value": "{primitives.color.blue.300}",
+          "type": "color"
+        },
+        "500": {
+          "value": "{primitives.color.blue.500}",
+          "type": "color"
+        },
+        "600": {
+          "value": "{primitives.color.blue.600}",
+          "type": "color"
+        },
+        "700": {
+          "value": "{primitives.color.blue.700}",
+          "type": "color"
+        },
+        "800": {
+          "value": "{primitives.color.blue.800}",
+          "type": "color"
+        },
+        "900": {
+          "value": "{primitives.color.blue.900}",
+          "type": "color"
+        },
+        "default": {
+          "value": "{primitives.color.blue.400}",
+          "type": "color"
+        }
+      },
+      "neutral": {
+        "0": {
+          "value": "{primitives.color.gray.0}",
+          "type": "color"
+        },
+        "100": {
+          "value": "{primitives.color.gray.100}",
+          "type": "color"
+        },
+        "200": {
+          "value": "{primitives.color.gray.200}",
+          "type": "color"
+        },
+        "300": {
+          "value": "{primitives.color.gray.300}",
+          "type": "color"
+        },
+        "400": {
+          "value": "{primitives.color.gray.400}",
+          "type": "color"
+        },
+        "500": {
+          "value": "{primitives.color.gray.500}",
+          "type": "color"
+        },
+        "600": {
+          "value": "{primitives.color.gray.600}",
+          "type": "color"
+        },
+        "700": {
+          "value": "{primitives.color.gray.700}",
+          "type": "color"
+        },
+        "800": {
+          "value": "{primitives.color.gray.800}",
+          "type": "color"
+        },
+        "900": {
+          "value": "{primitives.color.gray.900}",
+          "type": "color"
+        },
+        "white": {
+          "value": "{primitives.color.white}",
+          "type": "color"
+        }
+      },
+      "warning": {
+        "light": {
+          "value": "{primitives.color.orange.200}",
+          "type": "color"
+        },
+        "dark": {
+          "value": "{primitives.color.orange.900}",
+          "type": "color"
+        },
+        "normal": {
+          "value": "{primitives.color.orange.500}",
+          "type": "color"
+        }
+      },
+      "error": {
+        "light": {
+          "value": "{primitives.color.red.200}",
+          "type": "color"
+        },
+        "dark": {
+          "value": "{primitives.color.red.800}",
+          "type": "color"
+        },
+        "normal": {
+          "value": "{primitives.color.red.400}",
+          "type": "color"
+        }
+      },
+      "success": {
+        "light": {
+          "value": "{primitives.color.green.200}",
+          "type": "color"
+        },
+        "dark": {
+          "value": "{primitives.color.green.900}",
+          "type": "color"
+        },
+        "normal": {
+          "value": "{primitives.color.green.500}",
+          "type": "color"
+        }
+      },
+      "info": {
+        "light": {
+          "value": "{primitives.color.purple-blue.100}",
+          "type": "color"
+        },
+        "dark": {
+          "value": "{primitives.color.purple-blue.700}",
+          "type": "color"
+        },
+        "normal": {
+          "value": "{primitives.color.purple-blue.200}",
+          "type": "color"
+        }
+      }
+    }
+  },
+  "border": {
+    "width": {
+      "border-0": {
+        "value": "{scale.0}",
+        "type": "number"
+      },
+      "border-sm": {
+        "value": "{scale.25}",
+        "type": "number"
+      },
+      "border-md": {
+        "value": "{scale.50}",
+        "type": "number"
+      },
+      "border-lg": {
+        "value": "{scale.100}",
+        "type": "number"
+      }
+    },
+    "radius": {
+      "rounded-0": {
+        "value": "{scale.0}",
+        "type": "number"
+      },
+      "rounded": {
+        "value": "{scale.200}",
+        "type": "number"
+      },
+      "rounded-md": {
+        "value": "{scale.300}",
+        "type": "number"
+      },
+      "rounded-lg": {
+        "value": "{scale.400}",
+        "type": "number"
+      },
+      "rounded-pill": {
+        "value": "{scale.1000}",
+        "type": "number"
+      },
+      "rounded-sm": {
+        "value": "{scale.250}",
+        "type": "number"
+      }
+    }
+  }
+}

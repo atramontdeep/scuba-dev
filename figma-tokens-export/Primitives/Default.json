@@ -1,0 +1,258 @@
+{
+  "primitives": {
+    "color": {
+      "blue": {
+        "100": {
+          "value": "#eaf8ff",
+          "type": "color"
+        },
+        "200": {
+          "value": "#c2eaff",
+          "type": "color"
+        },
+        "300": {
+          "value": "#99dbff",
+          "type": "color"
+        },
+        "400": {
+          "value": "#70cdff",
+          "type": "color"
+        },
+        "500": {
+          "value": "#0086cd",
+          "type": "color"
+        },
+        "600": {
+          "value": "#0942a1",
+          "type": "color"
+        },
+        "700": {
+          "value": "#06327a",
+          "type": "color"
+        },
+        "800": {
+          "value": "#111660",
+          "type": "color"
+        },
+        "900": {
+          "value": "#060a2d",
+          "type": "color"
+        }
+      },
+      "gray": {
+        "0": {
+          "value": "#fafafa",
+          "type": "color"
+        },
+        "100": {
+          "value": "#f6f6f6",
+          "type": "color"
+        },
+        "200": {
+          "value": "#eeeeee",
+          "type": "color"
+        },
+        "300": {
+          "value": "#e5e5e5",
+          "type": "color"
+        },
+        "400": {
+          "value": "#d4d4d4",
+          "type": "color"
+        },
+        "500": {
+          "value": "#aaaaaa",
+          "type": "color"
+        },
+        "600": {
+          "value": "#7f7f7f",
+          "type": "color"
+        },
+        "700": {
+          "value": "#555555",
+          "type": "color"
+        },
+        "800": {
+          "value": "#2a2a2a",
+          "type": "color"
+        },
+        "900": {
+          "value": "#191919",
+          "type": "color"
+        }
+      },
+      "orange": {
+        "200": {
+          "value": "#ffe5b4",
+          "type": "color"
+        },
+        "500": {
+          "value": "#ffa145",
+          "type": "color"
+        },
+        "900": {
+          "value": "#792d0d",
+          "type": "color"
+        }
+      },
+      "red": {
+        "200": {
+          "value": "#ffc7b4",
+          "type": "color"
+        },
+        "400": {
+          "value": "#fe7e71",
+          "type": "color"
+        },
+        "600": {
+          "value": "#ea2255",
+          "type": "color"
+        },
+        "800": {
+          "value": "#921535",
+          "type": "color"
+        }
+      },
+      "white": {
+        "value": "#ffffff",
+        "type": "color"
+      },
+      "green": {
+        "200": {
+          "value": "#deffc8",
+          "type": "color"
+        },
+        "500": {
+          "value": "#7fe13d",
+          "type": "color"
+        },
+        "900": {
+          "value": "#245900",
+          "type": "color"
+        }
+      },
+      "purple-blue": {
+        "100": {
+          "value": "#d7ddff",
+          "type": "color"
+        },
+        "200": {
+          "value": "#adbafe",
+          "type": "color"
+        },
+        "700": {
+          "value": "#1b28b5",
+          "type": "color"
+        }
+      }
+    }
+  },
+  "type": {
+    "font-weight": {
+      "regular": {
+        "value": "regular",
+        "type": "text"
+      },
+      "semibold": {
+        "value": "semibold",
+        "type": "text"
+      },
+      "bold": {
+        "value": "bold",
+        "type": "text"
+      }
+    },
+    "font-family": {
+      "body": {
+        "value": "Poppins",
+        "type": "text"
+      }
+    }
+  },
+  "scale": {
+    "0": {
+      "value": 0,
+      "type": "number"
+    },
+    "25": {
+      "value": 1,
+      "type": "number"
+    },
+    "50": {
+      "value": 2,
+      "type": "number"
+    },
+    "100": {
+      "value": 4,
+      "type": "number"
+    },
+    "200": {
+      "value": 8,
+      "type": "number"
+    },
+    "250": {
+      "value": 12,
+      "type": "number"
+    },
+    "300": {
+      "value": 16,
+      "type": "number"
+    },
+    "400": {
+      "value": 20,
+      "type": "number"
+    },
+    "500": {
+      "value": 24,
+      "type": "number"
+    },
+    "550": {
+      "value": 28,
+      "type": "number"
+    },
+    "600": {
+      "value": 32,
+      "type": "number"
+    },
+    "700": {
+      "value": 40,
+      "type": "number"
+    },
+    "800": {
+      "value": 48,
+      "type": "number"
+    },
+    "900": {
+      "value": 56,
+      "type": "number"
+    },
+    "1000": {
+      "value": 64,
+      "type": "number"
+    },
+    "1100": {
+      "value": 72,
+      "type": "number"
+    },
+    "1200": {
+      "value": 80,
+      "type": "number"
+    },
+    "1400": {
+      "value": 96,
+      "type": "number"
+    },
+    "1600": {
+      "value": 112,
+      "type": "number"
+    },
+    "2000": {
+      "value": 144,
+      "type": "number"
+    },
+    "3000": {
+      "value": 200,
+      "type": "number"
+    }
+  }
+}
