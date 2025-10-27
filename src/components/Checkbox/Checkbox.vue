@@ -1,11 +1,9 @@
 <template>
   <label :class="checkboxWrapperClasses">
-    <!-- Label Left -->
-    <span v-if="showLabelLeft" class="scuba-checkbox__label scuba-checkbox__label--left">
+    <span v-if="showLabelLeft" :class="['scuba-checkbox__label', 'scuba-checkbox__label--left']">
       {{ label }}
     </span>
 
-    <!-- Checkbox Container -->
     <div class="scuba-checkbox__container">
       <input
         :id="inputId"
@@ -18,16 +16,12 @@
       />
       
       <div :class="checkboxBoxClasses">
-        <!-- Check Icon -->
-        <i v-if="showCheckIcon" class="ph ph-check scuba-checkbox__icon"></i>
-        
-        <!-- Indeterminate Icon -->
-        <i v-if="isIndeterminate" class="ph ph-minus scuba-checkbox__icon"></i>
+        <i v-if="showCheckIcon" :class="'ph ph-check scuba-checkbox__icon'"></i>
+        <i v-if="isIndeterminate" :class="'ph ph-minus scuba-checkbox__icon'"></i>
       </div>
     </div>
 
-    <!-- Label Right -->
-    <span v-if="showLabelRight" class="scuba-checkbox__label scuba-checkbox__label--right">
+    <span v-if="showLabelRight" :class="['scuba-checkbox__label', 'scuba-checkbox__label--right']">
       {{ label }}
     </span>
   </label>
@@ -58,36 +52,65 @@ const emit = defineEmits(['update:modelValue', 'change']);
 
 const internalValue = ref(props.modelValue);
 
-const inputId = computed(() => props.id || `scuba-checkbox-${Math.random().toString(36).substr(2, 9)}`);
+const inputId = computed(() => {
+  if (props.id) return props.id;
+  return 'scuba-checkbox-' + Math.random().toString(36).substr(2, 9);
+});
+
 const isChecked = computed(() => internalValue.value === true);
 const isIndeterminate = computed(() => props.indeterminate);
 const showLabelLeft = computed(() => props.label && props.labelPosition === 'left');
 const showLabelRight = computed(() => props.label && props.labelPosition === 'right');
 const showCheckIcon = computed(() => isChecked.value && !isIndeterminate.value);
 
-const checkboxWrapperClasses = computed(() => [
-  'scuba-checkbox',
-  `scuba-checkbox--${props.size}`,
-  {
-    'scuba-checkbox--disabled': props.disabled,
-    'scuba-checkbox--no-label': !props.label
+const checkboxWrapperClasses = computed(() => {
+  const classes = ['scuba-checkbox'];
+  classes.push('scuba-checkbox--' + props.size);
+  
+  if (props.disabled) {
+    classes.push('scuba-checkbox--disabled');
   }
-]);
-
-const checkboxBoxClasses = computed(() => [
-  'scuba-checkbox__box',
-  {
-    'scuba-checkbox__box--checked': isChecked.value && !isIndeterminate.value,
-    'scuba-checkbox__box--indeterminate': isIndeterminate.value,
-    'scuba-checkbox__box--disabled': props.disabled,
-    'scuba-checkbox__box--unchecked': !isChecked.value && !isIndeterminate.value
+  
+  if (!props.label) {
+    classes.push('scuba-checkbox--no-label');
   }
-]);
+  
+  return classes;
+});
 
-watch(() => props.modelValue, (val) => { internalValue.value = val; });
-watch(internalValue, (val) => { emit('update:modelValue', val); });
+const checkboxBoxClasses = computed(() => {
+  const classes = ['scuba-checkbox__box'];
+  
+  if (isChecked.value && !isIndeterminate.value) {
+    classes.push('scuba-checkbox__box--checked');
+  }
+  
+  if (isIndeterminate.value) {
+    classes.push('scuba-checkbox__box--indeterminate');
+  }
+  
+  if (props.disabled) {
+    classes.push('scuba-checkbox__box--disabled');
+  }
+  
+  if (!isChecked.value && !isIndeterminate.value) {
+    classes.push('scuba-checkbox__box--unchecked');
+  }
+  
+  return classes;
+});
 
-const handleChange = (event) => { emit('change', event); };
+watch(() => props.modelValue, (val) => { 
+  internalValue.value = val; 
+});
+
+watch(internalValue, (val) => { 
+  emit('update:modelValue', val); 
+});
+
+const handleChange = (event) => { 
+  emit('change', event); 
+};
 </script>
 
 <style scoped>
