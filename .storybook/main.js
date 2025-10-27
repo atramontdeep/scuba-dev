@@ -1,12 +1,6 @@
-import { mergeConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-
-/** @type { import('@storybook/vue3-vite').StorybookConfig } */
-const config = {
+module.exports = {
   stories: [
-    '../src/**/*.mdx',
-    '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'
+    '../src/**/*.stories.@(js|jsx|ts|tsx)'
   ],
   addons: [
     '@storybook/addon-essentials',
@@ -23,12 +17,5 @@ const config = {
   },
   features: {
     buildStoriesJson: true
-  },
-  async viteFinal(config) {
-    return mergeConfig(config, {
-      plugins: [vue(), vueJsx()]
-    });
   }
 };
-
-export default config;
