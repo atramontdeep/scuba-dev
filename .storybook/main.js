@@ -21,6 +21,12 @@ const config = {
   docs: {
     autodocs: 'tag'
   },
+  features: {
+    buildStoriesJson: true
+  },
+  core: {
+    builder: '@storybook/builder-vite'
+  },
   async viteFinal(config) {
     return mergeConfig(config, {
       plugins: [vue(), vueJsx()],
