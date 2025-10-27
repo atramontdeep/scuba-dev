@@ -37,9 +37,9 @@ function isExpanded(row) {
 
 function getSortIcon(column) {
   if (!column.sortable) return null;
-  if (table.sort.value.key !== column.key) return 'ph ph-arrows-down-up';
-  if (table.sort.value.dir === 'asc') return 'ph ph-arrow-up';
-  return 'ph ph-arrow-down';
+  if (table.sort.value.key !== column.key) return 'ph-arrows-down-up';
+  if (table.sort.value.dir === 'asc') return 'ph-arrow-up';
+  return 'ph-arrow-down';
 }
 </script>
 
@@ -104,7 +104,7 @@ function getSortIcon(column) {
               <span>{{ c.header }}</span>
               <i 
                 v-if="c.sortable" 
-                :class="[getSortIcon(c), 'dt-sort-icon']"
+                :class="'ph ' + getSortIcon(c) + ' dt-sort-icon'"
               ></i>
             </div>
           </th>
