@@ -73,11 +73,13 @@ const buttonClasses = computed(() => {
 });
 
 const iconLeftClasses = computed(() => {
-  return ['ph', props.iconLeft, 'scuba-button__icon-left'];
+  if (!props.iconLeft) return '';
+  return 'ph ' + props.iconLeft + ' scuba-button__icon-left';
 });
 
 const iconRightClasses = computed(() => {
-  return ['ph', props.iconRight, 'scuba-button__icon-right'];
+  if (!props.iconRight) return '';
+  return 'ph ' + props.iconRight + ' scuba-button__icon-right';
 });
 
 const handleClick = (event) => {

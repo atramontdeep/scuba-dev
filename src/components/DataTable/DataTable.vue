@@ -49,6 +49,12 @@ function getSortIcon(column) {
   
   return 'ph-arrow-down';
 }
+
+function getSortIconClass(column) {
+  const icon = getSortIcon(column);
+  if (!icon) return '';
+  return 'ph ' + icon + ' dt-sort-icon';
+}
 </script>
 
 <template>
@@ -111,7 +117,7 @@ function getSortIcon(column) {
               <span>{{ c.header }}</span>
               <i 
                 v-if="c.sortable && getSortIcon(c)" 
-                :class="'ph ' + getSortIcon(c) + ' dt-sort-icon'"
+                :class="getSortIconClass(c)"
               ></i>
             </div>
           </th>

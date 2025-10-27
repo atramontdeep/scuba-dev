@@ -1,6 +1,6 @@
 <template>
   <label :class="checkboxWrapperClasses">
-    <span v-if="showLabelLeft" :class="['scuba-checkbox__label', 'scuba-checkbox__label--left']">
+    <span v-if="showLabelLeft" :class="labelLeftClasses">
       {{ label }}
     </span>
 
@@ -16,14 +16,15 @@
       />
       
       <div :class="checkboxBoxClasses">
-        <i v-if="showCheckIcon" :class="'ph ph-check scuba-checkbox__icon'"></i>
-        <i v-if="isIndeterminate" :class="'ph ph-minus scuba-checkbox__icon'"></i>
+        <i v-if="showCheckIcon" :class="checkIconClasses"></i>
+        <i v-if="isIndeterminate" :class="minusIconClasses"></i>
       </div>
     </div>
 
-    <span v-if="showLabelRight" :class="['scuba-checkbox__label', 'scuba-checkbox__label--right']">
+    <span v-if="showLabelRight" :class="labelRightClasses">
       {{ label }}
     </span>
+    
   </label>
 </template>
 
@@ -62,6 +63,22 @@ const isIndeterminate = computed(() => props.indeterminate);
 const showLabelLeft = computed(() => props.label && props.labelPosition === 'left');
 const showLabelRight = computed(() => props.label && props.labelPosition === 'right');
 const showCheckIcon = computed(() => isChecked.value && !isIndeterminate.value);
+
+const labelLeftClasses = computed(() => {
+  return 'scuba-checkbox__label scuba-checkbox__label--left';
+});
+
+const labelRightClasses = computed(() => {
+  return 'scuba-checkbox__label scuba-checkbox__label--right';
+});
+
+const checkIconClasses = computed(() => {
+  return 'ph ph-check scuba-checkbox__icon';
+});
+
+const minusIconClasses = computed(() => {
+  return 'ph ph-minus scuba-checkbox__icon';
+});
 
 const checkboxWrapperClasses = computed(() => {
   const classes = ['scuba-checkbox'];

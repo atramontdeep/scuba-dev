@@ -162,15 +162,15 @@ const labelClasses = computed(() => {
 });
 
 const iconLeftClasses = computed(() => {
-  return ['scuba-input__icon', 'scuba-input__icon--left'];
+  return 'scuba-input__icon scuba-input__icon--left';
 });
 
 const iconRightClasses = computed(() => {
-  return ['scuba-input__icon', 'scuba-input__icon--right'];
+  return 'scuba-input__icon scuba-input__icon--right';
 });
 
 const textareaClasses = computed(() => {
-  return ['scuba-input__field', 'scuba-input__textarea'];
+  return 'scuba-input__field scuba-input__textarea';
 });
 
 const inputContainerClasses = computed(() => {
