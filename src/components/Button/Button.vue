@@ -4,13 +4,13 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <i v-if="iconLeft" :class="['ph', iconLeft, 'scuba-button__icon-left']"></i>
+    <i v-if="iconLeft" :class="[iconLeft, 'scuba-button__icon-left']"></i>
     
     <span class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
     
-    <i v-if="iconRight" :class="['ph', iconRight, 'scuba-button__icon-right']"></i>
+    <i v-if="iconRight" :class="[iconRight, 'scuba-button__icon-right']"></i>
   </button>
 </template>
 
@@ -53,7 +53,7 @@ const props = defineProps({
   },
   
   /**
-   * Ícone à esquerda (classe Phosphor, ex: 'ph-heart')
+   * Ícone à esquerda (classe Phosphor completa, ex: 'ph ph-heart')
    */
   iconLeft: {
     type: String,
@@ -61,7 +61,7 @@ const props = defineProps({
   },
   
   /**
-   * Ícone à direita (classe Phosphor, ex: 'ph-arrow-right')
+   * Ícone à direita (classe Phosphor completa, ex: 'ph ph-arrow-right')
    */
   iconRight: {
     type: String,
@@ -115,7 +115,7 @@ const handleClick = (event) => {
   /* Spacing */
   padding: var(--spacing-xs, 12px) var(--spacing-md, 24px);
   
-  /* Border - CORRIGIDO */
+  /* Border */
   border: 2px solid transparent;
   border-radius: var(--border-radius-rounded, 8px);
   
@@ -132,7 +132,7 @@ const handleClick = (event) => {
 }
 
 .scuba-button:focus-visible {
-  outline: 2px solid var(--context-color-border-focus, var(--semantic-color-primary-default, #0086cd));
+  outline: 2px solid var(--context-color-border-focus, #0086cd);
   outline-offset: 2px;
 }
 
