@@ -24,26 +24,11 @@ const config = {
   features: {
     buildStoriesJson: true
   },
-  core: {
-    builder: '@storybook/builder-vite'
-  },
   async viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [vue(), vueJsx()],
-      esbuild: {
-        loader: 'jsx',
-        include: /src\/.*\.jsx?$/,
-      },
-      optimizeDeps: {
-        esbuildOptions: {
-          loader: {
-            '.js': 'jsx',
-            '.jsx': 'jsx',
-          },
-        },
-      },
+      plugins: [vue(), vueJsx()]
     });
-  },
+  }
 };
 
 export default config;
