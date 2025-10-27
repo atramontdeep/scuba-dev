@@ -4,13 +4,13 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <i v-if="iconLeft" :class="'ph ' + iconLeft + ' scuba-button__icon-left'"></i>
+    <i v-if="iconLeft" :class="iconLeftClasses"></i>
     
     <span class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
     
-    <i v-if="iconRight" :class="'ph ' + iconRight + ' scuba-button__icon-right'"></i>
+    <i v-if="iconRight" :class="iconRightClasses"></i>
   </button>
 </template>
 
@@ -52,16 +52,33 @@ const props = defineProps({
 
 const emit = defineEmits(['click']);
 
-const buttonClasses = computed(() => [
-  'scuba-button',
-  `scuba-button--${props.variant}`,
-  `scuba-button--${props.size}`,
-  {
-    'scuba-button--disabled': props.disabled,
-    'scuba-button--full-width': props.fullWidth,
-    'scuba-button--with-icon': props.iconLeft || props.iconRight
+const buttonClasses = computed(() => {
+  const classes = ['scuba-button'];
+  classes.push('scuba-button--' + props.variant);
+  classes.push('scuba-button--' + props.size);
+  
+  if (props.disabled) {
+    classes.push('scuba-button--disabled');
   }
-]);
+  
+  if (props.fullWidth) {
+    classes.push('scuba-button--full-width');
+  }
+  
+  if (props.iconLeft || props.iconRight) {
+    classes.push('scuba-button--with-icon');
+  }
+  
+  return classes;
+});
+
+const iconLeftClasses = computed(() => {
+  return ['ph', props.iconLeft, 'scuba-button__icon-left'];
+});
+
+const iconRightClasses = computed(() => {
+  return ['ph', props.iconRight, 'scuba-button__icon-right'];
+});
 
 const handleClick = (event) => {
   if (!props.disabled) {
