@@ -1,0 +1,86 @@
+name: Deploy Storybook to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🎨 Build Storybook
+        run: npm run build-storybook
+        env:
+          NODE_ENV: production
+
+      - name: 📄 Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: 📤 Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './storybook-static'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: ✅ Deployment complete
+        run: |
+          echo "🎉 Storybook deployed successfully!"
+          echo "📍 URL: ${{ steps.deployment.outputs.page_url }}"
+```
+
+### 2. Clique em "Commit changes..." (botão verde no canto superior direito)
+
+### 3. Na janela que abrir:
+- **Commit message:** `feat: add storybook deployment workflow`
+- **Commit directly to the main branch** (deixe selecionado)
+- Clique em **"Commit changes"**
+
+### 4. Ir para Actions:
+Clique na aba **"Actions"** no topo da página
+
+---
+
+## ✅ O que vai acontecer:
+
+1. ⚡ Commit direto no GitHub → Workflow roda IMEDIATAMENTE
+2. 🔄 Você verá o workflow "Deploy Storybook to GitHub Pages" rodando
+3. ⏱️ Aguarde ~2-4 minutos
+4. ✅ Status verde → Deploy concluído
+5. 🌐 Storybook online: https://atramontdeep.github.io/scuba-dev/
+
+---
+
+## 📊 Depois do commit, você verá:
+
+Na aba Actions:
+```
+✅ Deploy Storybook to GitHub Pages
+   feat: add storybook deployment workflow
+   by atramontdeep - in progress...
