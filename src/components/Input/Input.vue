@@ -24,7 +24,7 @@
     <div :class="inputContainerClasses">
       <!-- Icon Left -->
       <span v-if="iconLeft" class="scuba-input__icon scuba-input__icon--left">
-        <i :class="[iconLeft]"></i>
+        <i :class="'ph ' + iconLeft"></i>
       </span>
 
       <!-- Input or Textarea -->
@@ -71,11 +71,11 @@
           @click="togglePasswordVisibility"
           :aria-label="passwordVisible ? 'Ocultar senha' : 'Mostrar senha'"
         >
-          <i :class="[passwordVisible ? 'ph ph-eye-slash' : 'ph ph-eye']"></i>
+          <i :class="passwordVisible ? 'ph ph-eye-slash' : 'ph ph-eye'"></i>
         </button>
         
         <!-- Regular Icon -->
-        <i v-else-if="iconRight" :class="[iconRight]"></i>
+        <i v-else-if="iconRight" :class="'ph ' + iconRight"></i>
       </span>
     </div>
 
