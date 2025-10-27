@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
+    "build-storybook": "storybook build -o storybook-static",
     "generate:component": "node scripts/generate-component.js",
     "generate:ai": "node scripts/generate-ai.js",
     "tokens:sync": "node scripts/sync-tokens.js"
