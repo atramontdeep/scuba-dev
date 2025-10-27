@@ -1,4 +1,3 @@
-<!-- src/components/DataTable/DataTable.vue -->
 <script setup>
 import { computed, toRefs } from 'vue';
 import { useTable } from './useTable';
@@ -36,16 +35,24 @@ function isExpanded(row) {
 }
 
 function getSortIcon(column) {
-  if (!column.sortable) return null;
-  if (table.sort.value.key !== column.key) return 'ph-arrows-down-up';
-  if (table.sort.value.dir === 'asc') return 'ph-arrow-up';
+  if (!column.sortable) return '';
+  const key = table.sort.value.key;
+  const dir = table.sort.value.dir;
+  
+  if (key !== column.key) {
+    return 'ph-arrows-down-up';
+  }
+  
+  if (dir === 'asc') {
+    return 'ph-arrow-up';
+  }
+  
   return 'ph-arrow-down';
 }
 </script>
 
 <template>
   <div class="dt-wrapper">
-    <!-- Toolbar (seleção) -->
     <div
       v-if="selectable && table.selected.size > 0"
       class="dt-toolbar"
@@ -103,7 +110,7 @@ function getSortIcon(column) {
             >
               <span>{{ c.header }}</span>
               <i 
-                v-if="c.sortable" 
+                v-if="c.sortable && getSortIcon(c)" 
                 :class="'ph ' + getSortIcon(c) + ' dt-sort-icon'"
               ></i>
             </div>
@@ -140,27 +147,23 @@ function getSortIcon(column) {
               v-for="c in columns"
               :key="c.key"
               class="dt-td"
-              :style="{ textAlign: c.align ?? 'left', width: c.width }"
+              :style="{ textAlign: c.align || 'left', width: c.width }"
             >
-              <!-- slot por coluna: cell-[key] -->
               <slot
-                :name="`cell-${c.key}`"
+                :name="'cell-' + c.key"
                 :row="row"
                 :value="row[c.key]"
               >
-                <!-- fallback: valor simples -->
                 {{ row[c.key] }}
               </slot>
             </td>
           </tr>
 
-          <!-- linha expandida -->
           <tr v-if="expandable && isExpanded(row)" class="dt-row--expanded">
             <td v-if="selectable" />
             <td v-if="expandable" />
             <td :colspan="columns.length" class="dt-td dt-td--expanded">
               <slot name="expanded" :row="row">
-                <!-- fallback -->
                 <div class="dt-expanded-default">
                   Sem detalhes
                 </div>
@@ -182,7 +185,6 @@ function getSortIcon(column) {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Toolbar */
 .dt-toolbar {
   display: flex;
   align-items: center;
@@ -221,7 +223,6 @@ function getSortIcon(column) {
   flex: 1;
 }
 
-/* Table */
 .dt-table {
   width: 100%;
   border-collapse: separate;
