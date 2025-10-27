@@ -139,8 +139,6 @@ const handleChange = (event) => {
 </script>
 
 <style scoped>
-@import url('https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css');
-
 /* Wrapper */
 .scuba-checkbox {
   display: inline-flex;
@@ -181,7 +179,7 @@ const handleChange = (event) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--context-color-border-action, var(--semantic-color-neutral-700, #555555));
+  border: 2px solid var(--context-color-border-action, #555555);
   border-radius: 4px;
   background: transparent;
   transition: all 0.2s ease;
@@ -206,7 +204,7 @@ const handleChange = (event) => {
 
 /* Icon */
 .scuba-checkbox__icon {
-  color: var(--primitives-color-white, #ffffff);
+  color: #ffffff;
   font-size: 14px;
   line-height: 1;
   display: flex;
@@ -228,57 +226,57 @@ const handleChange = (event) => {
 
 /* Unchecked State */
 .scuba-checkbox__box--unchecked {
-  border-color: var(--context-color-border-action, var(--semantic-color-neutral-700, #555555));
+  border-color: var(--context-color-border-action, #555555);
   background: transparent;
 }
 
 .scuba-checkbox:hover:not(.scuba-checkbox--disabled) .scuba-checkbox__box--unchecked {
-  border-color: var(--context-color-border-action-hover, var(--semantic-color-primary-500, #0086cd));
+  border-color: var(--context-color-border-action-hover, #0086cd);
 }
 
 /* Checked State */
 .scuba-checkbox__box--checked {
-  background: var(--context-color-surface-focus-dark, var(--primitives-color-blue-600, #0942a1));
-  border-color: var(--context-color-surface-focus-dark, var(--primitives-color-blue-600, #0942a1));
+  background: var(--context-color-surface-focus-dark, #0942a1);
+  border-color: var(--context-color-surface-focus-dark, #0942a1);
 }
 
 .scuba-checkbox:hover:not(.scuba-checkbox--disabled) .scuba-checkbox__box--checked {
-  background: var(--semantic-color-primary-700, var(--primitives-color-blue-700, #06327a));
-  border-color: var(--semantic-color-primary-700, var(--primitives-color-blue-700, #06327a));
+  background: #06327a;
+  border-color: #06327a;
 }
 
 /* Indeterminate State */
 .scuba-checkbox__box--indeterminate {
-  background: var(--semantic-color-primary-500, var(--primitives-color-blue-500, #0086cd));
-  border-color: var(--semantic-color-primary-500, var(--primitives-color-blue-500, #0086cd));
+  background: var(--semantic-color-primary-500, #0086cd);
+  border-color: var(--semantic-color-primary-500, #0086cd);
 }
 
 .scuba-checkbox:hover:not(.scuba-checkbox--disabled) .scuba-checkbox__box--indeterminate {
-  background: var(--semantic-color-primary-600, var(--primitives-color-blue-600, #0942a1));
-  border-color: var(--semantic-color-primary-600, var(--primitives-color-blue-600, #0942a1));
+  background: #0942a1;
+  border-color: #0942a1;
 }
 
 /* Focus State */
 .scuba-checkbox__input:focus-visible + .scuba-checkbox__box {
-  outline: 3px solid var(--context-color-surface-focus-dark, var(--semantic-color-primary-500, #0086cd));
+  outline: 3px solid rgba(0, 134, 205, 0.3);
   outline-offset: 2px;
 }
 
 /* Disabled State */
 .scuba-checkbox__box--disabled {
-  border-color: var(--context-color-border-disabled, var(--semantic-color-neutral-300, #e5e5e5));
-  background: var(--context-color-surface-disabled, var(--semantic-color-neutral-300, #e5e5e5));
+  border-color: var(--context-color-border-disabled, #e5e5e5);
+  background: var(--context-color-surface-disabled, #e5e5e5);
   cursor: not-allowed;
 }
 
 .scuba-checkbox--disabled .scuba-checkbox__box--checked,
 .scuba-checkbox--disabled .scuba-checkbox__box--indeterminate {
-  background: var(--context-color-surface-disabled, var(--semantic-color-neutral-300, #e5e5e5));
-  border-color: var(--context-color-border-disabled, var(--semantic-color-neutral-300, #e5e5e5));
+  background: var(--context-color-surface-disabled, #e5e5e5);
+  border-color: var(--context-color-border-disabled, #e5e5e5);
 }
 
 .scuba-checkbox--disabled .scuba-checkbox__icon {
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 /* Label */
@@ -286,7 +284,7 @@ const handleChange = (event) => {
   font-size: var(--type-font-size-body-md, 16px);
   font-weight: var(--type-font-weight-regular, 400);
   line-height: var(--type-line-height-body-md, 24px);
-  color: var(--context-color-text-primary, var(--semantic-color-neutral-900, #191919));
+  color: var(--context-color-text-primary, #191919);
 }
 
 .scuba-checkbox--sm .scuba-checkbox__label {
@@ -300,7 +298,7 @@ const handleChange = (event) => {
 }
 
 .scuba-checkbox--disabled .scuba-checkbox__label {
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 /* Label Positions */
