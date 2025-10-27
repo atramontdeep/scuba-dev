@@ -1,33 +1,29 @@
 <template>
-  <div :class="['scuba-input-wrapper', { 'scuba-input-wrapper--full-width': fullWidth }]">
-    <!-- Label -->
+  <div :class="wrapperClasses">
     <label 
       v-if="label" 
       :for="inputId"
-      :class="['scuba-input__label', { 'scuba-input__label--disabled': disabled }]"
+      :class="labelClasses"
     >
       {{ label }}
-      <span v-if="required" class="scuba-input__required">*</span>
-      <span v-if="optional" class="scuba-input__optional">opcional</span>
+      <span v-if="required" :class="'scuba-input__required'">*</span>
+      <span v-if="optional" :class="'scuba-input__optional'">opcional</span>
       <button
         v-if="helpText"
         type="button"
-        class="scuba-input__help-button"
-        :aria-label="'Ajuda para ' + label"
+        :class="'scuba-input__help-button'"
+        :aria-label="helpAriaLabel"
         @click="$emit('help-click')"
       >
-        <i class="ph ph-question"></i>
+        <i :class="'ph ph-question'"></i>
       </button>
     </label>
 
-    <!-- Input Container -->
     <div :class="inputContainerClasses">
-      <!-- Icon Left -->
-      <span v-if="iconLeft" class="scuba-input__icon scuba-input__icon--left">
+      <span v-if="iconLeft" :class="iconLeftClasses">
         <i :class="'ph ' + iconLeft"></i>
       </span>
 
-      <!-- Input or Textarea -->
       <textarea
         v-if="type === 'textarea'"
         :id="inputId"
@@ -37,7 +33,7 @@
         :readonly="readonly"
         :rows="rows"
         :maxlength="maxlength"
-        class="scuba-input__field scuba-input__textarea"
+        :class="textareaClasses"
         @blur="handleBlur"
         @focus="handleFocus"
         @input="handleInput"
@@ -55,31 +51,27 @@
         :min="min"
         :max="max"
         :step="step"
-        class="scuba-input__field"
+        :class="'scuba-input__field'"
         @blur="handleBlur"
         @focus="handleFocus"
         @input="handleInput"
       />
 
-      <!-- Icon Right / Action -->
-      <span v-if="iconRight || showPasswordToggle" class="scuba-input__icon scuba-input__icon--right">
-        <!-- Password Toggle -->
+      <span v-if="iconRight || showPasswordToggle" :class="iconRightClasses">
         <button
           v-if="showPasswordToggle"
           type="button"
-          class="scuba-input__toggle-button"
+          :class="'scuba-input__toggle-button'"
           @click="togglePasswordVisibility"
-          :aria-label="passwordVisible ? 'Ocultar senha' : 'Mostrar senha'"
+          :aria-label="passwordToggleLabel"
         >
-          <i :class="passwordVisible ? 'ph ph-eye-slash' : 'ph ph-eye'"></i>
+          <i :class="passwordToggleIcon"></i>
         </button>
         
-        <!-- Regular Icon -->
         <i v-else-if="iconRight" :class="'ph ' + iconRight"></i>
       </span>
     </div>
 
-    <!-- Hint Text -->
     <div v-if="hint || error" :class="hintClasses">
       {{ error || hint }}
     </div>
@@ -90,10 +82,7 @@
 import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
-  modelValue: {
-    type: [String, Number],
-    default: ''
-  },
+  modelValue: { type: [String, Number], default: '' },
   type: {
     type: String,
     default: 'text',
@@ -102,78 +91,24 @@ const props = defineProps({
       'search', 'date', 'time', 'datetime-local', 'textarea'
     ].includes(value)
   },
-  label: {
-    type: String,
-    default: ''
-  },
-  placeholder: {
-    type: String,
-    default: 'Placeholder'
-  },
-  required: {
-    type: Boolean,
-    default: false
-  },
-  optional: {
-    type: Boolean,
-    default: false
-  },
-  helpText: {
-    type: String,
-    default: ''
-  },
-  hint: {
-    type: String,
-    default: 'Hint'
-  },
-  error: {
-    type: String,
-    default: ''
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  readonly: {
-    type: Boolean,
-    default: false
-  },
-  iconLeft: {
-    type: String,
-    default: ''
-  },
-  iconRight: {
-    type: String,
-    default: ''
-  },
-  fullWidth: {
-    type: Boolean,
-    default: false
-  },
-  id: {
-    type: String,
-    default: null
-  },
-  rows: {
-    type: Number,
-    default: 4
-  },
-  maxlength: {
-    type: Number,
-    default: null
-  },
-  min: {
-    type: Number,
-    default: null
-  },
-  max: {
-    type: Number,
-    default: null
-  },
-  step: {
-    type: Number,
-    default: null
-  }
+  label: { type: String, default: '' },
+  placeholder: { type: String, default: 'Placeholder' },
+  required: { type: Boolean, default: false },
+  optional: { type: Boolean, default: false },
+  helpText: { type: String, default: '' },
+  hint: { type: String, default: 'Hint' },
+  error: { type: String, default: '' },
+  disabled: { type: Boolean, default: false },
+  readonly: { type: Boolean, default: false },
+  iconLeft: { type: String, default: '' },
+  iconRight: { type: String, default: '' },
+  fullWidth: { type: Boolean, default: false },
+  id: { type: String, default: null },
+  rows: { type: Number, default: 4 },
+  maxlength: { type: Number, default: null },
+  min: { type: Number, default: null },
+  max: { type: Number, default: null },
+  step: { type: Number, default: null }
 });
 
 const emit = defineEmits(['update:modelValue', 'blur', 'focus', 'input', 'help-click']);
@@ -182,7 +117,10 @@ const internalValue = ref(props.modelValue);
 const isFocused = ref(false);
 const passwordVisible = ref(false);
 
-const inputId = computed(() => props.id || `scuba-input-${Math.random().toString(36).substr(2, 9)}`);
+const inputId = computed(() => {
+  if (props.id) return props.id;
+  return 'scuba-input-' + Math.random().toString(36).substr(2, 9);
+});
 
 const inputType = computed(() => {
   if (props.type === 'password' && passwordVisible.value) {
@@ -193,23 +131,81 @@ const inputType = computed(() => {
 
 const showPasswordToggle = computed(() => props.type === 'password');
 
-const inputContainerClasses = computed(() => [
-  'scuba-input__container',
-  {
-    'scuba-input__container--disabled': props.disabled,
-    'scuba-input__container--error': props.error,
-    'scuba-input__container--focused': isFocused.value,
-    'scuba-input__container--with-icon-left': props.iconLeft,
-    'scuba-input__container--with-icon-right': props.iconRight || showPasswordToggle.value
-  }
-]);
+const helpAriaLabel = computed(() => {
+  return 'Ajuda para ' + props.label;
+});
 
-const hintClasses = computed(() => [
-  'scuba-input__hint',
-  {
-    'scuba-input__hint--error': props.error
+const passwordToggleLabel = computed(() => {
+  if (passwordVisible.value) return 'Ocultar senha';
+  return 'Mostrar senha';
+});
+
+const passwordToggleIcon = computed(() => {
+  if (passwordVisible.value) return 'ph ph-eye-slash';
+  return 'ph ph-eye';
+});
+
+const wrapperClasses = computed(() => {
+  const classes = ['scuba-input-wrapper'];
+  if (props.fullWidth) {
+    classes.push('scuba-input-wrapper--full-width');
   }
-]);
+  return classes;
+});
+
+const labelClasses = computed(() => {
+  const classes = ['scuba-input__label'];
+  if (props.disabled) {
+    classes.push('scuba-input__label--disabled');
+  }
+  return classes;
+});
+
+const iconLeftClasses = computed(() => {
+  return ['scuba-input__icon', 'scuba-input__icon--left'];
+});
+
+const iconRightClasses = computed(() => {
+  return ['scuba-input__icon', 'scuba-input__icon--right'];
+});
+
+const textareaClasses = computed(() => {
+  return ['scuba-input__field', 'scuba-input__textarea'];
+});
+
+const inputContainerClasses = computed(() => {
+  const classes = ['scuba-input__container'];
+  
+  if (props.disabled) {
+    classes.push('scuba-input__container--disabled');
+  }
+  
+  if (props.error) {
+    classes.push('scuba-input__container--error');
+  }
+  
+  if (isFocused.value) {
+    classes.push('scuba-input__container--focused');
+  }
+  
+  if (props.iconLeft) {
+    classes.push('scuba-input__container--with-icon-left');
+  }
+  
+  if (props.iconRight || showPasswordToggle.value) {
+    classes.push('scuba-input__container--with-icon-right');
+  }
+  
+  return classes;
+});
+
+const hintClasses = computed(() => {
+  const classes = ['scuba-input__hint'];
+  if (props.error) {
+    classes.push('scuba-input__hint--error');
+  }
+  return classes;
+});
 
 watch(() => props.modelValue, (newVal) => {
   internalValue.value = newVal;
@@ -242,8 +238,8 @@ const togglePasswordVisibility = () => {
 .scuba-input-wrapper {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--spacing-3xs, 8px);
-  font-family: var(--type-font-family-body, 'Poppins', sans-serif);
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .scuba-input-wrapper--full-width {
@@ -253,24 +249,24 @@ const togglePasswordVisibility = () => {
 .scuba-input__label {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3xs, 8px);
-  font-size: var(--type-font-size-body-md, 16px);
-  font-weight: var(--type-font-weight-semibold, 600);
-  line-height: var(--type-line-height-body-md, 24px);
-  color: var(--context-color-text-primary, #191919);
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #191919;
 }
 
 .scuba-input__label--disabled {
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  color: #aaaaaa;
 }
 
 .scuba-input__required {
-  color: var(--semantic-color-error-dark, #ea2255);
+  color: #ea2255;
 }
 
 .scuba-input__optional {
-  font-weight: var(--type-font-weight-regular, 400);
-  color: var(--context-color-text-secondary, #555555);
+  font-weight: 400;
+  color: #555555;
 }
 
 .scuba-input__help-button {
@@ -283,24 +279,24 @@ const togglePasswordVisibility = () => {
   background: transparent;
   border: none;
   border-radius: 50%;
-  color: var(--context-color-icon-secondary, #555555);
+  color: #555555;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 16px;
 }
 
 .scuba-input__help-button:hover {
-  color: var(--context-color-icon-primary, #2a2a2a);
-  background: var(--context-color-surface-action, #eeeeee);
+  color: #2a2a2a;
+  background: #eeeeee;
 }
 
 .scuba-input__container {
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--spacing-2xs, 12px);
-  padding: 0 var(--spacing-xs, 16px);
-  background: var(--context-color-surface-action, #eeeeee);
+  gap: 12px;
+  padding: 0 16px;
+  background: #eeeeee;
   border: 2px solid transparent;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -308,21 +304,21 @@ const togglePasswordVisibility = () => {
 }
 
 .scuba-input__container:hover:not(.scuba-input__container--disabled) {
-  border-color: var(--context-color-border-action-hover, #0086cd);
+  border-color: #0086cd;
 }
 
 .scuba-input__container--focused {
-  border-color: var(--context-color-border-focus, #0086cd);
+  border-color: #0086cd;
   outline: 2px solid rgba(0, 134, 205, 0.2);
   outline-offset: 0;
 }
 
 .scuba-input__container--error {
-  border-color: var(--context-color-border-error, #ea2255);
+  border-color: #ea2255;
 }
 
 .scuba-input__container--disabled {
-  background: var(--context-color-surface-disabled, #e5e5e5);
+  background: #e5e5e5;
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -330,37 +326,37 @@ const togglePasswordVisibility = () => {
 .scuba-input__field {
   flex: 1;
   width: 100%;
-  padding: var(--spacing-2xs, 12px) 0;
+  padding: 12px 0;
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--type-font-family-body, 'Poppins', sans-serif);
-  font-size: var(--type-font-size-body-md, 16px);
-  line-height: var(--type-line-height-body-md, 24px);
-  color: var(--context-color-text-primary, #191919);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191919;
 }
 
 .scuba-input__field::placeholder {
-  color: var(--context-color-text-secondary, #555555);
+  color: #555555;
   opacity: 0.6;
 }
 
 .scuba-input__field:disabled {
   cursor: not-allowed;
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  color: #aaaaaa;
 }
 
 .scuba-input__textarea {
   resize: vertical;
   min-height: 100px;
-  padding: var(--spacing-2xs, 12px) 0;
+  padding: 12px 0;
 }
 
 .scuba-input__container:has(.scuba-input__textarea) {
   align-items: flex-start;
   min-height: auto;
-  padding-top: var(--spacing-2xs, 12px);
-  padding-bottom: var(--spacing-2xs, 12px);
+  padding-top: 12px;
+  padding-bottom: 12px;
 }
 
 .scuba-input__icon {
@@ -368,16 +364,16 @@ const togglePasswordVisibility = () => {
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  color: var(--context-color-icon-secondary, #555555);
+  color: #555555;
   flex-shrink: 0;
 }
 
 .scuba-input__container--disabled .scuba-input__icon {
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  color: #aaaaaa;
 }
 
 .scuba-input__container--error .scuba-input__icon {
-  color: var(--context-color-icon-error, #ea2255);
+  color: #ea2255;
 }
 
 .scuba-input__toggle-button {
@@ -388,25 +384,25 @@ const togglePasswordVisibility = () => {
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: var(--context-color-icon-secondary, #555555);
+  color: #555555;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 20px;
 }
 
 .scuba-input__toggle-button:hover {
-  color: var(--context-color-icon-primary, #2a2a2a);
-  background: var(--context-color-surface-secondary, #f6f6f6);
+  color: #2a2a2a;
+  background: #f6f6f6;
 }
 
 .scuba-input__hint {
-  font-size: var(--type-font-size-body-sm, 14px);
-  line-height: var(--type-line-height-body-sm, 20px);
-  color: var(--context-color-text-secondary, #555555);
+  font-size: 14px;
+  line-height: 20px;
+  color: #555555;
 }
 
 .scuba-input__hint--error {
-  color: var(--context-color-text-error, #ea2255);
+  color: #ea2255;
 }
 
 .scuba-input__field[type="number"]::-webkit-inner-spin-button,
