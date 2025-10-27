@@ -21,29 +21,49 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
-
+      
       - name: Clear npm cache
         run: npm cache clean --force
-
+      
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
-
+      
       - name: Build Storybook
         run: npm run build-storybook
-
+      
+      - name: Copy Builder to Storybook output
+        run: |
+          echo "📦 Copying Builder files..."
+          if [ -d "builder" ]; then
+            mkdir -p storybook-static/builder
+            cp -r builder/* storybook-static/builder/
+            echo "✅ Builder copied successfully"
+          else
+            echo "⚠️ Builder folder not found, skipping..."
+          fi
+      
+      - name: List output files
+        run: |
+          echo "📂 Storybook output contents:"
+          ls -la storybook-static/
+          if [ -d "storybook-static/builder" ]; then
+            echo "📂 Builder contents:"
+            ls -la storybook-static/builder/
+          fi
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./storybook-static
-
+      
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
