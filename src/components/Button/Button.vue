@@ -138,13 +138,13 @@ const handleClick = (event) => {
 }
 
 .scuba-button--solid:hover:not(:disabled) {
-  background: var(--semantic-color-primary-dark, #0942a1);
-  color: var(--primitives-color-white, #ffffff);
+  background: var(--context-color-surface-action-hover, #c2eaff);
+  color: var(--context-color-text-focus, #0942a1);
 }
 
 .scuba-button--solid:active:not(:disabled) {
-  background: var(--semantic-color-primary-dark, #0942a1);
-  color: var(--primitives-color-white, #ffffff);
+  background: var(--context-color-surface-action-hover, #c2eaff);
+  color: var(--context-color-text-focus, #0942a1);
 }
 
 .scuba-button--solid:focus-visible {
@@ -153,40 +153,40 @@ const handleClick = (event) => {
 
 .scuba-button--outline {
   background: transparent;
-  color: var(--semantic-color-neutral-dark, #191919);
-  border-color: var(--semantic-color-primary-default, #0086cd);
+  color: var(--context-color-text-primary, #2a2a2a);
+  border-color: var(--semantic-color-border-primary, #2a2a2a);
 }
 
 .scuba-button--outline:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
-  border-color: var(--semantic-color-primary-default, #0086cd);
-  color: var(--semantic-color-primary-dark, #0942a1);
+  background:  var(--context-color-surface-action-hover, #c2eaff);
+  border-color: transparent;
+  color: var(--context-color-text-focus, #0942a1);
 }
 
 .scuba-button--outline:active:not(:disabled) {
-  background: var(--context-color-surface-action-active, rgba(0, 134, 205, 0.2));
+  background:  var(--context-color-surface-action-hover, #c2eaff);
   border-color: var(--semantic-color-primary-dark, #0942a1);
 }
 
 .scuba-button--outline:focus-visible {
-  border-color: var(--semantic-color-primary-default, #0086cd);
+  border-color: var(--context-color-border-focus, #70cdff);
   box-shadow: 0 0 0 3px var(--context-color-surface-focus-light, rgba(0, 134, 205, 0.2));
 }
 
 .scuba-button--text {
   background: transparent;
-  color: var(--semantic-color-primary-default, #0086cd);
+  color: var(--context-color-text-primary, #2a2a2a);
   border-color: transparent;
   padding: var(--spacing-3xs, 8px) var(--spacing-2xs, 12px);
 }
 
 .scuba-button--text:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
-  color: var(--semantic-color-primary-dark, #0942a1);
+  background:  var(--context-color-surface-action-hover, #c2eaff);
+  color: var(--context-color-text-focus, #0942a1);
 }
 
 .scuba-button--text:active:not(:disabled) {
-  background: var(--context-color-surface-action-active, rgba(0, 134, 205, 0.2));
+  background:  var(--context-color-surface-action-hover, #c2eaff);
 }
 
 .scuba-button--text:focus-visible {
