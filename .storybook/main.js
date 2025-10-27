@@ -1,6 +1,6 @@
-const { mergeConfig } = require('vite');
-const vue = require('@vitejs/plugin-vue');
-const vueJsx = require('@vitejs/plugin-vue-jsx');
+import { mergeConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -43,4 +43,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;
