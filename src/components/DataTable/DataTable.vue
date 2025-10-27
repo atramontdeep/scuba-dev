@@ -38,7 +38,8 @@ function isExpanded(row) {
 function getSortIcon(column) {
   if (!column.sortable) return null;
   if (table.sort.value.key !== column.key) return 'ph ph-arrows-down-up';
-  return table.sort.value.dir === 'asc' ? 'ph ph-arrow-up' : 'ph ph-arrow-down';
+  if (table.sort.value.dir === 'asc') return 'ph ph-arrow-up';
+  return 'ph ph-arrow-down';
 }
 </script>
 
