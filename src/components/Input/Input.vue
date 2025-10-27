@@ -239,8 +239,6 @@ const togglePasswordVisibility = () => {
 </script>
 
 <style scoped>
-@import url('https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css');
-
 .scuba-input-wrapper {
   display: inline-flex;
   flex-direction: column;
@@ -259,20 +257,20 @@ const togglePasswordVisibility = () => {
   font-size: var(--type-font-size-body-md, 16px);
   font-weight: var(--type-font-weight-semibold, 600);
   line-height: var(--type-line-height-body-md, 24px);
-  color: var(--context-color-text-primary, var(--semantic-color-neutral-900, #191919));
+  color: var(--context-color-text-primary, #191919);
 }
 
 .scuba-input__label--disabled {
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 .scuba-input__required {
-  color: var(--semantic-color-error-dark, var(--primitives-color-red-600, #ea2255));
+  color: var(--semantic-color-error-dark, #ea2255);
 }
 
 .scuba-input__optional {
   font-weight: var(--type-font-weight-regular, 400);
-  color: var(--context-color-text-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-text-secondary, #555555);
 }
 
 .scuba-input__help-button {
@@ -285,15 +283,15 @@ const togglePasswordVisibility = () => {
   background: transparent;
   border: none;
   border-radius: 50%;
-  color: var(--context-color-icon-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-icon-secondary, #555555);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 16px;
 }
 
 .scuba-input__help-button:hover {
-  color: var(--context-color-icon-primary, var(--semantic-color-neutral-800, #2a2a2a));
-  background: var(--context-color-surface-action, var(--semantic-color-neutral-200, #eeeeee));
+  color: var(--context-color-icon-primary, #2a2a2a);
+  background: var(--context-color-surface-action, #eeeeee);
 }
 
 .scuba-input__container {
@@ -302,7 +300,7 @@ const togglePasswordVisibility = () => {
   align-items: center;
   gap: var(--spacing-2xs, 12px);
   padding: 0 var(--spacing-xs, 16px);
-  background: var(--context-color-surface-action, var(--semantic-color-neutral-200, #eeeeee));
+  background: var(--context-color-surface-action, #eeeeee);
   border: 2px solid transparent;
   border-radius: 8px;
   transition: all 0.2s ease;
@@ -310,21 +308,21 @@ const togglePasswordVisibility = () => {
 }
 
 .scuba-input__container:hover:not(.scuba-input__container--disabled) {
-  border-color: var(--context-color-border-action-hover, var(--semantic-color-primary-500, #0086cd));
+  border-color: var(--context-color-border-action-hover, #0086cd);
 }
 
 .scuba-input__container--focused {
-  border-color: var(--context-color-border-focus, var(--semantic-color-primary-default, #0086cd));
-  outline: 2px solid var(--context-color-surface-focus-light, var(--semantic-color-primary-100, #eaf8ff));
+  border-color: var(--context-color-border-focus, #0086cd);
+  outline: 2px solid rgba(0, 134, 205, 0.2);
   outline-offset: 0;
 }
 
 .scuba-input__container--error {
-  border-color: var(--context-color-border-error, var(--semantic-color-error-dark, #ea2255));
+  border-color: var(--context-color-border-error, #ea2255);
 }
 
 .scuba-input__container--disabled {
-  background: var(--context-color-surface-disabled, var(--semantic-color-neutral-300, #e5e5e5));
+  background: var(--context-color-surface-disabled, #e5e5e5);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -339,17 +337,17 @@ const togglePasswordVisibility = () => {
   font-family: var(--type-font-family-body, 'Poppins', sans-serif);
   font-size: var(--type-font-size-body-md, 16px);
   line-height: var(--type-line-height-body-md, 24px);
-  color: var(--context-color-text-primary, var(--semantic-color-neutral-900, #191919));
+  color: var(--context-color-text-primary, #191919);
 }
 
 .scuba-input__field::placeholder {
-  color: var(--context-color-text-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-text-secondary, #555555);
   opacity: 0.6;
 }
 
 .scuba-input__field:disabled {
   cursor: not-allowed;
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 .scuba-input__textarea {
@@ -370,16 +368,16 @@ const togglePasswordVisibility = () => {
   align-items: center;
   justify-content: center;
   font-size: 20px;
-  color: var(--context-color-icon-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-icon-secondary, #555555);
   flex-shrink: 0;
 }
 
 .scuba-input__container--disabled .scuba-input__icon {
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 .scuba-input__container--error .scuba-input__icon {
-  color: var(--context-color-icon-error, var(--semantic-color-error-dark, #ea2255));
+  color: var(--context-color-icon-error, #ea2255);
 }
 
 .scuba-input__toggle-button {
@@ -390,25 +388,25 @@ const togglePasswordVisibility = () => {
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: var(--context-color-icon-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-icon-secondary, #555555);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 20px;
 }
 
 .scuba-input__toggle-button:hover {
-  color: var(--context-color-icon-primary, var(--semantic-color-neutral-800, #2a2a2a));
-  background: var(--context-color-surface-secondary, var(--semantic-color-neutral-100, #f6f6f6));
+  color: var(--context-color-icon-primary, #2a2a2a);
+  background: var(--context-color-surface-secondary, #f6f6f6);
 }
 
 .scuba-input__hint {
   font-size: var(--type-font-size-body-sm, 14px);
   line-height: var(--type-line-height-body-sm, 20px);
-  color: var(--context-color-text-secondary, var(--semantic-color-neutral-700, #555555));
+  color: var(--context-color-text-secondary, #555555);
 }
 
 .scuba-input__hint--error {
-  color: var(--context-color-text-error, var(--semantic-color-error-dark, #ea2255));
+  color: var(--context-color-text-error, #ea2255);
 }
 
 .scuba-input__field[type="number"]::-webkit-inner-spin-button,
