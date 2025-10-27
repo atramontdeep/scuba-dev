@@ -2,6 +2,8 @@
 <script setup>
 import { computed, toRefs } from 'vue';
 import { useTable } from './useTable';
+import Checkbox from '../Checkbox/Checkbox.vue';
+import Button from '../Button/Button.vue';
 
 const props = defineProps({
   rows: { type: Array, required: true },
@@ -32,6 +34,12 @@ function onHeaderClick(c) {
 function isExpanded(row) {
   return table.expanded.has(row[props.rowKey]);
 }
+
+function getSortIcon(column) {
+  if (!column.sortable) return null;
+  if (table.sort.value.key !== column.key) return 'ph ph-arrows-down-up';
+  return table.sort.value.dir === 'asc' ? 'ph ph-arrow-up' : 'ph ph-arrow-down';
+}
 </script>
 
 <template>
@@ -43,33 +51,35 @@ function isExpanded(row) {
       role="region"
       aria-label="Ações em lote"
     >
-      <div class="dt-toolbar__counter">
-        {{ table.selected.size }} selecionado{{ table.selected.size > 1 ? 's' : '' }}
+      <div class="dt-toolbar__info">
+        <i class="ph ph-minus-circle dt-toolbar__icon"></i>
+        <span class="dt-toolbar__counter">
+          {{ table.selected.size }} selecionado{{ table.selected.size > 1 ? 's' : '' }}
+        </span>
       </div>
       <div class="dt-toolbar__divider" />
       <div class="dt-toolbar__actions">
-        <button
+        <Button
           v-for="a in actions"
           :key="a.key"
-          type="button"
-          class="dt-btn"
+          variant="text"
+          size="sm"
+          :icon-left="a.icon"
+          :label="a.label"
           @click="onActionClick(a)"
-        >
-          <span v-if="a.icon" class="dt-btn__icon">{{ a.icon }}</span>
-          {{ a.label }}
-        </button>
+        />
       </div>
     </div>
 
     <table class="dt-table">
       <thead>
-        <tr>
+        <tr :class="{ 'dt-header-selected': table.selected.size > 0 }">
           <th v-if="selectable" class="dt-th dt-th--checkbox">
-            <input
-              type="checkbox"
-              :checked="table.allSelected"
+            <Checkbox
+              :model-value="table.allSelected"
               :indeterminate="table.someSelected"
-              @change="table.toggleAll()"
+              size="sm"
+              @update:model-value="table.toggleAll()"
               aria-label="Selecionar tudo"
             />
           </th>
@@ -80,19 +90,23 @@ function isExpanded(row) {
             v-for="c in columns"
             :key="c.key"
             class="dt-th"
+            :class="{ 'dt-th--sortable': c.sortable }"
             :style="{ width: c.width }"
-            :data-sortable="!!c.sortable"
             @click="onHeaderClick(c)"
           >
-            <div class="dt-th__content" :style="{ justifyContent: c.align === 'right' ? 'flex-end' : c.align === 'center' ? 'center' : 'flex-start' }">
+            <div 
+              class="dt-th__content" 
+              :style="{ 
+                justifyContent: c.align === 'right' ? 'flex-end' : c.align === 'center' ? 'center' : 'flex-start' 
+              }"
+            >
               <span>{{ c.header }}</span>
-              <svg v-if="c.sortable" width="16" height="16" viewBox="0 0 24 24" class="dt-sort-icon">
-                <path fill="currentColor" d="M12 8l-4 4h8z"/>
-              </svg>
+              <i 
+                v-if="c.sortable" 
+                :class="[getSortIcon(c), 'dt-sort-icon']"
+              ></i>
             </div>
           </th>
-
-          <!-- coluna “Última atividade”, por ex., poderia estar nas columns também -->
         </tr>
       </thead>
 
@@ -100,22 +114,24 @@ function isExpanded(row) {
         <template v-for="row in sortedRows" :key="row[rowKey]">
           <tr :class="{ 'dt-row--selected': table.selected.has(row[rowKey]) }">
             <td v-if="selectable" class="dt-td dt-td--checkbox">
-              <input
-                type="checkbox"
-                :checked="table.selected.has(row[rowKey])"
-                @change="table.toggleRow(row[rowKey])"
+              <Checkbox
+                :model-value="table.selected.has(row[rowKey])"
+                size="sm"
+                @update:model-value="table.toggleRow(row[rowKey])"
                 :aria-label="`Selecionar linha ${row[rowKey]}`"
               />
             </td>
 
-            <td
-              v-if="expandable"
-              class="dt-td dt-td--expander"
-            >
-              <button class="dt-expander" @click="table.toggleExpanded(row[rowKey])" :aria-expanded="isExpanded(row)">
-                <svg width="18" height="18" viewBox="0 0 24 24" :style="{ transform: isExpanded(row) ? 'rotate(90deg)' : 'rotate(0deg)' }">
-                  <path fill="currentColor" d="M9 6l6 6-6 6z"/>
-                </svg>
+            <td v-if="expandable" class="dt-td dt-td--expander">
+              <button 
+                class="dt-expander" 
+                @click="table.toggleExpanded(row[rowKey])" 
+                :aria-expanded="isExpanded(row)"
+              >
+                <i 
+                  class="ph ph-caret-right"
+                  :class="{ 'dt-expander--expanded': isExpanded(row) }"
+                ></i>
               </button>
             </td>
 
@@ -158,10 +174,11 @@ function isExpanded(row) {
 
 <style scoped>
 .dt-wrapper {
-  border: 1px solid var(--context-color-border-secondary, #e2e4e8);
+  border: 1px solid #E5E7EB;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--context-color-surface-primary, #fff);
+  background: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Toolbar */
@@ -169,34 +186,38 @@ function isExpanded(row) {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 14px 16px;
-  background: var(--context-color-surface-action, rgba(31,111,235,0.08));
-  border-bottom: 1px solid var(--context-color-border-secondary, #e2e4e8);
+  padding: 14px 20px;
+  background: #DBEAFE;
+  border-bottom: 1px solid #93C5FD;
 }
+
+.dt-toolbar__info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dt-toolbar__icon {
+  font-size: 20px;
+  color: #1E40AF;
+}
+
 .dt-toolbar__counter {
-  font: 600 14px/1 var(--font-family-primary, system-ui);
-  color: var(--context-color-text-primary, #1f2328);
+  font-size: 14px;
+  font-weight: 600;
+  color: #1E40AF;
 }
+
 .dt-toolbar__divider {
   width: 1px;
   height: 24px;
-  background: var(--context-color-border-secondary, #e2e4e8);
+  background: #93C5FD;
 }
+
 .dt-toolbar__actions {
   display: inline-flex;
   gap: 8px;
-}
-.dt-btn {
-  border: 1px solid var(--context-color-border-primary, #d0d7de);
-  background: var(--context-color-surface-primary, #fff);
-  color: var(--context-color-text-primary, #1f2328);
-  font: 500 14px/1 var(--font-family-primary, system-ui);
-  border-radius: 10px;
-  padding: 8px 12px;
-  cursor: pointer;
-}
-.dt-btn:hover {
-  background: var(--context-color-surface-action-hover, rgba(31,111,235,0.12));
+  flex: 1;
 }
 
 /* Table */
@@ -205,53 +226,106 @@ function isExpanded(row) {
   border-collapse: separate;
   border-spacing: 0;
 }
+
 .dt-th, .dt-td {
   padding: 16px 20px;
-  border-bottom: 1px solid var(--context-color-border-secondary, #e2e4e8);
-  color: var(--context-color-text-primary, #1f2328);
-  font: 400 14px/1.4 var(--font-family-primary, system-ui);
-  background: var(--context-color-surface-primary, #fff);
+  border-bottom: 1px solid #F3F4F6;
+  color: #1F2937;
+  font-size: 14px;
+  background: #FFFFFF;
 }
+
 .dt-th {
   font-weight: 600;
   text-align: left;
-  background: var(--context-color-surface-primary, #fff);
+  background: #FFFFFF;
   white-space: nowrap;
+  transition: background 0.2s;
 }
+
+.dt-header-selected .dt-th {
+  background: #DBEAFE;
+  border-bottom-color: #93C5FD;
+}
+
 .dt-th__content {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-.dt-th[data-sortable="true"] {
+
+.dt-th--sortable {
   cursor: pointer;
+  user-select: none;
 }
+
+.dt-th--sortable:hover {
+  background: #F9FAFB;
+}
+
+.dt-header-selected .dt-th--sortable:hover {
+  background: #BFDBFE;
+}
+
 .dt-sort-icon {
-  opacity: 0.5;
+  font-size: 16px;
+  color: #9CA3AF;
+  transition: color 0.2s;
 }
+
+.dt-th--sortable:hover .dt-sort-icon {
+  color: #6B7280;
+}
+
 .dt-td--checkbox,
 .dt-th--checkbox {
   width: 56px;
+  padding-left: 20px;
 }
+
 .dt-td--expander,
 .dt-th--expander {
   width: 48px;
+  padding: 0;
 }
+
 .dt-expander {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--context-color-icon-secondary, #57606a);
+  color: #6B7280;
+  transition: all 0.2s;
 }
-.dt-row--selected .dt-td,
-.dt-row--selected .dt-th {
-  background: var(--context-color-surface-focus-light, #e8f0fe);
+
+.dt-expander:hover {
+  color: #1F2937;
 }
+
+.dt-expander i {
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.dt-expander--expanded {
+  transform: rotate(90deg);
+}
+
+.dt-row--selected .dt-td {
+  background: #EFF6FF;
+}
+
 .dt-row--expanded .dt-td--expanded {
-  background: var(--context-color-surface-primary, #fff);
+  background: #F9FAFB;
+  padding: 20px;
 }
+
 .dt-expanded-default {
-  color: var(--context-color-text-secondary, #555);
-  font: 400 14px/1.4 var(--font-family-primary, system-ui);
+  color: #6B7280;
+  font-size: 14px;
 }
 </style>

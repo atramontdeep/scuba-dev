@@ -1,45 +1,72 @@
 <!-- src/components/DataTable/cells/StatusCell.vue -->
 <script setup>
-/**
- * Simple status pill: success | warning | error | info
- */
-defineProps({
-  status: { type: String, required: true, validator: (v) => ['success', 'warning', 'error', 'info'].includes(v) },
-  label: { type: String, default: '' }
+const props = defineProps({
+  status: { 
+    type: String, 
+    required: true,
+    validator: (v) => [
+      'not-started',
+      'in-progress', 
+      'ready-for-approval',
+      'audited',
+      'about-to-expire',
+      'expired',
+      'completed',
+      'waiting-response',
+      'responded',
+      'validating',
+      'adjusting',
+      'validated'
+    ].includes(v)
+  }
 });
+
+const statusConfig = {
+  'not-started': { label: 'Não iniciada', color: '#D1D5DB' },
+  'in-progress': { label: 'Em andamento', color: '#60A5FA' },
+  'ready-for-approval': { label: 'Pronta para aprovação', color: '#38BDF8' },
+  'audited': { label: 'Auditada', color: '#3B82F6' },
+  'about-to-expire': { label: 'A expirar', color: '#FB923C' },
+  'expired': { label: 'Expirada', color: '#EF4444' },
+  'completed': { label: 'Concluída', color: '#22C55E' },
+  'waiting-response': { label: 'Aguardando resposta', color: '#60A5FA' },
+  'responded': { label: 'Respondido', color: '#38BDF8' },
+  'validating': { label: 'Em validação', color: '#C084FC' },
+  'adjusting': { label: 'Em ajuste', color: '#3B82F6' },
+  'validated': { label: 'Validado', color: '#10B981' }
+};
+
+const config = statusConfig[props.status];
 </script>
 
 <template>
-  <span class="dt-status" :data-variant="status">
-    {{ label ?? status }}
+  <span class="status-badge" :style="{ '--status-color': config.color }">
+    <span class="status-dot"></span>
+    {{ config.label }}
   </span>
 </template>
 
 <style scoped>
-.dt-status {
+.status-badge {
   display: inline-flex;
   align-items: center;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font: 600 12px/1 var(--font-family-primary, system-ui);
-  border: 1px solid transparent;
-  color: var(--context-color-text-primary, #1f2328);
-  background: var(--context-color-surface-secondary, #f2f3f5);
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1F2937;
+  white-space: nowrap;
 }
-.dt-status[data-variant="success"] {
-  background: var(--context-color-surface-success, #d1f0d6);
-  color: var(--semantic-color-success/dark, #116329);
-}
-.dt-status[data-variant="warning"] {
-  background: var(--context-color-surface-warning, #ffedd1);
-  color: var(--semantic-color-warning/dark, #8a4b00);
-}
-.dt-status[data-variant="error"] {
-  background: var(--context-color-surface-error, #ffe1e1);
-  color: var(--semantic-color-error/dark, #a40e26);
-}
-.dt-status[data-variant="info"] {
-  background: var(--context-color-surface-info, #dbedff);
-  color: var(--semantic-color-info/dark, #1158c7);
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--status-color);
+  flex-shrink: 0;
 }
 </style>

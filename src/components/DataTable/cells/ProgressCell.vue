@@ -1,40 +1,104 @@
 <!-- src/components/DataTable/cells/ProgressCell.vue -->
 <script setup>
-defineProps({
+import { computed } from 'vue';
+
+const props = defineProps({
   value: { type: Number, required: true },  // 0..100
-  label: { type: String, default: '' }       // ex: "21/200"
+  label: { type: String, default: '' }      // ex: "21/200"
 });
+
+const clampedValue = computed(() => Math.max(0, Math.min(100, props.value)));
+
+const progressState = computed(() => {
+  if (clampedValue.value === 0) return 'empty';
+  if (clampedValue.value === 100) return 'complete';
+  return 'partial';
+});
+
+const stateConfig = {
+  empty: {
+    barColor: '#FFFFFF',
+    fillColor: 'transparent',
+    textColor: '#6B7280',
+    borderColor: '#E5E7EB'
+  },
+  partial: {
+    barColor: '#DBEAFE',
+    fillColor: '#60A5FA',
+    textColor: '#1F2937',
+    borderColor: '#93C5FD'
+  },
+  complete: {
+    barColor: '#1E40AF',
+    fillColor: '#1E40AF',
+    textColor: '#FFFFFF',
+    borderColor: '#1E40AF'
+  }
+};
+
+const config = computed(() => stateConfig[progressState.value]);
 </script>
 
 <template>
-  <div class="dt-progress">
-    <div class="dt-progress__bar">
-      <div class="dt-progress__fill" :style="{ width: `${Math.max(0, Math.min(100, value))}%` }" />
+  <div class="progress-cell">
+    <div 
+      class="progress-bar"
+      :class="`progress-bar--${progressState}`"
+      :style="{
+        '--bar-bg': config.barColor,
+        '--fill-bg': config.fillColor,
+        '--border-color': config.borderColor
+      }"
+    >
+      <div class="progress-fill" :style="{ width: `${clampedValue}%` }"></div>
+      <span 
+        class="progress-text"
+        :style="{ color: config.textColor }"
+      >
+        {{ Math.round(clampedValue) }}% <span v-if="label" class="progress-label">({{ label }})</span>
+      </span>
     </div>
-    <span class="dt-progress__text">{{ Math.round(value) }}% <span v-if="label">({{ label }})</span></span>
   </div>
 </template>
 
 <style scoped>
-.dt-progress {
+.progress-cell {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
 }
-.dt-progress__bar {
+
+.progress-bar {
+  position: relative;
   width: 220px;
   height: 36px;
   border-radius: 10px;
-  background: var(--context-color-surface-action, rgba(31,111,235,0.08));
-  border: 1px solid var(--context-color-border-secondary, #e2e4e8);
+  background: var(--bar-bg);
+  border: 1px solid var(--border-color);
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.dt-progress__fill {
+
+.progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
   height: 100%;
-  background: var(--context-color-icon-action, #1f6feb);
+  background: var(--fill-bg);
+  transition: width 0.3s ease;
+  border-radius: 10px;
 }
-.dt-progress__text {
-  color: var(--context-color-text-primary, #1f2328);
-  font: 500 14px/1 var(--font-family-primary, system-ui);
+
+.progress-text {
+  position: relative;
+  z-index: 1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.progress-label {
+  font-weight: 400;
 }
 </style>
