@@ -24,7 +24,7 @@
     <div :class="inputContainerClasses">
       <!-- Icon Left -->
       <span v-if="iconLeft" class="scuba-input__icon scuba-input__icon--left">
-        <i :class="['ph', iconLeft]"></i>
+        <i :class="[iconLeft]"></i>
       </span>
 
       <!-- Input or Textarea -->
@@ -75,7 +75,7 @@
         </button>
         
         <!-- Regular Icon -->
-        <i v-else-if="iconRight" :class="['ph', iconRight]"></i>
+        <i v-else-if="iconRight" :class="[iconRight]"></i>
       </span>
     </div>
 
