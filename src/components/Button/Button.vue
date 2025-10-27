@@ -4,13 +4,13 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <i v-if="iconLeft" :class="[iconLeft, 'scuba-button__icon-left']"></i>
+    <i v-if="iconLeft" :class="iconLeft + ' scuba-button__icon-left'"></i>
     
     <span class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
     
-    <i v-if="iconRight" :class="[iconRight, 'scuba-button__icon-right']"></i>
+    <i v-if="iconRight" :class="iconRight + ' scuba-button__icon-right'"></i>
   </button>
 </template>
 
@@ -18,59 +18,32 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-  /**
-   * Variante do botão
-   */
   variant: {
     type: String,
     default: 'solid',
     validator: (value) => ['solid', 'outline', 'text'].includes(value)
   },
-  
-  /**
-   * Tamanho do botão
-   */
   size: {
     type: String,
     default: 'md',
     validator: (value) => ['sm', 'md', 'lg'].includes(value)
   },
-  
-  /**
-   * Texto do botão
-   */
   label: {
     type: String,
     default: 'Button'
   },
-  
-  /**
-   * Estado desabilitado
-   */
   disabled: {
     type: Boolean,
     default: false
   },
-  
-  /**
-   * Ícone à esquerda (classe Phosphor completa, ex: 'ph ph-heart')
-   */
   iconLeft: {
     type: String,
     default: ''
   },
-  
-  /**
-   * Ícone à direita (classe Phosphor completa, ex: 'ph ph-arrow-right')
-   */
   iconRight: {
     type: String,
     default: ''
   },
-  
-  /**
-   * Largura total (100%)
-   */
   fullWidth: {
     type: Boolean,
     default: false
@@ -98,33 +71,21 @@ const handleClick = (event) => {
 </script>
 
 <style scoped>
-/* Base Button */
 .scuba-button {
-  /* Layout */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-2xs, 8px);
-  
-  /* Typography - usando tokens do Scuba */
-  font-family: var(--type-font-family-body, 'Poppins', sans-serif);
-  font-size: var(--type-font-size-body-md, 16px);
-  font-weight: var(--type-font-weight-semibold, 600);
-  line-height: var(--type-line-height-body-md, 24px);
-  
-  /* Spacing */
-  padding: var(--spacing-xs, 12px) var(--spacing-md, 24px);
-  
-  /* Border */
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  padding: 12px 24px;
   border: 2px solid transparent;
-  border-radius: var(--border-radius-rounded, 8px);
-  
-  /* Interaction */
+  border-radius: 8px;
   cursor: pointer;
   user-select: none;
   transition: all 0.2s ease;
-  
-  /* Remove default button styles */
   background: none;
   outline: none;
   text-decoration: none;
@@ -132,16 +93,14 @@ const handleClick = (event) => {
 }
 
 .scuba-button:focus-visible {
-  outline: 2px solid var(--context-color-border-focus, #0086cd);
+  outline: 2px solid #0086cd;
   outline-offset: 2px;
 }
 
-/* Full Width */
 .scuba-button--full-width {
   width: 100%;
 }
 
-/* Icon Spacing */
 .scuba-button__icon-left,
 .scuba-button__icon-right {
   display: inline-flex;
@@ -149,62 +108,59 @@ const handleClick = (event) => {
   font-size: 1.2em;
 }
 
-/* Sizes */
 .scuba-button--sm {
   height: 32px;
-  padding: 0 var(--spacing-xs, 16px);
-  font-size: var(--type-font-size-body-sm, 14px);
-  line-height: var(--type-line-height-body-sm, 20px);
-  gap: var(--spacing-3xs, 6px);
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 20px;
+  gap: 6px;
 }
 
 .scuba-button--md {
   height: 40px;
-  padding: 0 var(--spacing-sm, 20px);
-  font-size: var(--type-font-size-body-md, 16px);
-  line-height: var(--type-line-height-body-md, 24px);
+  padding: 0 20px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .scuba-button--lg {
   height: 48px;
-  padding: 0 var(--spacing-md, 24px);
-  font-size: var(--type-font-size-body-lg, 18px);
-  line-height: var(--type-line-height-body-lg, 32px);
-  gap: var(--spacing-2xs, 12px);
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 32px;
+  gap: 12px;
 }
 
-/* Variant: SOLID */
 .scuba-button--solid {
-  background: var(--context-color-surface-inverted, #0086cd);
-  color: var(--context-text-inverted, #ffffff);
+  background: #0086cd;
+  color: #ffffff;
   border-color: transparent;
 }
 
 .scuba-button--solid:hover:not(:disabled) {
-  background: var(--context-color-surface-focus, #0942a1);
-  color: var(--context-text-focus, #ffffff);
+  background: #0942a1;
+  color: #ffffff;
 }
 
 .scuba-button--solid:active:not(:disabled) {
-  background: var(--context-color-surface-focus, #0942a1);
-  color: var(--context-text-focus, #ffffff);
+  background: #0942a1;
+  color: #ffffff;
 }
 
 .scuba-button--solid:focus-visible {
   box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.3);
 }
 
-/* Variant: OUTLINE */
 .scuba-button--outline {
   background: transparent;
-  color: var(--context-color-text-primary, #191919);
-  border-color: var(--context-color-border-action, #0086cd);
+  color: #191919;
+  border-color: #0086cd;
 }
 
 .scuba-button--outline:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
+  background: rgba(0, 134, 205, 0.1);
   border-color: #0086cd;
-  color: var(--context-color-text-focus, #0942a1);
+  color: #0942a1;
 }
 
 .scuba-button--outline:active:not(:disabled) {
@@ -213,21 +169,20 @@ const handleClick = (event) => {
 }
 
 .scuba-button--outline:focus-visible {
-  border-color: var(--context-color-border-focus, #0086cd);
+  border-color: #0086cd;
   box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
 }
 
-/* Variant: TEXT */
 .scuba-button--text {
   background: transparent;
-  color: var(--semantic-color-primary-500, #0086cd);
+  color: #0086cd;
   border-color: transparent;
-  padding: var(--spacing-3xs, 8px) var(--spacing-xs, 12px);
+  padding: 8px 12px;
 }
 
 .scuba-button--text:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
-  color: var(--semantic-color-primary-600, #0942a1);
+  background: rgba(0, 134, 205, 0.1);
+  color: #0942a1;
 }
 
 .scuba-button--text:active:not(:disabled) {
@@ -238,7 +193,6 @@ const handleClick = (event) => {
   box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
 }
 
-/* Disabled State */
 .scuba-button--disabled,
 .scuba-button:disabled {
   cursor: not-allowed;
@@ -247,18 +201,18 @@ const handleClick = (event) => {
 
 .scuba-button--solid.scuba-button--disabled,
 .scuba-button--solid:disabled {
-  background: var(--context-color-surface-disabled, #e5e5e5);
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  background: #e5e5e5;
+  color: #aaaaaa;
 }
 
 .scuba-button--outline.scuba-button--disabled,
 .scuba-button--outline:disabled {
-  border-color: var(--context-color-border-disabled, #e5e5e5);
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  border-color: #e5e5e5;
+  color: #aaaaaa;
 }
 
 .scuba-button--text.scuba-button--disabled,
 .scuba-button--text:disabled {
-  color: var(--context-color-icon-disabled, #aaaaaa);
+  color: #aaaaaa;
 }
 </style>
