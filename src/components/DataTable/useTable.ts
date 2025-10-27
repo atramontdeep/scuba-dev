@@ -1,21 +1,14 @@
 // src/components/DataTable/useTable.ts
 import { computed, reactive, ref } from 'vue';
 
-export type SortDir = 'asc' | 'desc' | null;
-
-export interface SortState {
-  key: string | null;
-  dir: SortDir;
-}
-
-export function useTable<T>(rows: T[], rowKey: keyof T) {
-  const selected = reactive(new Set<string | number>());
-  const expanded = reactive(new Set<string | number>());
-  const sort = ref<SortState>({ key: null, dir: null });
+export function useTable(rows, rowKey) {
+  const selected = reactive(new Set());
+  const expanded = reactive(new Set());
+  const sort = ref({ key: null, dir: null });
 
   const allSelected = computed(() => {
     if (!rows.length) return false;
-    return rows.every((r) => selected.has(r[rowKey] as any));
+    return rows.every((r) => selected.has(r[rowKey]));
   });
 
   const someSelected = computed(() => selected.size > 0 && !allSelected.value);
@@ -24,19 +17,19 @@ export function useTable<T>(rows: T[], rowKey: keyof T) {
     if (allSelected.value) {
       selected.clear();
     } else {
-      rows.forEach((r) => selected.add(r[rowKey] as any));
+      rows.forEach((r) => selected.add(r[rowKey]));
     }
   }
 
-  function toggleRow(id: string | number) {
+  function toggleRow(id) {
     if (selected.has(id)) selected.delete(id); else selected.add(id);
   }
 
-  function toggleExpanded(id: string | number) {
+  function toggleExpanded(id) {
     if (expanded.has(id)) expanded.delete(id); else expanded.add(id);
   }
 
-  function setSort(key: string) {
+  function setSort(key) {
     if (sort.value.key !== key) {
       sort.value = { key, dir: 'asc' };
       return;
@@ -46,14 +39,14 @@ export function useTable<T>(rows: T[], rowKey: keyof T) {
     else sort.value = { key, dir: 'asc' };
   }
 
-  function sortRows(input: T[]) {
+  function sortRows(input) {
     const s = sort.value;
     if (!s.key || !s.dir) return input;
-    const k = s.key as keyof T;
+    const k = s.key;
     const dirMul = s.dir === 'asc' ? 1 : -1;
     return [...input].sort((a, b) => {
-      const va = (a[k] as any);
-      const vb = (b[k] as any);
+      const va = a[k];
+      const vb = b[k];
       if (va == null && vb == null) return 0;
       if (va == null) return -1 * dirMul;
       if (vb == null) return 1 * dirMul;

@@ -1,9 +1,12 @@
 <!-- src/components/DataTable/cells/StatusCell.vue -->
-<script setup lang="ts">
+<script setup>
 /**
  * Simple status pill: success | warning | error | info
  */
-const props = defineProps<{ status: 'success' | 'warning' | 'error' | 'info'; label?: string }>();
+defineProps({
+  status: { type: String, required: true, validator: (v) => ['success', 'warning', 'error', 'info'].includes(v) },
+  label: { type: String, default: '' }
+});
 </script>
 
 <template>

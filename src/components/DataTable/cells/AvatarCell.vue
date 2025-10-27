@@ -1,9 +1,9 @@
 <!-- src/components/DataTable/cells/AvatarCell.vue -->
-<script setup lang="ts">
-defineProps<{
-  name: string;
-  image?: string;
-}>();
+<script setup>
+defineProps({
+  name: { type: String, required: true },
+  image: { type: String, default: '' }
+});
 </script>
 
 <template>

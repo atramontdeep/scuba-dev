@@ -1,11 +1,11 @@
 // src/components/DataTable/DataTable.stories.jsx
-import DataTable from './DataTable/DataTable.vue';
-import AvatarCell from './DataTable/cells/AvatarCell.vue';
-import ProgressCell from './DataTable/cells/ProgressCell.vue';
-import StatusCell from './DataTable/cells/StatusCell.vue';
+import DataTable from './DataTable.vue';
+import AvatarCell from './cells/AvatarCell.vue';
+import ProgressCell from './cells/ProgressCell.vue';
+import StatusCell from './cells/StatusCell.vue';
 
 export default {
-  title: 'Components/DataTable',
+  title: 'Scuba/DataTable',
   component: DataTable,
   parameters: { layout: 'fullscreen' },
 };

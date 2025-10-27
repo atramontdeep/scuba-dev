@@ -1,58 +1,36 @@
 <!-- src/components/DataTable/DataTable.vue -->
-<script setup lang="ts">
+<script setup>
 import { computed, toRefs } from 'vue';
 import { useTable } from './useTable';
 
-export type ColumnDef<T = any> = {
-  key: string;               // chave do dado
-  header: string;            // rótulo
-  sortable?: boolean;
-  width?: string;            // ex "260px"
-  align?: 'left' | 'center' | 'right';
-};
-
-export type TableAction = {
-  key: string;
-  label: string;
-  icon?: string;
-};
-
-const props = withDefaults(defineProps<{
-  rows: any[];
-  columns: ColumnDef[];
-  rowKey?: string;
-  selectable?: boolean;
-  expandable?: boolean;
-  actions?: TableAction[];      // toolbar de seleção (customizável)
-}>(), {
-  rowKey: 'id',
-  selectable: true,
-  expandable: true,
-  actions: () => [],
+const props = defineProps({
+  rows: { type: Array, required: true },
+  columns: { type: Array, required: true },
+  rowKey: { type: String, default: 'id' },
+  selectable: { type: Boolean, default: true },
+  expandable: { type: Boolean, default: true },
+  actions: { type: Array, default: () => [] }
 });
 
-const emits = defineEmits<{
-  (e: 'action', payload: { key: string; rows: any[] }): void;
-  (e: 'update:sort', payload: { key: string | null; dir: 'asc' | 'desc' | null }): void;
-}>();
+const emits = defineEmits(['action', 'update:sort']);
 
 const { rows, rowKey } = toRefs(props);
-const table = useTable(rows.value, rowKey.value as any);
+const table = useTable(rows.value, rowKey.value);
 const sortedRows = computed(() => table.sortRows(rows.value));
 
-function onActionClick(a: TableAction) {
-  const selectedRows = rows.value.filter((r) => table.selected.has(r[props.rowKey as any]));
+function onActionClick(a) {
+  const selectedRows = rows.value.filter((r) => table.selected.has(r[props.rowKey]));
   emits('action', { key: a.key, rows: selectedRows });
 }
 
-function onHeaderClick(c: ColumnDef) {
+function onHeaderClick(c) {
   if (!c.sortable) return;
   table.setSort(c.key);
   emits('update:sort', table.sort.value);
 }
 
-function isExpanded(row: any) {
-  return table.expanded.has(row[props.rowKey as any]);
+function isExpanded(row) {
+  return table.expanded.has(row[props.rowKey]);
 }
 </script>
 

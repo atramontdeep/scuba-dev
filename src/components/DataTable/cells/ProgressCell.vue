@@ -1,9 +1,9 @@
 <!-- src/components/DataTable/cells/ProgressCell.vue -->
-<script setup lang="ts">
-defineProps<{
-  value: number;      // 0..100
-  label?: string;     // ex: "21/200"
-}>();
+<script setup>
+defineProps({
+  value: { type: Number, required: true },  // 0..100
+  label: { type: String, default: '' }       // ex: "21/200"
+});
 </script>
 
 <template>
