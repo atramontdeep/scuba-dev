@@ -4,17 +4,13 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <span v-if="iconLeft" class="scuba-button__icon-left">
-      <slot name="icon-left">{{ iconLeft }}</slot>
-    </span>
+    <i v-if="iconLeft" :class="['ph', iconLeft, 'scuba-button__icon-left']"></i>
     
     <span class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
     
-    <span v-if="iconRight" class="scuba-button__icon-right">
-      <slot name="icon-right">{{ iconRight }}</slot>
-    </span>
+    <i v-if="iconRight" :class="['ph', iconRight, 'scuba-button__icon-right']"></i>
   </button>
 </template>
 
@@ -57,7 +53,7 @@ const props = defineProps({
   },
   
   /**
-   * Ícone à esquerda (emoji ou texto)
+   * Ícone à esquerda (classe Phosphor, ex: 'ph-heart')
    */
   iconLeft: {
     type: String,
@@ -65,7 +61,7 @@ const props = defineProps({
   },
   
   /**
-   * Ícone à direita (emoji ou texto)
+   * Ícone à direita (classe Phosphor, ex: 'ph-arrow-right')
    */
   iconRight: {
     type: String,
@@ -119,9 +115,9 @@ const handleClick = (event) => {
   /* Spacing */
   padding: var(--spacing-xs, 12px) var(--spacing-md, 24px);
   
-  /* Border */
-  border: var(--border-width  -border-md) solid transparent;
-  border-radius: var(--border-radius-rounded);
+  /* Border - CORRIGIDO */
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-rounded, 8px);
   
   /* Interaction */
   cursor: pointer;
@@ -179,67 +175,67 @@ const handleClick = (event) => {
 
 /* Variant: SOLID */
 .scuba-button--solid {
-  background: var(--context-color-surface-inverted);
-  color: var(--context-text-inverted);
+  background: var(--context-color-surface-inverted, #0086cd);
+  color: var(--context-text-inverted, #ffffff);
   border-color: transparent;
 }
 
 .scuba-button--solid:hover:not(:disabled) {
-  background: var(--context-color-surface-focus);
-  color: var(--context-text-focus);
+  background: var(--context-color-surface-focus, #0942a1);
+  color: var(--context-text-focus, #ffffff);
 }
 
 .scuba-button--solid:active:not(:disabled) {
-  background: var(--context-color-surface-focus);
-  color: var(--context-text-focus);
+  background: var(--context-color-surface-focus, #0942a1);
+  color: var(--context-text-focus, #ffffff);
 }
 
 .scuba-button--solid:focus-visible {
-  box-shadow: 0 0 0 3px var(--context-color-surface-focus);
+  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.3);
 }
 
 /* Variant: OUTLINE */
 .scuba-button--outline {
   background: transparent;
-  color: var(--context-color-text-primary);
-  border-color: var(--context-color-border-action);
+  color: var(--context-color-text-primary, #191919);
+  border-color: var(--context-color-border-action, #0086cd);
 }
 
 .scuba-button--outline:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover);
-  border-color: transparent;
-  color: var(--context-color-text-focus);
+  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
+  border-color: #0086cd;
+  color: var(--context-color-text-focus, #0942a1);
 }
 
 .scuba-button--outline:active:not(:disabled) {
-  background: var(--semantic-color-primary-200, #c2eaff);
-  border-color: var(--semantic-color-primary-600, #0942a1);
+  background: rgba(0, 134, 205, 0.2);
+  border-color: #0942a1;
 }
 
 .scuba-button--outline:focus-visible {
-  border-color: var(--context-color-border-focus, var(--semantic-color-primary-default, #0086cd));
-  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light, var(--semantic-color-primary-100, #eaf8ff));
+  border-color: var(--context-color-border-focus, #0086cd);
+  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
 }
 
 /* Variant: TEXT */
 .scuba-button--text {
   background: transparent;
-  color: var(--semantic-color-primary-500, var(--primitives-color-blue-500, #0086cd));
+  color: var(--semantic-color-primary-500, #0086cd);
   border-color: transparent;
   padding: var(--spacing-3xs, 8px) var(--spacing-xs, 12px);
 }
 
 .scuba-button--text:hover:not(:disabled) {
-  background: var(--context-color-surface-action-hover, var(--semantic-color-primary-200, #c2eaff));
-  color: var(--semantic-color-primary-600, var(--primitives-color-blue-600, #0942a1));
+  background: var(--context-color-surface-action-hover, rgba(0, 134, 205, 0.1));
+  color: var(--semantic-color-primary-600, #0942a1);
 }
 
 .scuba-button--text:active:not(:disabled) {
-  background: var(--semantic-color-primary-200, #c2eaff);
+  background: rgba(0, 134, 205, 0.2);
 }
 
 .scuba-button--text:focus-visible {
-  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light, var(--semantic-color-primary-100, #eaf8ff));
+  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
 }
 
 /* Disabled State */
@@ -251,19 +247,18 @@ const handleClick = (event) => {
 
 .scuba-button--solid.scuba-button--disabled,
 .scuba-button--solid:disabled {
-  background: var(--context-color-surface-disabled, var(--semantic-color-neutral-300, #e5e5e5));
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  background: var(--context-color-surface-disabled, #e5e5e5);
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 .scuba-button--outline.scuba-button--disabled,
 .scuba-button--outline:disabled {
-  border-color: var(--context-color-border-disabled, var(--semantic-color-neutral-300, #e5e5e5));
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  border-color: var(--context-color-border-disabled, #e5e5e5);
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 
 .scuba-button--text.scuba-button--disabled,
 .scuba-button--text:disabled {
-  color: var(--context-color-icon-disabled, var(--semantic-color-neutral-500, #aaaaaa));
+  color: var(--context-color-icon-disabled, #aaaaaa);
 }
 </style>
-// trigger workflow
