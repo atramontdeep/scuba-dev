@@ -1,4 +1,6 @@
 const { mergeConfig } = require('vite');
+const vue = require('@vitejs/plugin-vue');
+const vueJsx = require('@vitejs/plugin-vue-jsx');
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -24,6 +26,7 @@ const config = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
+      plugins: [vue(), vueJsx()],
       define: {
         'process.env': {},
         global: 'globalThis',

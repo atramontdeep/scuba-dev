@@ -4,13 +4,13 @@
     :disabled="disabled"
     @click="handleClick"
   >
-    <i v-if="iconLeft" :class="iconLeft"></i>
+    <i v-if="iconLeft" :class="iconLeftClasses"></i>
     
     <span class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
     
-    <i v-if="iconRight" :class="iconRight"></i>
+    <i v-if="iconRight" :class="iconRightClasses"></i>
   </button>
 </template>
 
@@ -72,6 +72,16 @@ const buttonClasses = computed(() => {
   return classes;
 });
 
+const iconLeftClasses = computed(() => {
+  if (!props.iconLeft) return '';
+  return 'ph ' + props.iconLeft + ' scuba-button__icon-left';
+});
+
+const iconRightClasses = computed(() => {
+  if (!props.iconRight) return '';
+  return 'ph ' + props.iconRight + ' scuba-button__icon-right';
+});
+
 const handleClick = (event) => {
   if (!props.disabled) {
     emit('click', event);
@@ -89,7 +99,7 @@ const handleClick = (event) => {
   font-size: 16px;
   font-weight: 600;
   line-height: 24px;
-  padding: 12px 24px;
+  padding: var( --spacing-px-3) var( --spacing-px-6);
   border: 2px solid transparent;
   border-radius: 8px;
   cursor: pointer;
@@ -110,7 +120,8 @@ const handleClick = (event) => {
   width: 100%;
 }
 
-.scuba-button i {
+.scuba-button__icon-left,
+.scuba-button__icon-right {
   display: inline-flex;
   align-items: center;
   font-size: 1.2em;
@@ -126,7 +137,7 @@ const handleClick = (event) => {
 
 .scuba-button--md {
   height: 40px;
-  padding: 0 20px;
+  padding: var( --spacing-px-3) var( --spacing-px-6);
   font-size: 16px;
   line-height: 24px;
 }
@@ -223,4 +234,4 @@ const handleClick = (event) => {
 .scuba-button--text:disabled {
   color: #aaaaaa;
 }
-</style>
+</style>  

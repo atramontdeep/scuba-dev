@@ -18,7 +18,7 @@ defineProps({
 .dt-avatar {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-2xs, 12px);
 }
 .dt-avatar img,
 .dt-avatar__fallback {
@@ -31,10 +31,16 @@ defineProps({
   align-items: center;
   justify-content: center;
   color: var(--context-color-text-secondary, #555);
-  font: 600 14px/1 var(--font-family-primary, system-ui);
+  font-family: var(--type-font-family-body, 'Poppins', sans-serif);
+  font-size: var(--type-font-size-body-sm, 14px);
+  font-weight: var(--type-font-weight-semibold, 600);
+  line-height: 1;
 }
 .dt-avatar__name {
   color: var(--context-color-text-primary, #1f2328);
-  font: 500 14px/1 var(--font-family-primary, system-ui);
+  font-family: var(--type-font-family-body, 'Poppins', sans-serif);
+  font-size: var(--type-font-size-body-sm, 14px);
+  font-weight: var(--type-font-weight-medium, 500);
+  line-height: 1;
 }
 </style>
