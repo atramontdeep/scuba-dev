@@ -1,6 +1,4 @@
-import { mergeConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
+const { mergeConfig } = require('vite');
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -26,7 +24,10 @@ const config = {
   },
   async viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [vue(), vueJsx()],
+      plugins: [
+        (await import('@vitejs/plugin-vue')).default(),
+        (await import('@vitejs/plugin-vue-jsx')).default()
+      ],
       define: {
         'process.env': {},
         global: 'globalThis',
@@ -43,4 +44,4 @@ const config = {
   },
 };
 
-export default config;
+module.exports = config;
