@@ -1,2390 +1,1487 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deep ESG Builder</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      background: #f6f6f6;
-      color: #191919;
-    }
-
-    /* Dashboard */
-    .dashboard {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
-
-    .dashboard-topbar {
-      height: 64px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e5e5;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 32px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 20px;
-      font-weight: 700;
-      color: #0086cd;
-    }
-
-    .logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, #0086cd, #0942a1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-    }
-
-    .dashboard-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s;
-    }
-
-    .btn-secondary {
-      background: #eeeeee;
-      color: #191919;
-    }
-
-    .btn-secondary:hover {
-      background: #e5e5e5;
-    }
-
-    .btn-primary {
-      background: #0086cd;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #0942a1;
-    }
-
-    .dashboard-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 40px;
-    }
-
-    .projects-header {
-      margin-bottom: 32px;
-    }
-
-    .projects-header h1 {
-      font-size: 32px;
-      font-weight: 700;
-      color: #191919;
-      margin-bottom: 8px;
-    }
-
-    .projects-header p {
-      font-size: 16px;
-      color: #666666;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .project-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-
-    .project-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    }
-
-    .project-thumbnail {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 48px;
-      position: relative;
-    }
-
-    .project-thumbnail.empty {
-      background: #f0f0f0;
-      color: #cccccc;
-    }
-
-    .project-info {
-      padding: 20px;
-    }
-
-    .project-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: #191919;
-      margin-bottom: 8px;
-    }
-
-    .project-meta {
-      font-size: 13px;
-      color: #999999;
-    }
-
-    /* Editor */
-    .editor {
-      display: none;
-      height: 100vh;
-      flex-direction: column;
-    }
-
-    .editor.active {
-      display: flex;
-    }
-
-    .editor-topbar {
-      height: 60px;
-      background: #ffffff;
-      border-bottom: 1px solid #e5e5e5;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .editor-topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .back-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      border: none;
-      background: transparent;
-      color: #666666;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      transition: all 0.2s;
-    }
-
-    .back-btn:hover {
-      background: #f9fafb;
-      color: #191919;
-    }
-
-    .layout-dropdown {
-      position: relative;
-    }
-
-    .dropdown-trigger {
-      padding: 8px 12px;
-      background: transparent;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: #191919;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-
-    .dropdown-trigger:hover {
-      background: #f9fafb;
-      border-color: #0086cd;
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: calc(100% + 4px);
-      left: 0;
-      background: white;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 6px;
-      min-width: 160px;
-      z-index: 1000;
-      display: none;
-    }
-
-    .dropdown-menu.active {
-      display: block;
-    }
-
-    .dropdown-item {
-      padding: 8px 12px;
-      font-size: 13px;
-      color: #191919;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .dropdown-item:hover {
-      background: #f9fafb;
-    }
-
-    .editor-topbar-center {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .project-name {
-      font-size: 16px;
-      font-weight: 600;
-      color: #191919;
-    }
-
-    .autosave-status {
-      font-size: 12px;
-      color: #999999;
-      margin-left: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .autosave-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #10b981;
-    }
-
-    .editor-topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .zoom-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px;
-      background: #f9fafb;
-      border-radius: 8px;
-    }
-
-    .zoom-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: white;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      color: #666666;
-      transition: all 0.2s;
-    }
-
-    .zoom-btn:hover {
-      background: #e5e5e5;
-      color: #191919;
-    }
-
-    .zoom-value {
-      font-size: 13px;
-      font-weight: 600;
-      color: #191919;
-      min-width: 48px;
-      text-align: center;
-    }
-
-    .editor-content {
-      flex: 1;
-      display: flex;
-      overflow: hidden;
-    }
-
-    /* Sidebar Left */
-    .sidebar-left {
-      width: 280px;
-      background: #ffffff;
-      border-right: 1px solid #e5e5e5;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .sidebar-tabs {
-      display: flex;
-      border-bottom: 1px solid #e5e5e5;
-      background: #f9fafb;
-    }
-
-    .sidebar-tab {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      border: none;
-      font-family: 'Poppins', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: #666666;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-bottom: 2px solid transparent;
-    }
-
-    .sidebar-tab:hover {
-      color: #191919;
-      background: #ffffff;
-    }
-
-    .sidebar-tab.active {
-      color: #0086cd;
-      background: #ffffff;
-      border-bottom-color: #0086cd;
-    }
-
-    .sidebar-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    /* Pages Tab */
-    .pages-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .pages-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #191919;
-    }
-
-    .add-page-btn {
-      width: 28px;
-      height: 28px;
-      border: none;
-      background: #0086cd;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      transition: all 0.2s;
-    }
-
-    .add-page-btn:hover {
-      background: #0942a1;
-    }
-
-    .pages-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .page-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .page-item:hover {
-      background: #f9fafb;
-    }
-
-    .page-item.active {
-      background: #e6f4fb;
-      color: #0086cd;
-    }
-
-    .page-icon {
-      font-size: 18px;
-    }
-
-    .page-name {
-      flex: 1;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .page-menu-btn {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: transparent;
-      color: #999999;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: all 0.2s;
-    }
-
-    .page-item:hover .page-menu-btn {
-      opacity: 1;
-    }
-
-    .page-menu-btn:hover {
-      background: rgba(0, 0, 0, 0.05);
-      color: #191919;
-    }
-
-    /* Assets Tab */
-    .assets-search {
-      margin-bottom: 16px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      background: #f9fafb;
-      transition: all 0.2s;
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: #0086cd;
-      background: white;
-    }
-
-    .components-section {
-      margin-bottom: 24px;
-    }
-
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #999999;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
-
-    .components-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .component-item {
-      padding: 16px;
-      background: #f9fafb;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      cursor: move;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .component-item:hover {
-      background: white;
-      border-color: #0086cd;
-      box-shadow: 0 2px 8px rgba(0, 134, 205, 0.1);
-    }
-
-    .component-icon {
-      font-size: 24px;
-      color: #0086cd;
-    }
-
-    .component-name {
-      font-size: 12px;
-      font-weight: 600;
-      color: #191919;
-    }
-
-    /* Layers Tab */
-    .layers-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .layer-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .layer-item:hover {
-      background: #f9fafb;
-    }
-
-    .layer-item.active {
-      background: #e6f4fb;
-      color: #0086cd;
-    }
-
-    .layer-icon {
-      font-size: 16px;
-    }
-
-    .layer-name {
-      flex: 1;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .layer-visibility {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: transparent;
-      color: #999999;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .layer-visibility:hover {
-      background: rgba(0, 0, 0, 0.05);
-      color: #191919;
-    }
-
-    /* Canvas Area */
-    .canvas-area {
-      flex: 1;
-      background: #1D1D1D;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .canvas-wrapper {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-    }
-
-    .canvas-wrapper.panning {
-      cursor: grab !important;
-    }
-
-    .canvas-wrapper.panning:active {
-      cursor: grabbing !important;
-    }
-
-    .viewport {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s ease-out;
-    }
-
-    .canvas-frame {
-      width: 1400px;
-      min-height: 900px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: visible;
-    }
-
-    .frame-content {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
-    .canvas-empty {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      color: #999999;
-      pointer-events: none;
-    }
-
-    .empty-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-      opacity: 0.3;
-    }
-
-    .empty-text {
-      font-size: 16px;
-      font-weight: 500;
-    }
-
-    /* Canvas Components */
-    .canvas-component {
-      position: absolute;
-      cursor: move;
-      user-select: none;
-    }
-
-    .canvas-component.selected {
-      outline: 2px solid #0086cd;
-      outline-offset: 2px;
-    }
-
-    .canvas-component.selected::after {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: -6px;
-      right: -6px;
-      bottom: -6px;
-      pointer-events: none;
-    }
-
-    /* Resize Handles */
-    .resize-handle {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: white;
-      border: 2px solid #0086cd;
-      border-radius: 2px;
-      z-index: 10;
-      display: none;
-    }
-
-    .canvas-component.selected .resize-handle {
-      display: block;
-    }
-
-    .resize-handle.nw { top: -5px; left: -5px; cursor: nwse-resize; }
-    .resize-handle.ne { top: -5px; right: -5px; cursor: nesw-resize; }
-    .resize-handle.sw { bottom: -5px; left: -5px; cursor: nesw-resize; }
-    .resize-handle.se { bottom: -5px; right: -5px; cursor: nwse-resize; }
-    .resize-handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
-    .resize-handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
-    .resize-handle.w { top: 50%; left: -5px; transform: translateY(-50%); cursor: ew-resize; }
-    .resize-handle.e { top: 50%; right: -5px; transform: translateY(-50%); cursor: ew-resize; }
-
-    /* Selection Box (Multiple Selection) */
-    .selection-box {
-      position: absolute;
-      border: 2px solid #0086cd;
-      background: rgba(0, 134, 205, 0.1);
-      pointer-events: none;
-      display: none;
-      z-index: 9999;
-    }
-
-    /* Snap Guides */
-    .snap-guide {
-      position: absolute;
-      background: #ff4081;
-      pointer-events: none;
-      z-index: 9998;
-      display: none;
-    }
-
-    .snap-guide.horizontal {
-      height: 1px;
-      width: 100%;
-    }
-
-    .snap-guide.vertical {
-      width: 1px;
-      height: 100%;
-    }
-
-    /* Sidebar Right (Properties) */
-    .sidebar-right {
-      width: 320px;
-      background: #ffffff;
-      border-left: 1px solid #e5e5e5;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    .properties-header {
-      padding: 20px;
-      border-bottom: 1px solid #e5e5e5;
-    }
-
-    .properties-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #191919;
-      margin-bottom: 4px;
-    }
-
-    .properties-subtitle {
-      font-size: 13px;
-      color: #999999;
-    }
-
-    .properties-content {
-      padding: 20px;
-    }
-
-    .property-section {
-      margin-bottom: 24px;
-    }
-
-    .property-section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #666666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
-    }
-
-    .property-group {
-      margin-bottom: 16px;
-    }
-
-    .property-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #191919;
-      margin-bottom: 8px;
-      display: block;
-    }
-
-    .property-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      background: #f9fafb;
-      transition: all 0.2s;
-    }
-
-    .property-input:focus {
-      outline: none;
-      border-color: #0086cd;
-      background: white;
-    }
-
-    .property-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .property-row .property-input {
-      flex: 1;
-    }
-
-    .color-input-wrapper {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .color-preview {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      border: 1px solid #e5e5e5;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .color-picker {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    .select-input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 14px;
-      background: #f9fafb;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .select-input:focus {
-      outline: none;
-      border-color: #0086cd;
-      background: white;
-    }
-
-    .toggle-switch {
-      width: 48px;
-      height: 28px;
-      background: #e5e5e5;
-      border-radius: 14px;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .toggle-switch.active {
-      background: #0086cd;
-    }
-
-    .toggle-switch::after {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      background: white;
-      border-radius: 50%;
-      top: 3px;
-      left: 3px;
-      transition: all 0.3s;
-    }
-
-    .toggle-switch.active::after {
-      left: 23px;
-    }
-
-    /* Context Menu */
-    .context-menu {
-      position: fixed;
-      background: white;
-      border: 1px solid #e5e5e5;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      padding: 6px;
-      min-width: 180px;
-      z-index: 10000;
-      display: none;
-    }
-
-    .context-menu.active {
-      display: block;
-    }
-
-    .context-menu-item {
-      padding: 10px 12px;
-      font-size: 13px;
-      color: #191919;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .context-menu-item:hover {
-      background: #f9fafb;
-    }
-
-    .context-menu-item.danger {
-      color: #ef4444;
-    }
-
-    .context-menu-item.danger:hover {
-      background: #fef2f2;
-    }
-
-    .context-menu-divider {
-      height: 1px;
-      background: #e5e5e5;
-      margin: 6px 0;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scuba Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 40px;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+        }
+
+        .dashboard-header {
+            margin-bottom: 48px;
+        }
+
+        .dashboard-title {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .dashboard-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .dashboard-actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .btn-new-project {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-new-project:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.4);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            overflow-y: auto;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-color: #00d4ff;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
+        }
+
+        .project-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .project-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        .project-delete {
+            background: rgba(255, 68, 68, 0.1);
+            border: none;
+            color: #ff4444;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .project-meta {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Builder */
+        .builder-container {
+            display: grid;
+            grid-template-columns: 260px 1fr 320px;
+            grid-template-rows: 60px 1fr;
+            height: 100vh;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Header */
+        .header {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b4e 100%);
+            border-bottom: 2px solid #00d4ff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: pointer;
+        }
+
+        .project-name-input {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+            width: 200px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Sidebar Left */
+        .sidebar-left {
+            background: #151830;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-tab {
+            flex: 1;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-tab.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        /* Pages Tab */
+        .pages-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .pages-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .btn-add-page {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .page-item {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .page-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .page-item.active {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .page-name {
+            font-size: 14px;
+            color: #e0e0e0;
+        }
+
+        .page-delete {
+            background: transparent;
+            border: none;
+            color: rgba(255, 68, 68, 0.7);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Assets Tab */
+        .assets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .btn-sync-components {
+            background: rgba(123, 44, 191, 0.2);
+            border: 1px solid rgba(123, 44, 191, 0.4);
+            color: #b57edc;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-sync-components:hover {
+            background: rgba(123, 44, 191, 0.3);
+        }
+
+        .sync-spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(181, 126, 220, 0.3);
+            border-top-color: #b57edc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .component-category {
+            margin-bottom: 24px;
+        }
+
+        .category-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+        }
+
+        .component-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .component-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+            transform: translateX(4px);
+        }
+
+        .component-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        /* Canvas */
+        .canvas-area {
+            background: #0d1117;
+            position: relative;
+            overflow: auto;
+        }
+
+        .canvas-toolbar {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(21, 24, 48, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .toolbar-btn {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .canvas-content {
+            padding: 80px 40px 40px;
+            min-height: 100%;
+        }
+
+        .canvas-drop-zone {
+            min-height: 600px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 40px;
+        }
+
+        .canvas-drop-zone.drag-over {
+            background: rgba(0, 212, 255, 0.05);
+            border-color: #00d4ff;
+        }
+
+        .canvas-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 60px 20px;
+        }
+
+        /* Layout Components */
+        .layout-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .layout-container.flex-container {
+            display: flex;
+        }
+
+        .layout-container.grid-container {
+            display: grid;
+        }
+
+        .layout-container.selected {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .layout-container.drag-over {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+        }
+
+        .layout-label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #0d1117;
+            padding: 2px 8px;
+            font-size: 11px;
+            color: #00d4ff;
+            border-radius: 4px;
+        }
+
+        .layout-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        /* Dropped Component */
+        .dropped-component {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .dropped-component.selected {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+        }
+
+        .component-controls {
+            position: absolute;
+            top: -12px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .dropped-component:hover .component-controls,
+        .layout-container:hover > .component-controls {
+            opacity: 1;
+        }
+
+        .component-control-btn {
+            width: 24px;
+            height: 24px;
+            background: #00d4ff;
+            border: none;
+            border-radius: 4px;
+            color: #000;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        /* Properties Panel */
+        .sidebar-right {
+            background: #151830;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .properties-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+
+        .property-section {
+            margin-bottom: 24px;
+        }
+
+        .property-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .property-field {
+            margin-bottom: 16px;
+        }
+
+        .property-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .property-input,
+        .property-select {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 13px;
+        }
+
+        .property-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .property-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .property-row-4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .property-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .property-checkbox input {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  
-  <!-- Dashboard -->
-  <div class="dashboard" id="dashboard">
-    <div class="dashboard-topbar">
-      <div class="logo">
-        <div class="logo-icon">D</div>
-        Deep ESG Builder
-      </div>
-      <div class="dashboard-actions">
-        <button class="btn btn-secondary">
-          <i class="ph ph-gear"></i>
-          Settings
-        </button>
-        <button class="btn btn-primary" onclick="createNewProject()">
-          <i class="ph ph-plus"></i>
-          New Project
-        </button>
-      </div>
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-title">SCUBA Builder</div>
+            <div class="dashboard-subtitle">Crie interfaces incríveis com componentes Scuba</div>
+        </div>
+        <div class="dashboard-actions">
+            <button class="btn-new-project" onclick="createNewProject()">
+                ➕ Novo Projeto
+            </button>
+        </div>
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Projects will be rendered here -->
+        </div>
     </div>
 
-    <div class="dashboard-content">
-      <div class="projects-header">
-        <h1>Your Projects</h1>
-        <p>Create and manage your ESG interface projects</p>
-      </div>
+    <!-- Builder -->
+    <div class="builder-container hidden" id="builder">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo" onclick="backToDashboard()">← SCUBA</div>
+                <input type="text" class="project-name-input" id="projectNameInput" placeholder="Nome do projeto">
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="exportProject()">⬇️ Exportar</button>
+                <button class="btn btn-primary" onclick="saveProject()">💾 Salvar</button>
+            </div>
+        </div>
 
-      <div class="projects-grid" id="projects-grid">
-        <!-- Projects will be loaded here -->
-      </div>
+        <!-- Sidebar Left -->
+        <div class="sidebar-left">
+            <div class="sidebar-tabs">
+                <button class="sidebar-tab active" onclick="switchTab('pages')">📄 Pages</button>
+                <button class="sidebar-tab" onclick="switchTab('assets')">🎨 Assets</button>
+            </div>
+            <div class="sidebar-content">
+                <!-- Pages Tab -->
+                <div class="tab-pane active" id="pagesTab">
+                    <div class="pages-header">
+                        <div class="pages-title">Páginas</div>
+                        <button class="btn-add-page" onclick="addNewPage()">+ Nova</button>
+                    </div>
+                    <div id="pagesList">
+                        <!-- Pages will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Assets Tab -->
+                <div class="tab-pane" id="assetsTab">
+                    <div class="assets-header">
+                        <div class="pages-title">Componentes</div>
+                        <button class="btn-sync-components" onclick="syncComponents()">
+                            <span class="sync-icon">🔄</span>
+                            <span>Sincronizar</span>
+                        </button>
+                    </div>
+                    <div id="componentsList">
+                        <div style="text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.5);">
+                            <div style="font-size: 32px; margin-bottom: 12px;">📦</div>
+                            <div>Clique em Sincronizar para carregar os componentes do Scuba</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="canvas-area">
+            <div class="canvas-toolbar">
+                <button class="toolbar-btn" onclick="setViewMode('desktop')">🖥️ Desktop</button>
+                <button class="toolbar-btn" onclick="setViewMode('tablet')">📱 Tablet</button>
+                <button class="toolbar-btn" onclick="setViewMode('mobile')">📱 Mobile</button>
+            </div>
+            <div class="canvas-content">
+                <div class="canvas-drop-zone" id="canvas">
+                    <div class="canvas-placeholder">
+                        <div style="font-size: 64px; margin-bottom: 16px;">📐</div>
+                        <div>Comece adicionando um Container ou Grid</div>
+                        <div style="margin-top: 8px; font-size: 12px;">Arraste componentes de layout da aba Assets</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Right -->
+        <div class="sidebar-right" id="propertiesPanel">
+            <div style="text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3);">
+                <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                <div>Selecione um componente<br>para editar propriedades</div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Editor -->
-  <div class="editor" id="editor">
-    <!-- Topbar -->
-    <div class="editor-topbar">
-      <div class="editor-topbar-left">
-        <button class="back-btn" onclick="closeEditor()">
-          <i class="ph ph-arrow-left"></i>
-        </button>
+    <script>
+        const STORYBOOK_URL = 'https://atramontdeep.github.io/scuba-dev';
+        
+        // Estado global
+        let currentProject = null;
+        let currentPageId = null;
+        let selectedComponentId = null;
+        let scubaComponents = null;
 
-        <div class="layout-dropdown">
-          <button class="dropdown-trigger" onclick="toggleDropdown()">
-            <i class="ph ph-device-mobile"></i>
-            <span id="current-layout">Desktop</span>
-            <i class="ph ph-caret-down"></i>
-          </button>
-          <div class="dropdown-menu" id="layout-menu">
-            <div class="dropdown-item" onclick="changeLayout('desktop')">
-              <i class="ph ph-desktop"></i>
-              Desktop (1400px)
-            </div>
-            <div class="dropdown-item" onclick="changeLayout('tablet')">
-              <i class="ph ph-device-tablet"></i>
-              Tablet (768px)
-            </div>
-            <div class="dropdown-item" onclick="changeLayout('mobile')">
-              <i class="ph ph-device-mobile"></i>
-              Mobile (375px)
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="editor-topbar-center">
-        <div class="project-name" id="current-project-name">My Project</div>
-        <div class="autosave-status">
-          <div class="autosave-indicator"></div>
-          <span>All changes saved</span>
-        </div>
-      </div>
-
-      <div class="editor-topbar-right">
-        <div class="zoom-controls">
-          <button class="zoom-btn" onclick="zoomOut()">
-            <i class="ph ph-minus"></i>
-          </button>
-          <div class="zoom-value" id="zoom-display">100%</div>
-          <button class="zoom-btn" onclick="zoomIn()">
-            <i class="ph ph-plus"></i>
-          </button>
-        </div>
-
-        <button class="btn btn-secondary">
-          <i class="ph ph-eye"></i>
-          Preview
-        </button>
-        <button class="btn btn-primary">
-          <i class="ph ph-export"></i>
-          Export
-        </button>
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="editor-content">
-      <!-- Left Sidebar -->
-      <div class="sidebar-left">
-        <div class="sidebar-tabs">
-          <button class="sidebar-tab active" data-tab="pages" onclick="switchTab('pages')">
-            Pages
-          </button>
-          <button class="sidebar-tab" data-tab="assets" onclick="switchTab('assets')">
-            Assets
-          </button>
-          <button class="sidebar-tab" data-tab="layers" onclick="switchTab('layers')">
-            Layers
-          </button>
-        </div>
-
-        <div class="sidebar-content">
-          <!-- Pages Tab -->
-          <div class="tab-content active" id="pages-tab">
-            <div class="pages-header">
-              <div class="pages-title">Pages</div>
-              <button class="add-page-btn" id="add-page-btn">
-                <i class="ph ph-plus"></i>
-              </button>
-            </div>
-            <div class="pages-list" id="pages-list">
-              <!-- Pages will be loaded here -->
-            </div>
-          </div>
-
-          <!-- Assets Tab -->
-          <div class="tab-content" id="assets-tab">
-            <div class="assets-search">
-              <input type="text" class="search-input" placeholder="Search components...">
-            </div>
-
-            <div class="components-section">
-              <div class="section-title">Scuba Components</div>
-              <div class="components-grid">
-                <div class="component-item" draggable="true" data-component="button">
-                  <i class="ph ph-cursor-click component-icon"></i>
-                  <span class="component-name">Button</span>
-                </div>
-                <div class="component-item" draggable="true" data-component="input">
-                  <i class="ph ph-text-aa component-icon"></i>
-                  <span class="component-name">Input</span>
-                </div>
-                <div class="component-item" draggable="true" data-component="checkbox">
-                  <i class="ph ph-check-square component-icon"></i>
-                  <span class="component-name">Checkbox</span>
-                </div>
-                <div class="component-item" draggable="true" data-component="card">
-                  <i class="ph ph-rectangle component-icon"></i>
-                  <span class="component-name">Card</span>
-                </div>
-                <div class="component-item" draggable="true" data-component="text">
-                  <i class="ph ph-text-t component-icon"></i>
-                  <span class="component-name">Text</span>
-                </div>
-                <div class="component-item" draggable="true" data-component="image">
-                  <i class="ph ph-image component-icon"></i>
-                  <span class="component-name">Image</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Layers Tab -->
-          <div class="tab-content" id="layers-tab">
-            <div class="layers-list" id="layers-list">
-              <div style="text-align: center; padding: 40px 20px; color: #999999;">
-                <i class="ph ph-stack" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
-                <p style="font-size: 14px;">No layers yet</p>
-                <p style="font-size: 12px; margin-top: 4px;">Add components to see layers</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Canvas Area -->
-      <div class="canvas-area">
-        <div class="canvas-wrapper" id="canvas-wrapper">
-          <div class="viewport" id="viewport">
-            <div class="canvas-frame" id="canvas-frame">
-              <div class="frame-content" id="frame-content">
-                <div class="canvas-empty">
-                  <div class="empty-icon">
-                    <i class="ph ph-plus-circle"></i>
-                  </div>
-                  <div class="empty-text">Drag components here to start</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Snap Guides -->
-        <div class="snap-guide horizontal" id="snap-guide-h"></div>
-        <div class="snap-guide vertical" id="snap-guide-v"></div>
-
-        <!-- Selection Box -->
-        <div class="selection-box" id="selection-box"></div>
-      </div>
-
-      <!-- Right Sidebar (Properties) -->
-      <div class="sidebar-right">
-        <div class="properties-header">
-          <div class="properties-title" id="properties-title">Nothing selected</div>
-          <div class="properties-subtitle" id="properties-subtitle">Select a layer to inspect</div>
-        </div>
-
-        <div class="properties-content" id="properties-content">
-          <!-- Empty state -->
-          <div style="text-align: center; padding: 60px 20px; color: #999999;">
-            <i class="ph ph-cursor-click" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
-            <p style="font-size: 14px;">Select a component</p>
-            <p style="font-size: 12px; margin-top: 4px;">to edit its properties</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Context Menu -->
-  <div class="context-menu" id="context-menu">
-    <div class="context-menu-item" data-action="rename">
-      <i class="ph ph-pencil-simple"></i>
-      Rename
-    </div>
-    <div class="context-menu-item" data-action="duplicate">
-      <i class="ph ph-copy"></i>
-      Duplicate
-    </div>
-    <div class="context-menu-divider"></div>
-    <div class="context-menu-item danger" data-action="delete">
-      <i class="ph ph-trash"></i>
-      Delete
-    </div>
-  </div>
-
-  <script>
-    // State
-    let projects = [
-      { id: 'proj-1', name: 'ESG Dashboard 2024', lastModified: 'Hoje às 14:32' },
-      { id: 'proj-2', name: 'Carbon Calculator', lastModified: 'Ontem às 16:20' },
-      { id: 'proj-3', name: 'Sustainability Report', lastModified: '2 dias atrás' }
-    ];
-
-    let pages = [
-      { id: 'home', name: 'Home', icon: 'ph-house' },
-      { id: 'about', name: 'About', icon: 'ph-info' }
-    ];
-
-    let currentProject = null;
-    let zoomLevel = 1;
-    let viewportOffset = { x: 0, y: 0 };
-    let isPanning = false;
-    let panStart = { x: 0, y: 0 };
-    let selectedElement = null;
-    let selectedElements = [];
-    let isDraggingComponent = false;
-    let draggedComponentType = null;
-    let componentCounter = 0;
-    let layers = [];
-
-    // Resize state
-    let isResizing = false;
-    let resizeHandle = null;
-    let resizeStart = { x: 0, y: 0, width: 0, height: 0 };
-
-    // Selection box state
-    let isSelecting = false;
-    let selectionStart = { x: 0, y: 0 };
-
-    // Load projects
-    function loadProjects() {
-      const grid = document.getElementById('projects-grid');
-      grid.innerHTML = projects.map(project => `
-        <div class="project-card" onclick="openProject('${project.id}')">
-          <div class="project-thumbnail">
-            <i class="ph ph-layout"></i>
-          </div>
-          <div class="project-info">
-            <div class="project-title">${project.name}</div>
-            <div class="project-meta">Modified: ${project.lastModified}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Create new project
-    function createNewProject() {
-      const name = prompt('Project name:', 'New Project');
-      if (name) {
-        const project = {
-          id: `proj-${Date.now()}`,
-          name: name,
-          lastModified: 'Just now'
+        // Layout components built-in
+        const layoutComponents = {
+            layout: [
+                {
+                    id: 'flex-container',
+                    name: 'Container (Flex)',
+                    description: 'Container flexível para layouts',
+                    isLayout: true,
+                    props: {
+                        direction: {
+                            type: 'select',
+                            options: ['row', 'column', 'row-reverse', 'column-reverse'],
+                            default: 'row',
+                            label: 'Direção'
+                        },
+                        justify: {
+                            type: 'select',
+                            options: ['flex-start', 'center', 'flex-end', 'space-between', 'space-around', 'space-evenly'],
+                            default: 'flex-start',
+                            label: 'Justify Content'
+                        },
+                        align: {
+                            type: 'select',
+                            options: ['flex-start', 'center', 'flex-end', 'stretch', 'baseline'],
+                            default: 'flex-start',
+                            label: 'Align Items'
+                        },
+                        gap: {
+                            type: 'number',
+                            default: 16,
+                            label: 'Gap (px)'
+                        },
+                        padding: {
+                            type: 'number',
+                            default: 20,
+                            label: 'Padding (px)'
+                        },
+                        wrap: {
+                            type: 'select',
+                            options: ['nowrap', 'wrap', 'wrap-reverse'],
+                            default: 'nowrap',
+                            label: 'Flex Wrap'
+                        }
+                    }
+                },
+                {
+                    id: 'grid-container',
+                    name: 'Grid',
+                    description: 'Container em grid',
+                    isLayout: true,
+                    props: {
+                        columns: {
+                            type: 'number',
+                            default: 3,
+                            label: 'Colunas'
+                        },
+                        rows: {
+                            type: 'number',
+                            default: 0,
+                            label: 'Linhas (auto se 0)'
+                        },
+                        gap: {
+                            type: 'number',
+                            default: 24,
+                            label: 'Gap (px)'
+                        },
+                        columnGap: {
+                            type: 'number',
+                            default: 0,
+                            label: 'Column Gap (0 = usar gap)'
+                        },
+                        rowGap: {
+                            type: 'number',
+                            default: 0,
+                            label: 'Row Gap (0 = usar gap)'
+                        },
+                        padding: {
+                            type: 'number',
+                            default: 20,
+                            label: 'Padding (px)'
+                        }
+                    }
+                }
+            ]
         };
-        projects.unshift(project);
-        loadProjects();
-        openProject(project.id);
-      }
-    }
 
-    // Open project
-    function openProject(projectId) {
-      currentProject = projects.find(p => p.id === projectId);
-      document.getElementById('current-project-name').textContent = currentProject.name;
-      
-      // Hide dashboard
-      const dashboard = document.getElementById('dashboard');
-      dashboard.style.display = 'none';
-      
-      // Show editor
-      const editor = document.getElementById('editor');
-      editor.classList.add('active');
-      
-      triggerAutosave();
-    }
-
-    // Close editor
-    function closeEditor() {
-      const editor = document.getElementById('editor');
-      editor.classList.remove('active');
-      
-      const dashboard = document.getElementById('dashboard');
-      dashboard.style.display = 'flex';
-    }
-
-    // Layout dropdown
-    function toggleDropdown() {
-      const menu = document.getElementById('layout-menu');
-      menu.classList.toggle('active');
-    }
-
-    function changeLayout(layout) {
-      const layouts = {
-        'desktop': { width: 1400, label: 'Desktop' },
-        'tablet': { width: 768, label: 'Tablet' },
-        'mobile': { width: 375, label: 'Mobile' }
-      };
-
-      const frame = document.getElementById('canvas-frame');
-      frame.style.width = layouts[layout].width + 'px';
-      document.getElementById('current-layout').textContent = layouts[layout].label;
-      toggleDropdown();
-      triggerAutosave();
-    }
-
-    // Zoom controls
-    function zoomIn() {
-      setZoom(Math.min(zoomLevel + 0.1, 2));
-    }
-
-    function zoomOut() {
-      setZoom(Math.max(zoomLevel - 0.1, 0.25));
-    }
-
-    function setZoom(level) {
-      zoomLevel = level;
-      const viewport = document.getElementById('viewport');
-      viewport.style.transform = `translate(${viewportOffset.x}px, ${viewportOffset.y}px) scale(${zoomLevel})`;
-      document.getElementById('zoom-display').textContent = Math.round(zoomLevel * 100) + '%';
-    }
-
-    // Autosave
-    function triggerAutosave() {
-      const indicator = document.querySelector('.autosave-indicator');
-      indicator.style.background = '#f59e0b';
-      
-      setTimeout(() => {
-        indicator.style.background = '#10b981';
-      }, 1000);
-    }
-
-    // Zoom with mouse wheel
-    const canvasWrapper = document.getElementById('canvas-wrapper');
-    canvasWrapper.addEventListener('wheel', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault();
-        const delta = e.deltaY > 0 ? -0.1 : 0.1;
-        setZoom(Math.max(0.25, Math.min(2, zoomLevel + delta)));
-      }
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      // Cmd/Ctrl + 0 = Reset zoom
-      if ((e.metaKey || e.ctrlKey) && e.key === '0') {
-        e.preventDefault();
-        setZoom(1);
-        viewportOffset = { x: 0, y: 0 };
-        document.getElementById('viewport').style.transform = `translate(0px, 0px) scale(1)`;
-      }
-
-      // Delete/Backspace = Delete selected
-      if ((e.key === 'Delete' || e.key === 'Backspace') && selectedElement && !e.target.matches('input, textarea')) {
-        e.preventDefault();
-        deleteSelectedElement();
-      }
-
-      // Cmd/Ctrl + C = Copy
-      if ((e.metaKey || e.ctrlKey) && e.key === 'c' && selectedElement) {
-        e.preventDefault();
-        copyElement();
-      }
-
-      // Cmd/Ctrl + V = Paste
-      if ((e.metaKey || e.ctrlKey) && e.key === 'v') {
-        e.preventDefault();
-        pasteElement();
-      }
-
-      // Cmd/Ctrl + D = Duplicate
-      if ((e.metaKey || e.ctrlKey) && e.key === 'd' && selectedElement) {
-        e.preventDefault();
-        duplicateElement();
-      }
-
-      // Space = Pan mode
-      if (e.code === 'Space' && !e.target.matches('input, textarea')) {
-        e.preventDefault();
-        canvasWrapper.classList.add('panning');
-      }
-    });
-
-    document.addEventListener('keyup', (e) => {
-      if (e.code === 'Space') {
-        canvasWrapper.classList.remove('panning');
-      }
-    });
-
-    // Pan with Space + Drag
-    canvasWrapper.addEventListener('mousedown', (e) => {
-      if (e.target === canvasWrapper || e.target === document.getElementById('viewport') || canvasWrapper.classList.contains('panning')) {
-        if (e.button === 0 && canvasWrapper.classList.contains('panning')) {
-          isPanning = true;
-          panStart = { x: e.clientX - viewportOffset.x, y: e.clientY - viewportOffset.y };
-          e.preventDefault();
-        }
-      }
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (isPanning) {
-        viewportOffset.x = e.clientX - panStart.x;
-        viewportOffset.y = e.clientY - panStart.y;
-        document.getElementById('viewport').style.transform = `translate(${viewportOffset.x}px, ${viewportOffset.y}px) scale(${zoomLevel})`;
-      }
-    });
-
-    document.addEventListener('mouseup', () => {
-      isPanning = false;
-    });
-
-    // Drag & Drop from Assets
-    document.querySelectorAll('.component-item').forEach(item => {
-      item.addEventListener('dragstart', (e) => {
-        draggedComponentType = e.target.closest('.component-item').dataset.component;
-        isDraggingComponent = true;
-      });
-
-      item.addEventListener('dragend', () => {
-        isDraggingComponent = false;
-        draggedComponentType = null;
-      });
-    });
-
-    // Drop zone
-    const frameContent = document.getElementById('frame-content');
-    
-    frameContent.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      if (isDraggingComponent) {
-        frameContent.style.background = 'rgba(0, 153, 255, 0.05)';
-      }
-    });
-
-    frameContent.addEventListener('dragleave', () => {
-      frameContent.style.background = '';
-    });
-
-    frameContent.addEventListener('drop', (e) => {
-      e.preventDefault();
-      frameContent.style.background = '';
-      
-      if (draggedComponentType) {
-        const rect = frameContent.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / zoomLevel;
-        const y = (e.clientY - rect.top) / zoomLevel;
-        
-        createComponent(draggedComponentType, x, y);
-        
-        // Remove empty state
-        const emptyState = document.querySelector('.canvas-empty');
-        if (emptyState) emptyState.style.display = 'none';
-      }
-    });
-
-    // Create component on canvas
-    function createComponent(type, x, y) {
-      const component = document.createElement('div');
-      component.className = 'canvas-component';
-      component.style.left = x + 'px';
-      component.style.top = y + 'px';
-      component.dataset.type = type;
-      component.dataset.id = `component-${++componentCounter}`;
-      
-      let content = '';
-      let width = 'auto';
-      let height = 'auto';
-
-      if (type === 'button') {
-        content = `
-          <button style="padding: 12px 24px; background: #0086cd; color: white; border: none; border-radius: 8px; font-family: Poppins; font-size: 16px; font-weight: 600; cursor: pointer;">
-            Button
-          </button>
-        `;
-      } else if (type === 'input') {
-        width = '280px';
-        content = `
-          <div style="display: flex; flex-direction: column; gap: 8px;">
-            <label style="font-size: 16px; font-weight: 600; color: #191919;">Label</label>
-            <input type="text" placeholder="Placeholder" style="padding: 12px 16px; background: #eeeeee; border: 2px solid transparent; border-radius: 8px; font-family: Poppins; font-size: 16px;">
-          </div>
-        `;
-      } else if (type === 'checkbox') {
-        content = `
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <div style="width: 20px; height: 20px; border: 2px solid #555; border-radius: 4px;"></div>
-            <span style="font-size: 16px; color: #191919;">Checkbox Label</span>
-          </div>
-        `;
-      } else if (type === 'card') {
-        width = '320px';
-        height = '200px';
-        content = `
-          <div style="width: 100%; height: 100%; background: white; border: 1px solid #e5e5e5; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-            <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 12px;">Card Title</h3>
-            <p style="font-size: 14px; color: #666; line-height: 1.6;">Card content goes here. This is a sample card component from Scuba Design System.</p>
-          </div>
-        `;
-      } else if (type === 'text') {
-        content = `
-          <div contenteditable="true" style="font-size: 16px; color: #191919; outline: none;">
-            Text content
-          </div>
-        `;
-      } else if (type === 'image') {
-        width = '200px';
-        height = '150px';
-        content = `
-          <div style="width: 100%; height: 100%; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
-            <i class="ph ph-image" style="font-size: 48px;"></i>
-          </div>
-        `;
-      }
-      
-      component.innerHTML = content;
-      
-      if (width !== 'auto') component.style.width = width;
-      if (height !== 'auto') component.style.height = height;
-
-      // Add resize handles
-      const handles = ['nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'];
-      handles.forEach(pos => {
-        const handle = document.createElement('div');
-        handle.className = `resize-handle ${pos}`;
-        handle.dataset.position = pos;
-        component.appendChild(handle);
-
-        handle.addEventListener('mousedown', (e) => {
-          e.stopPropagation();
-          startResize(e, component, pos);
-        });
-      });
-      
-      component.addEventListener('mousedown', (e) => {
-        if (!e.target.classList.contains('resize-handle')) {
-          e.stopPropagation();
-          selectElement(component);
-          startDrag(e, component);
-        }
-      });
-      
-      frameContent.appendChild(component);
-      selectElement(component);
-      
-      // Add to layers
-      layers.push({
-        id: component.dataset.id,
-        name: `${type.charAt(0).toUpperCase() + type.slice(1)} ${componentCounter}`,
-        type: type,
-        element: component,
-        visible: true
-      });
-      updateLayersList();
-      
-      triggerAutosave();
-    }
-
-    // Drag component
-    let isDraggingElement = false;
-    let dragOffset = { x: 0, y: 0 };
-
-    function startDrag(e, element) {
-      isDraggingElement = true;
-      const rect = element.getBoundingClientRect();
-      const frameRect = frameContent.getBoundingClientRect();
-      
-      dragOffset.x = e.clientX - rect.left;
-      dragOffset.y = e.clientY - rect.top;
-
-      function onMouseMove(e) {
-        if (!isDraggingElement) return;
-        
-        const frameRect = frameContent.getBoundingClientRect();
-        let newX = (e.clientX - frameRect.left - dragOffset.x) / zoomLevel;
-        let newY = (e.clientY - frameRect.top - dragOffset.y) / zoomLevel;
-
-        // Snap to grid (optional - 10px grid)
-        newX = Math.round(newX / 10) * 10;
-        newY = Math.round(newY / 10) * 10;
-
-        element.style.left = newX + 'px';
-        element.style.top = newY + 'px';
-      }
-
-      function onMouseUp() {
-        isDraggingElement = false;
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-        triggerAutosave();
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    }
-
-    // Resize component
-    function startResize(e, element, position) {
-      isResizing = true;
-      resizeHandle = position;
-      
-      const rect = element.getBoundingClientRect();
-      const frameRect = frameContent.getBoundingClientRect();
-      
-      resizeStart = {
-        x: e.clientX,
-        y: e.clientY,
-        width: rect.width,
-        height: rect.height,
-        left: parseFloat(element.style.left) || 0,
-        top: parseFloat(element.style.top) || 0
-      };
-
-      function onMouseMove(e) {
-        if (!isResizing) return;
-        
-        const deltaX = (e.clientX - resizeStart.x) / zoomLevel;
-        const deltaY = (e.clientY - resizeStart.y) / zoomLevel;
-
-        let newWidth = resizeStart.width;
-        let newHeight = resizeStart.height;
-        let newLeft = resizeStart.left;
-        let newTop = resizeStart.top;
-
-        if (position.includes('e')) {
-          newWidth = resizeStart.width + deltaX;
-        }
-        if (position.includes('w')) {
-          newWidth = resizeStart.width - deltaX;
-          newLeft = resizeStart.left + deltaX;
-        }
-        if (position.includes('s')) {
-          newHeight = resizeStart.height + deltaY;
-        }
-        if (position.includes('n')) {
-          newHeight = resizeStart.height - deltaY;
-          newTop = resizeStart.top + deltaY;
-        }
-
-        // Minimum size
-        newWidth = Math.max(50, newWidth);
-        newHeight = Math.max(30, newHeight);
-
-        element.style.width = newWidth + 'px';
-        element.style.height = newHeight + 'px';
-        element.style.left = newLeft + 'px';
-        element.style.top = newTop + 'px';
-      }
-
-      function onMouseUp() {
-        isResizing = false;
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-        triggerAutosave();
-      }
-
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    }
-
-    // Select element
-    function selectElement(element) {
-      if (selectedElement) {
-        selectedElement.classList.remove('selected');
-      }
-      selectedElement = element;
-      element.classList.add('selected');
-      
-      updatePropertiesPanel(element);
-    }
-
-    // Update properties panel
-    function updatePropertiesPanel(element) {
-      const type = element.dataset.type;
-      const layer = layers.find(l => l.id === element.dataset.id);
-      
-      document.getElementById('properties-title').textContent = layer ? layer.name : 'Component';
-      document.getElementById('properties-subtitle').textContent = `${type.charAt(0).toUpperCase() + type.slice(1)} component`;
-      
-      const content = document.getElementById('properties-content');
-      
-      // Get computed styles
-      const computedStyle = window.getComputedStyle(element);
-      const rect = element.getBoundingClientRect();
-      
-      content.innerHTML = `
-        <div class="property-section">
-          <div class="property-section-title">Position & Size</div>
-          
-          <div class="property-group">
-            <label class="property-label">Position</label>
-            <div class="property-row">
-              <div style="flex: 1;">
-                <label class="property-label" style="font-size: 11px; color: #999;">X</label>
-                <input type="number" class="property-input" value="${Math.round(parseFloat(element.style.left) || 0)}" onchange="updateElementStyle('${element.dataset.id}', 'left', this.value + 'px')">
-              </div>
-              <div style="flex: 1;">
-                <label class="property-label" style="font-size: 11px; color: #999;">Y</label>
-                <input type="number" class="property-input" value="${Math.round(parseFloat(element.style.top) || 0)}" onchange="updateElementStyle('${element.dataset.id}', 'top', this.value + 'px')">
-              </div>
-            </div>
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Size</label>
-            <div class="property-row">
-              <div style="flex: 1;">
-                <label class="property-label" style="font-size: 11px; color: #999;">Width</label>
-                <input type="number" class="property-input" value="${Math.round(rect.width)}" onchange="updateElementStyle('${element.dataset.id}', 'width', this.value + 'px')">
-              </div>
-              <div style="flex: 1;">
-                <label class="property-label" style="font-size: 11px; color: #999;">Height</label>
-                <input type="number" class="property-input" value="${Math.round(rect.height)}" onchange="updateElementStyle('${element.dataset.id}', 'height', this.value + 'px')">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        ${type === 'button' ? `
-        <div class="property-section">
-          <div class="property-section-title">Button Styles</div>
-          
-          <div class="property-group">
-            <label class="property-label">Text</label>
-            <input type="text" class="property-input" value="Button" onchange="updateButtonText('${element.dataset.id}', this.value)">
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Background Color</label>
-            <div class="color-input-wrapper">
-              <div class="color-preview" style="background: #0086cd;">
-                <input type="color" class="color-picker" value="#0086cd" onchange="updateButtonColor('${element.dataset.id}', 'background', this.value)">
-              </div>
-              <input type="text" class="property-input" value="#0086cd" onchange="updateButtonColor('${element.dataset.id}', 'background', this.value)">
-            </div>
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Text Color</label>
-            <div class="color-input-wrapper">
-              <div class="color-preview" style="background: #ffffff;">
-                <input type="color" class="color-picker" value="#ffffff" onchange="updateButtonColor('${element.dataset.id}', 'color', this.value)">
-              </div>
-              <input type="text" class="property-input" value="#ffffff" onchange="updateButtonColor('${element.dataset.id}', 'color', this.value)">
-            </div>
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Border Radius</label>
-            <input type="number" class="property-input" value="8" onchange="updateButtonStyle('${element.dataset.id}', 'border-radius', this.value + 'px')">
-          </div>
-        </div>
-        ` : ''}
-
-        ${type === 'text' ? `
-        <div class="property-section">
-          <div class="property-section-title">Text Styles</div>
-          
-          <div class="property-group">
-            <label class="property-label">Font Size</label>
-            <input type="number" class="property-input" value="16" onchange="updateTextStyle('${element.dataset.id}', 'font-size', this.value + 'px')">
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Font Weight</label>
-            <select class="select-input" onchange="updateTextStyle('${element.dataset.id}', 'font-weight', this.value)">
-              <option value="400">Normal</option>
-              <option value="500">Medium</option>
-              <option value="600">Semi Bold</option>
-              <option value="700">Bold</option>
-            </select>
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Text Color</label>
-            <div class="color-input-wrapper">
-              <div class="color-preview" style="background: #191919;">
-                <input type="color" class="color-picker" value="#191919" onchange="updateTextStyle('${element.dataset.id}', 'color', this.value)">
-              </div>
-              <input type="text" class="property-input" value="#191919" onchange="updateTextStyle('${element.dataset.id}', 'color', this.value)">
-            </div>
-          </div>
-        </div>
-        ` : ''}
-
-        <div class="property-section">
-          <div class="property-section-title">Layer</div>
-          
-          <div class="property-group">
-            <label class="property-label">Name</label>
-            <input type="text" class="property-input" value="${layer ? layer.name : 'Component'}" onchange="updateLayerName('${element.dataset.id}', this.value)">
-          </div>
-
-          <div class="property-group">
-            <label class="property-label">Opacity</label>
-            <input type="range" min="0" max="100" value="100" class="property-input" style="cursor: pointer;" onchange="updateElementStyle('${element.dataset.id}', 'opacity', this.value / 100)">
-          </div>
-        </div>
-      `;
-    }
-
-    // Update element style functions
-    function updateElementStyle(id, property, value) {
-      const element = layers.find(l => l.id === id)?.element;
-      if (element) {
-        element.style[property] = value;
-        triggerAutosave();
-      }
-    }
-
-    function updateButtonText(id, text) {
-      const element = layers.find(l => l.id === id)?.element;
-      if (element) {
-        const button = element.querySelector('button');
-        if (button) button.textContent = text;
-        triggerAutosave();
-      }
-    }
-
-    function updateButtonColor(id, property, value) {
-      const element = layers.find(l => l.id === id)?.element;
-      if (element) {
-        const button = element.querySelector('button');
-        if (button) button.style[property] = value;
-        triggerAutosave();
-      }
-    }
-
-    function updateButtonStyle(id, property, value) {
-      const element = layers.find(l => l.id === id)?.element;
-      if (element) {
-        const button = element.querySelector('button');
-        if (button) button.style[property] = value;
-        triggerAutosave();
-      }
-    }
-
-    function updateTextStyle(id, property, value) {
-      const element = layers.find(l => l.id === id)?.element;
-      if (element) {
-        const textEl = element.querySelector('[contenteditable]');
-        if (textEl) textEl.style[property] = value;
-        triggerAutosave();
-      }
-    }
-
-    function updateLayerName(id, name) {
-      const layer = layers.find(l => l.id === id);
-      if (layer) {
-        layer.name = name;
-        updateLayersList();
-        triggerAutosave();
-      }
-    }
-
-    // Delete selected element
-    function deleteSelectedElement() {
-      if (selectedElement && confirm('Delete this component?')) {
-        const id = selectedElement.dataset.id;
-        selectedElement.remove();
-        layers = layers.filter(l => l.id !== id);
-        selectedElement = null;
-        
-        // Reset properties panel
-        document.getElementById('properties-title').textContent = 'Nothing selected';
-        document.getElementById('properties-subtitle').textContent = 'Select a layer to inspect';
-        document.getElementById('properties-content').innerHTML = `
-          <div style="text-align: center; padding: 60px 20px; color: #999999;">
-            <i class="ph ph-cursor-click" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
-            <p style="font-size: 14px;">Select a component</p>
-            <p style="font-size: 12px; margin-top: 4px;">to edit its properties</p>
-          </div>
-        `;
-        
-        updateLayersList();
-        triggerAutosave();
-      }
-    }
-
-    // Copy element
-    let copiedElement = null;
-
-    function copyElement() {
-      if (selectedElement) {
-        copiedElement = selectedElement.cloneNode(true);
-        console.log('Component copied!');
-      }
-    }
-
-    function pasteElement() {
-      if (copiedElement) {
-        const clone = copiedElement.cloneNode(true);
-        clone.dataset.id = `component-${++componentCounter}`;
-        
-        // Offset position
-        const currentLeft = parseFloat(copiedElement.style.left) || 0;
-        const currentTop = parseFloat(copiedElement.style.top) || 0;
-        clone.style.left = (currentLeft + 20) + 'px';
-        clone.style.top = (currentTop + 20) + 'px';
-        
-        // Re-attach event listeners
-        clone.addEventListener('mousedown', (e) => {
-          if (!e.target.classList.contains('resize-handle')) {
-            e.stopPropagation();
-            selectElement(clone);
-            startDrag(e, clone);
-          }
-        });
-
-        // Re-attach resize handles
-        clone.querySelectorAll('.resize-handle').forEach(handle => {
-          handle.addEventListener('mousedown', (e) => {
-            e.stopPropagation();
-            startResize(e, clone, handle.dataset.position);
-          });
-        });
-        
-        frameContent.appendChild(clone);
-        selectElement(clone);
-        
-        // Add to layers
-        const type = clone.dataset.type;
-        layers.push({
-          id: clone.dataset.id,
-          name: `${type.charAt(0).toUpperCase() + type.slice(1)} ${componentCounter}`,
-          type: type,
-          element: clone,
-          visible: true
-        });
-        updateLayersList();
-        
-        triggerAutosave();
-      }
-    }
-
-    function duplicateElement() {
-      if (selectedElement) {
-        copyElement();
-        pasteElement();
-      }
-    }
-
-    // Update layers list
-    function updateLayersList() {
-      const list = document.getElementById('layers-list');
-      
-      if (layers.length === 0) {
-        list.innerHTML = `
-          <div style="text-align: center; padding: 40px 20px; color: #999999;">
-            <i class="ph ph-stack" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
-            <p style="font-size: 14px;">No layers yet</p>
-            <p style="font-size: 12px; margin-top: 4px;">Add components to see layers</p>
-          </div>
-        `;
-        return;
-      }
-
-      list.innerHTML = layers.map(layer => `
-        <div class="layer-item ${selectedElement?.dataset.id === layer.id ? 'active' : ''}" onclick="selectLayerById('${layer.id}')">
-          <i class="ph ph-${getLayerIcon(layer.type)} layer-icon"></i>
-          <span class="layer-name">${layer.name}</span>
-          <button class="layer-visibility" onclick="toggleLayerVisibility('${layer.id}', event)">
-            <i class="ph ph-${layer.visible ? 'eye' : 'eye-slash'}"></i>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    function getLayerIcon(type) {
-      const icons = {
-        'button': 'cursor-click',
-        'input': 'text-aa',
-        'checkbox': 'check-square',
-        'card': 'rectangle',
-        'text': 'text-t',
-        'image': 'image'
-      };
-      return icons[type] || 'square';
-    }
-
-    function selectLayerById(id) {
-      const layer = layers.find(l => l.id === id);
-      if (layer && layer.element) {
-        selectElement(layer.element);
-      }
-    }
-
-    function toggleLayerVisibility(id, event) {
-      event.stopPropagation();
-      const layer = layers.find(l => l.id === id);
-      if (layer) {
-        layer.visible = !layer.visible;
-        layer.element.style.display = layer.visible ? '' : 'none';
-        updateLayersList();
-        triggerAutosave();
-      }
-    }
-
-    // Deselect on canvas click
-    frameContent.addEventListener('click', (e) => {
-      if (e.target === frameContent && selectedElement) {
-        selectedElement.classList.remove('selected');
-        selectedElement = null;
-        
-        document.getElementById('properties-title').textContent = 'Nothing selected';
-        document.getElementById('properties-subtitle').textContent = 'Select a layer to inspect';
-        document.getElementById('properties-content').innerHTML = `
-          <div style="text-align: center; padding: 60px 20px; color: #999999;">
-            <i class="ph ph-cursor-click" style="font-size: 48px; opacity: 0.3; margin-bottom: 12px;"></i>
-            <p style="font-size: 14px;">Select a component</p>
-            <p style="font-size: 12px; margin-top: 4px;">to edit its properties</p>
-          </div>
-        `;
-      }
-    });
-
-    // Sidebar tabs
-    function switchTab(tabName) {
-      document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-
-      document.getElementById(`${tabName}-tab`).classList.add('active');
-    }
-
-    // Add page
-    document.getElementById('add-page-btn').addEventListener('click', () => {
-      const name = prompt('Page name:', 'New Page');
-      if (name) {
-        const pageId = `page-${Date.now()}`;
-        pages.push({ id: pageId, name: name, icon: 'ph-file' });
-        loadPages();
-        triggerAutosave();
-      }
-    });
-
-    // Load pages
-    function loadPages() {
-      const list = document.getElementById('pages-list');
-      list.innerHTML = pages.map(page => `
-        <div class="page-item ${page.id === 'home' ? 'active' : ''}" data-page-id="${page.id}">
-          <i class="${page.icon} page-icon"></i>
-          <span class="page-name">${page.name}</span>
-          <button class="page-menu-btn">
-            <i class="ph ph-dots-three"></i>
-          </button>
-        </div>
-      `).join('');
-
-      document.querySelectorAll('.page-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-          if (!e.target.closest('.page-menu-btn')) {
-            document.querySelectorAll('.page-item').forEach(p => p.classList.remove('active'));
-            item.classList.add('active');
-          }
-        });
-      });
-
-      document.querySelectorAll('.page-menu-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          showContextMenu(e.clientX, e.clientY, btn.closest('.page-item').dataset.pageId);
-        });
-      });
-    }
-
-    // Context menu
-    const contextMenu = document.getElementById('context-menu');
-    let contextMenuTarget = null;
-
-    function showContextMenu(x, y, pageId) {
-      contextMenuTarget = pageId;
-      contextMenu.style.left = x + 'px';
-      contextMenu.style.top = y + 'px';
-      contextMenu.classList.add('active');
-    }
-
-    function hideContextMenu() {
-      contextMenu.classList.remove('active');
-    }
-
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.context-menu') && !e.target.closest('.page-menu-btn')) {
-        hideContextMenu();
-      }
-    });
-
-    document.querySelectorAll('.context-menu-item').forEach(item => {
-      item.addEventListener('click', () => {
-        const action = item.dataset.action;
-        
-        if (action === 'rename') {
-          const page = pages.find(p => p.id === contextMenuTarget);
-          const newName = prompt('New name:', page.name);
-          if (newName) {
-            page.name = newName;
-            loadPages();
-            triggerAutosave();
-          }
-        } else if (action === 'duplicate') {
-          const page = pages.find(p => p.id === contextMenuTarget);
-          const newPage = {
-            id: `page-${Date.now()}`,
-            name: `${page.name} Copy`,
-            icon: page.icon
-          };
-          pages.push(newPage);
-          loadPages();
-          triggerAutosave();
-        } else if (action === 'delete') {
-          if (contextMenuTarget === 'home') {
-            alert('Cannot delete the home page');
-          } else {
-            if (confirm('Delete this page?')) {
-              pages = pages.filter(p => p.id !== contextMenuTarget);
-              loadPages();
-              triggerAutosave();
+        // Initialize
+        window.onload = function() {
+            loadDashboard();
+        };
+
+        // Dashboard functions
+        function loadDashboard() {
+            const projects = JSON.parse(localStorage.getItem('scubaProjects') || '[]');
+            const grid = document.getElementById('projectsGrid');
+            
+            if (projects.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.5);">
+                        <div style="font-size: 64px; margin-bottom: 16px;">📂</div>
+                        <div style="font-size: 18px;">Nenhum projeto ainda</div>
+                        <div style="margin-top: 8px;">Clique em "Novo Projeto" para começar</div>
+                    </div>
+                `;
+                return;
             }
-          }
+
+            grid.innerHTML = projects.map(project => `
+                <div class="project-card" onclick="openProject('${project.id}')">
+                    <div class="project-card-header">
+                        <div class="project-name">${project.name}</div>
+                        <button class="project-delete" onclick="event.stopPropagation(); deleteProject('${project.id}')">
+                            🗑️
+                        </button>
+                    </div>
+                    <div class="project-meta">
+                        ${project.pages.length} página(s) · Atualizado ${new Date(project.updatedAt).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
         }
-        
-        hideContextMenu();
-      });
-    });
 
-    // Initialize
-    loadProjects();
-    loadPages();
+        function createNewProject() {
+            const name = prompt('Nome do projeto:');
+            if (!name) return;
 
-    // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.layout-dropdown')) {
-        document.getElementById('layout-menu').classList.remove('active');
-      }
-    });
+            const project = {
+                id: 'project_' + Date.now(),
+                name: name,
+                pages: [{
+                    id: 'page_' + Date.now(),
+                    name: 'Home',
+                    components: []
+                }],
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
 
-    console.log('✨ Deep ESG Builder v1.3 Loaded!');
-    console.log('📦 New Features:');
-    console.log('- Enhanced Canvas with resize handles');
-    console.log('- Copy/Paste/Duplicate (Cmd+C/V/D)');
-    console.log('- Dynamic Properties Panel');
-    console.log('- Layers panel with visibility toggle');
-    console.log('- Snap to 10px grid');
-    console.log('- Real-time property editing');
-  </script>
-  <script>
-// ==========================================
-// CONFIGURAÇÃO DO STORYBOOK
-// ==========================================
+            const projects = JSON.parse(localStorage.getItem('scubaProjects') || '[]');
+            projects.push(project);
+            localStorage.setItem('scubaProjects', JSON.stringify(projects));
 
-const STORYBOOK_CONFIG = {
-  baseUrl: 'https://atramontdeep.github.io/scuba-dev',
-  get storiesApi() {
-    return `${this.baseUrl}/stories.json`;
-  },
-  get iframeUrl() {
-    return `${this.baseUrl}/iframe.html`;
-  }
-};
+            openProject(project.id);
+        }
 
-// ==========================================
-// CARREGAR COMPONENTES DO STORYBOOK
-// ==========================================
+        function openProject(projectId) {
+            const projects = JSON.parse(localStorage.getItem('scubaProjects') || '[]');
+            currentProject = projects.find(p => p.id === projectId);
+            
+            if (!currentProject) return;
 
-let storybookComponents = [];
+            currentPageId = currentProject.pages[0].id;
+            
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('builder').classList.remove('hidden');
+            document.getElementById('projectNameInput').value = currentProject.name;
 
-async function loadStorybookComponents() {
-  try {
-    console.log('🔄 Carregando componentes do Storybook...');
-    
-    const response = await fetch(STORYBOOK_CONFIG.storiesApi);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    console.log('📦 Dados do Storybook:', data);
-    
-    // Processar stories do Scuba
-    storybookComponents = Object.entries(data.stories)
-      .filter(([key, story]) => story.title?.startsWith('Scuba/'))
-      .map(([key, story]) => ({
-        id: key,
-        name: story.name,
-        title: story.title,
-        kind: story.kind,
-        component: story.title.replace('Scuba/', ''),
-        // Gerar preview URL
-        previewUrl: `${STORYBOOK_CONFIG.iframeUrl}?id=${key}&viewMode=story`
-      }));
-    
-    console.log(`✅ ${storybookComponents.length} componentes carregados:`, storybookComponents);
-    
-    // Atualizar sidebar com componentes
-    updateComponentsSidebar(storybookComponents);
-    
-    return storybookComponents;
-    
-  } catch (error) {
-    console.error('❌ Erro ao carregar componentes do Storybook:', error);
-    
-    // Fallback: mostrar mensagem de erro na sidebar
-    const sidebar = document.querySelector('.components-sidebar');
-    if (sidebar) {
-      sidebar.innerHTML = `
-        <div style="padding: 20px; text-align: center; color: #ea2255;">
-          <i class="ph ph-warning-circle" style="font-size: 48px; margin-bottom: 12px;"></i>
-          <p style="font-size: 14px; font-weight: 600;">Erro ao carregar componentes</p>
-          <p style="font-size: 12px; margin-top: 8px; color: #999;">
-            ${error.message}
-          </p>
-          <button onclick="loadStorybookComponents()" style="margin-top: 16px; padding: 8px 16px; background: #0086cd; color: white; border: none; border-radius: 8px; cursor: pointer; font-family: 'Poppins'; font-size: 13px; font-weight: 600;">
-            Tentar novamente
-          </button>
-        </div>
-      `;
-    }
-    
-    return [];
-  }
-}
+            renderPages();
+            renderCanvas();
+        }
 
-// ==========================================
-// ATUALIZAR SIDEBAR COM COMPONENTES
-// ==========================================
+        function backToDashboard() {
+            if (currentProject) {
+                saveProject();
+            }
+            document.getElementById('builder').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            loadDashboard();
+        }
 
-function updateComponentsSidebar(components) {
-  const sidebar = document.querySelector('.components-sidebar');
-  if (!sidebar) return;
-  
-  // Agrupar por categoria
-  const grouped = components.reduce((acc, comp) => {
-    const category = comp.title.split('/')[1] || 'Other';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(comp);
-    return acc;
-  }, {});
-  
-  // Renderizar
-  sidebar.innerHTML = Object.entries(grouped)
-    .map(([category, comps]) => `
-      <div class="component-category" style="margin-bottom: 16px;">
-        <div style="font-size: 11px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; padding: 0 12px;">
-          ${category}
-        </div>
-        ${comps.map(comp => `
-          <div 
-            class="component-item" 
-            draggable="true" 
-            data-component-id="${comp.id}"
-            data-component-name="${comp.name}"
-            data-preview-url="${comp.previewUrl}"
-            style="padding: 12px; cursor: grab; border-radius: 8px; margin-bottom: 4px; transition: all 0.2s;"
-            onmouseenter="this.style.background='#f3f4f6'"
-            onmouseleave="this.style.background='transparent'"
-          >
-            <i class="ph ph-${getComponentIcon(comp.component)}" style="margin-right: 8px; color: #0086cd;"></i>
-            <span style="font-size: 13px; font-weight: 500;">${comp.name}</span>
-          </div>
-        `).join('')}
-      </div>
-    `).join('');
-  
-  // Adicionar drag events
-  sidebar.querySelectorAll('.component-item').forEach(item => {
-    item.addEventListener('dragstart', handleDragStart);
-    item.addEventListener('click', () => insertStorybookComponent(item.dataset));
-  });
-}
+        function deleteProject(projectId) {
+            if (!confirm('Tem certeza que deseja deletar este projeto?')) return;
 
-function getComponentIcon(componentName) {
-  const icons = {
-    'Button': 'cursor-click',
-    'Input': 'text-aa',
-    'Checkbox': 'check-square',
-    'DataTable': 'table',
-    'Card': 'rectangle',
-    'Modal': 'browser'
-  };
-  return icons[componentName] || 'cube';
-}
+            const projects = JSON.parse(localStorage.getItem('scubaProjects') || '[]');
+            const filtered = projects.filter(p => p.id !== projectId);
+            localStorage.setItem('scubaProjects', JSON.stringify(filtered));
+            loadDashboard();
+        }
 
-// ==========================================
-// INSERIR COMPONENTE NO CANVAS
-// ==========================================
+        // Tabs
+        function switchTab(tabName) {
+            document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
 
-function insertStorybookComponent(data) {
-  const { componentId, componentName, previewUrl } = data;
-  
-  // Criar iframe com preview do Storybook
-  const iframe = document.createElement('iframe');
-  iframe.src = previewUrl;
-  iframe.style.cssText = `
-    position: absolute;
-    left: 50px;
-    top: 50px;
-    width: 400px;
-    height: 300px;
-    border: 2px solid #0086cd;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  `;
-  iframe.dataset.id = `component-${++componentCounter}`;
-  iframe.dataset.type = 'storybook-component';
-  iframe.dataset.componentId = componentId;
-  iframe.dataset.componentName = componentName;
-  
-  frameContent.appendChild(iframe);
-  
-  // Adicionar resize handles
-  addResizeHandles(iframe);
-  
-  // Adicionar eventos
-  iframe.addEventListener('mousedown', (e) => {
-    if (!e.target.classList.contains('resize-handle')) {
-      e.stopPropagation();
-      selectElement(iframe);
-      startDrag(e, iframe);
-    }
-  });
-  
-  selectElement(iframe);
-  
-  // Adicionar às layers
-  layers.push({
-    id: iframe.dataset.id,
-    name: componentName,
-    type: 'storybook-component',
-    element: iframe,
-    visible: true
-  });
-  
-  updateLayersList();
-  triggerAutosave();
-  
-  console.log(`✅ Componente ${componentName} inserido no canvas`);
-}
+        // Pages
+        function renderPages() {
+            const list = document.getElementById('pagesList');
+            list.innerHTML = currentProject.pages.map(page => `
+                <div class="page-item ${page.id === currentPageId ? 'active' : ''}" onclick="selectPage('${page.id}')">
+                    <span class="page-name">${page.name}</span>
+                    ${currentProject.pages.length > 1 ? `
+                        <button class="page-delete" onclick="event.stopPropagation(); deletePage('${page.id}')">
+                            🗑️
+                        </button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
 
-// ==========================================
-// INICIALIZAÇÃO
-// ==========================================
+        function addNewPage() {
+            const name = prompt('Nome da página:');
+            if (!name) return;
 
-// Carregar componentes quando a página carregar
-window.addEventListener('load', () => {
-  console.log('🚀 Inicializando integração com Storybook...');
-  loadStorybookComponents();
-});
+            const newPage = {
+                id: 'page_' + Date.now(),
+                name: name,
+                components: []
+            };
 
-// Adicionar botão de refresh na topbar
-document.addEventListener('DOMContentLoaded', () => {
-  const actions = document.querySelector('.dashboard-actions');
-  if (actions) {
-    const refreshBtn = document.createElement('button');
-    refreshBtn.className = 'btn btn-secondary';
-    refreshBtn.innerHTML = '<i class="ph ph-arrows-clockwise"></i> Atualizar Componentes';
-    refreshBtn.onclick = loadStorybookComponents;
-    actions.insertBefore(refreshBtn, actions.firstChild);
-  }
-});
+            currentProject.pages.push(newPage);
+            currentPageId = newPage.id;
+            renderPages();
+            renderCanvas();
+        }
 
-</script>
+        function selectPage(pageId) {
+            currentPageId = pageId;
+            selectedComponentId = null;
+            renderPages();
+            renderCanvas();
+            renderPropertiesPanel();
+        }
 
+        function deletePage(pageId) {
+            if (!confirm('Deletar esta página?')) return;
+
+            currentProject.pages = currentProject.pages.filter(p => p.id !== pageId);
+            if (currentPageId === pageId) {
+                currentPageId = currentProject.pages[0].id;
+            }
+            renderPages();
+            renderCanvas();
+        }
+
+        // Components sync
+        async function syncComponents() {
+            const btn = event.target.closest('.btn-sync-components');
+            const icon = btn.querySelector('.sync-icon');
+            icon.innerHTML = '<span class="sync-spinner"></span>';
+            
+            try {
+                // Tentar buscar stories.json ou index.json do Storybook
+                const response = await fetch(`${STORYBOOK_URL}/stories.json`).catch(() => 
+                    fetch(`${STORYBOOK_URL}/index.json`)
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    scubaComponents = parseStorybookData(data);
+                } else {
+                    // Fallback: usar componentes mockados
+                    scubaComponents = getMockComponents();
+                }
+                
+                localStorage.setItem('scubaComponents', JSON.stringify(scubaComponents));
+                renderComponentsList();
+                
+            } catch (error) {
+                console.error('Erro ao sincronizar:', error);
+                scubaComponents = getMockComponents();
+                renderComponentsList();
+            }
+            
+            icon.innerHTML = '✓';
+            setTimeout(() => icon.innerHTML = '🔄', 1500);
+        }
+
+        function parseStorybookData(data) {
+            // Parse Storybook data structure
+            const components = {};
+            
+            if (data.stories) {
+                Object.values(data.stories).forEach(story => {
+                    const category = story.kind?.split('/')[0]?.toLowerCase() || 'other';
+                    const name = story.name || story.id;
+                    
+                    if (!components[category]) {
+                        components[category] = [];
+                    }
+                    
+                    components[category].push({
+                        id: story.id,
+                        name: name,
+                        description: story.parameters?.docs?.description || '',
+                        storyPath: story.id,
+                        props: extractPropsFromStory(story)
+                    });
+                });
+            }
+            
+            return components;
+        }
+
+        function extractPropsFromStory(story) {
+            const props = {};
+            
+            if (story.argTypes) {
+                Object.entries(story.argTypes).forEach(([key, config]) => {
+                    props[key] = {
+                        type: config.control?.type || 'text',
+                        options: config.options || [],
+                        default: config.defaultValue || '',
+                        label: config.name || key
+                    };
+                });
+            }
+            
+            return props;
+        }
+
+        function getMockComponents() {
+            return {
+                buttons: [
+                    {
+                        id: 'button',
+                        name: 'Button',
+                        description: 'Botão do Scuba',
+                        props: {
+                            children: { type: 'text', default: 'Button', label: 'Texto' },
+                            variant: { 
+                                type: 'select', 
+                                options: ['primary', 'secondary', 'outline'], 
+                                default: 'primary',
+                                label: 'Variante'
+                            }
+                        }
+                    }
+                ],
+                inputs: [
+                    {
+                        id: 'input',
+                        name: 'Input',
+                        description: 'Campo de entrada',
+                        props: {
+                            placeholder: { type: 'text', default: 'Digite...', label: 'Placeholder' },
+                            label: { type: 'text', default: 'Label', label: 'Label' }
+                        }
+                    }
+                ]
+            };
+        }
+
+        function renderComponentsList() {
+            const list = document.getElementById('componentsList');
+            const allComponents = { ...layoutComponents, ...scubaComponents };
+            
+            list.innerHTML = Object.entries(allComponents).map(([category, components]) => `
+                <div class="component-category">
+                    <div class="category-title">${category.toUpperCase()}</div>
+                    ${components.map(comp => `
+                        <div class="component-item" draggable="true" 
+                             ondragstart="handleDragStart(event, '${category}', '${comp.id}')">
+                            <div class="component-name">${comp.name}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // Drag and drop
+        function handleDragStart(event, category, componentId) {
+            event.dataTransfer.setData('category', category);
+            event.dataTransfer.setData('componentId', componentId);
+        }
+
+        // Canvas
+        const canvas = document.getElementById('canvas');
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const target = e.target.closest('.layout-container');
+            if (target) {
+                target.classList.add('drag-over');
+            } else {
+                canvas.classList.add('drag-over');
+            }
+        });
+
+        canvas.addEventListener('dragleave', (e) => {
+            const target = e.target.closest('.layout-container');
+            if (target) {
+                target.classList.remove('drag-over');
+            } else {
+                canvas.classList.remove('drag-over');
+            }
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            canvas.classList.remove('drag-over');
+            
+            const category = e.dataTransfer.getData('category');
+            const componentId = e.dataTransfer.getData('componentId');
+            
+            const layoutTarget = e.target.closest('.layout-container');
+            const parentId = layoutTarget?.dataset.componentId || null;
+            
+            if (layoutTarget) {
+                layoutTarget.classList.remove('drag-over');
+            }
+            
+            addComponent(category, componentId, parentId);
+        });
+
+        function addComponent(category, componentId, parentId = null) {
+            const allComponents = { ...layoutComponents, ...scubaComponents };
+            const component = allComponents[category]?.find(c => c.id === componentId);
+            if (!component) return;
+
+            const instance = {
+                id: 'comp_' + Date.now(),
+                componentId: component.id,
+                category: category,
+                isLayout: component.isLayout || false,
+                parentId: parentId,
+                children: [],
+                props: {}
+            };
+
+            // Initialize props
+            if (component.props) {
+                Object.entries(component.props).forEach(([key, config]) => {
+                    instance.props[key] = config.default;
+                });
+            }
+
+            const currentPage = getCurrentPage();
+            
+            if (parentId) {
+                const parent = findComponentById(currentPage.components, parentId);
+                if (parent) {
+                    parent.children.push(instance);
+                }
+            } else {
+                currentPage.components.push(instance);
+            }
+
+            renderCanvas();
+            
+            const placeholder = canvas.querySelector('.canvas-placeholder');
+            if (placeholder) placeholder.style.display = 'none';
+        }
+
+        function getCurrentPage() {
+            return currentProject.pages.find(p => p.id === currentPageId);
+        }
+
+        function findComponentById(components, id) {
+            for (const comp of components) {
+                if (comp.id === id) return comp;
+                if (comp.children) {
+                    const found = findComponentById(comp.children, id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        function renderCanvas() {
+            const currentPage = getCurrentPage();
+            const existingComponents = canvas.querySelectorAll('.layout-container, .dropped-component');
+            existingComponents.forEach(el => el.remove());
+
+            if (currentPage.components.length === 0) {
+                const placeholder = canvas.querySelector('.canvas-placeholder');
+                if (placeholder) placeholder.style.display = 'block';
+                return;
+            }
+
+            currentPage.components.forEach(instance => {
+                const element = renderComponent(instance);
+                canvas.appendChild(element);
+            });
+        }
+
+        function renderComponent(instance) {
+            const allComponents = { ...layoutComponents, ...scubaComponents };
+            const component = allComponents[instance.category]?.find(c => c.id === instance.componentId);
+            
+            if (!component) return document.createElement('div');
+
+            if (instance.isLayout) {
+                return renderLayoutComponent(instance, component);
+            } else {
+                return renderRegularComponent(instance, component);
+            }
+        }
+
+        function renderLayoutComponent(instance, component) {
+            const div = document.createElement('div');
+            div.className = `layout-container ${instance.componentId === 'flex-container' ? 'flex-container' : 'grid-container'}`;
+            div.dataset.componentId = instance.id;
+            
+            if (selectedComponentId === instance.id) {
+                div.classList.add('selected');
+            }
+
+            // Apply styles
+            if (instance.componentId === 'flex-container') {
+                div.style.flexDirection = instance.props.direction;
+                div.style.justifyContent = instance.props.justify;
+                div.style.alignItems = instance.props.align;
+                div.style.gap = instance.props.gap + 'px';
+                div.style.padding = instance.props.padding + 'px';
+                div.style.flexWrap = instance.props.wrap;
+            } else {
+                div.style.gridTemplateColumns = `repeat(${instance.props.columns}, 1fr)`;
+                if (instance.props.rows > 0) {
+                    div.style.gridTemplateRows = `repeat(${instance.props.rows}, 1fr)`;
+                }
+                const colGap = instance.props.columnGap || instance.props.gap;
+                const rowGap = instance.props.rowGap || instance.props.gap;
+                div.style.gap = `${rowGap}px ${colGap}px`;
+                div.style.padding = instance.props.padding + 'px';
+            }
+
+            div.innerHTML = `
+                <div class="component-controls">
+                    <button class="component-control-btn" onclick="deleteComponent('${instance.id}')">🗑️</button>
+                </div>
+                <div class="layout-label">${component.name}</div>
+            `;
+
+            // Render children
+            if (instance.children && instance.children.length > 0) {
+                instance.children.forEach(child => {
+                    const childElement = renderComponent(child);
+                    div.appendChild(childElement);
+                });
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'layout-placeholder';
+                placeholder.textContent = 'Arraste componentes aqui';
+                div.appendChild(placeholder);
+            }
+
+            div.addEventListener('click', (e) => {
+                if (e.target === div || e.target.classList.contains('layout-label')) {
+                    selectComponent(instance.id);
+                }
+            });
+
+            // Drag over for nested drops
+            div.addEventListener('dragover', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                div.classList.add('drag-over');
+            });
+
+            div.addEventListener('dragleave', () => {
+                div.classList.remove('drag-over');
+            });
+
+            return div;
+        }
+
+        function renderRegularComponent(instance, component) {
+            const div = document.createElement('div');
+            div.className = 'dropped-component';
+            div.dataset.componentId = instance.id;
+            
+            if (selectedComponentId === instance.id) {
+                div.classList.add('selected');
+            }
+
+            div.innerHTML = `
+                <div class="component-controls">
+                    <button class="component-control-btn" onclick="deleteComponent('${instance.id}')">🗑️</button>
+                </div>
+                <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 8px;">
+                    ${component.name}
+                </div>
+                <div style="padding: 12px; background: rgba(0,212,255,0.1); border-radius: 4px; color: #e0e0e0;">
+                    [${component.name} Component Preview]
+                </div>
+            `;
+
+            div.addEventListener('click', () => selectComponent(instance.id));
+
+            return div;
+        }
+
+        function selectComponent(componentId) {
+            selectedComponentId = componentId;
+            renderCanvas();
+            renderPropertiesPanel();
+        }
+
+        function deleteComponent(componentId) {
+            const currentPage = getCurrentPage();
+            
+            function removeFromArray(arr) {
+                for (let i = 0; i < arr.length; i++) {
+                    if (arr[i].id === componentId) {
+                        arr.splice(i, 1);
+                        return true;
+                    }
+                    if (arr[i].children && removeFromArray(arr[i].children)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            removeFromArray(currentPage.components);
+            selectedComponentId = null;
+            renderCanvas();
+            renderPropertiesPanel();
+        }
+
+        // Properties panel
+        function renderPropertiesPanel() {
+            const panel = document.getElementById('propertiesPanel');
+            
+            if (!selectedComponentId) {
+                panel.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: rgba(255,255,255,0.3);">
+                        <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                        <div>Selecione um componente</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const currentPage = getCurrentPage();
+            const instance = findComponentById(currentPage.components, selectedComponentId);
+            if (!instance) return;
+
+            const allComponents = { ...layoutComponents, ...scubaComponents };
+            const component = allComponents[instance.category]?.find(c => c.id === instance.componentId);
+            if (!component) return;
+
+            panel.innerHTML = `
+                <div class="properties-title">${component.name}</div>
+                ${renderPropertiesFields(instance, component)}
+            `;
+
+            // Add event listeners
+            Object.keys(component.props || {}).forEach(key => {
+                const input = panel.querySelector(`[data-prop="${key}"]`);
+                if (input) {
+                    input.addEventListener('change', (e) => {
+                        const value = e.target.type === 'checkbox' ? e.target.checked : 
+                                     e.target.type === 'number' ? parseInt(e.target.value) :
+                                     e.target.value;
+                        instance.props[key] = value;
+                        renderCanvas();
+                    });
+                }
+            });
+        }
+
+        function renderPropertiesFields(instance, component) {
+            if (!component.props) return '';
+
+            const sections = instance.isLayout ? 
+                { 'Layout': component.props } : 
+                { 'Propriedades': component.props };
+
+            return Object.entries(sections).map(([sectionName, props]) => `
+                <div class="property-section">
+                    <div class="property-section-title">${sectionName}</div>
+                    ${Object.entries(props).map(([key, config]) => {
+                        return renderPropertyField(key, config, instance.props[key]);
+                    }).join('')}
+                </div>
+            `).join('');
+        }
+
+        function renderPropertyField(key, config, value) {
+            if (config.type === 'select') {
+                return `
+                    <div class="property-field">
+                        <label class="property-label">${config.label}</label>
+                        <select class="property-select" data-prop="${key}">
+                            ${config.options.map(opt => `
+                                <option value="${opt}" ${value === opt ? 'selected' : ''}>${opt}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                `;
+            } else if (config.type === 'boolean') {
+                return `
+                    <div class="property-field">
+                        <div class="property-checkbox">
+                            <input type="checkbox" data-prop="${key}" ${value ? 'checked' : ''}>
+                            <label class="property-label">${config.label}</label>
+                        </div>
+                    </div>
+                `;
+            } else if (config.type === 'number') {
+                return `
+                    <div class="property-field">
+                        <label class="property-label">${config.label}</label>
+                        <input type="number" class="property-input" data-prop="${key}" value="${value}">
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="property-field">
+                        <label class="property-label">${config.label}</label>
+                        <input type="text" class="property-input" data-prop="${key}" value="${value}">
+                    </div>
+                `;
+            }
+        }
+
+        // Save/Export
+        function saveProject() {
+            if (!currentProject) return;
+
+            currentProject.name = document.getElementById('projectNameInput').value;
+            currentProject.updatedAt = new Date().toISOString();
+
+            const projects = JSON.parse(localStorage.getItem('scubaProjects') || '[]');
+            const index = projects.findIndex(p => p.id === currentProject.id);
+            
+            if (index >= 0) {
+                projects[index] = currentProject;
+            } else {
+                projects.push(currentProject);
+            }
+
+            localStorage.setItem('scubaProjects', JSON.stringify(projects));
+            
+            // Visual feedback
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = '✓ Salvo';
+            setTimeout(() => btn.textContent = originalText, 1500);
+        }
+
+        function exportProject() {
+            if (!currentProject) return;
+
+            const blob = new Blob([JSON.stringify(currentProject, null, 2)], { 
+                type: 'application/json' 
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentProject.name}.scuba.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // View modes
+        function setViewMode(mode) {
+            const canvas = document.querySelector('.canvas-drop-zone');
+            switch(mode) {
+                case 'desktop':
+                    canvas.style.maxWidth = '100%';
+                    canvas.style.margin = '0';
+                    break;
+                case 'tablet':
+                    canvas.style.maxWidth = '768px';
+                    canvas.style.margin = '0 auto';
+                    break;
+                case 'mobile':
+                    canvas.style.maxWidth = '375px';
+                    canvas.style.margin = '0 auto';
+                    break;
+            }
+        }
+    </script>
 </body>
 </html>
