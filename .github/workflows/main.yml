@@ -36,7 +36,17 @@ jobs:
       
       - name: Build Storybook
         run: npm run build-storybook
-      
+
+      - name: Create stories.json for compatibility
+        run: |
+          echo "📝 Creating stories.json..."
+          if [ -f "storybook-static/index.json" ]; then
+            cp storybook-static/index.json storybook-static/stories.json
+            echo "✅ stories.json created successfully"
+          else
+            echo "⚠️ index.json not found, skipping..."
+          fi
+
       - name: Copy Builder to Storybook output
         run: |
           echo "📦 Copying Builder files..."
