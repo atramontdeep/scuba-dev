@@ -1,49 +1,58 @@
-// src/components/DataTable/DataTable.stories.jsx
 import DataTable from './DataTable.vue';
 import AvatarCell from './cells/AvatarCell.vue';
-import ProgressCell from './cells/ProgressCell.vue';
-import StatusCell from './cells/StatusCell.vue';
+import TaskBar from '../TaskBar/TaskBar.vue';
+import Status from '../Status/Status.vue';
+import Breadcrumb from '../Breadcrumb/Breadcrumb.vue';
 
 export default {
   title: 'Scuba/DataTable',
   component: DataTable,
-  parameters: { 
-    layout: 'padded',
-    docs: {
-      description: {
-        component: 'Tabela de dados completa com seleção múltipla, ordenação, expansão de linhas e ações em lote.'
-      }
-    }
-  },
+  tags: ['autodocs'],
   argTypes: {
     rows: {
-      description: 'Array de objetos com os dados das linhas',
-      control: 'object'
+      control: 'object',
+      description: 'Array de objetos com os dados das linhas'
     },
     columns: {
-      description: 'Array de objetos definindo as colunas (key, header, sortable, width, align)',
-      control: 'object'
+      control: 'object',
+      description: 'Array de objetos definindo as colunas (key, header, sortable, width, align)'
     },
     rowKey: {
-      description: 'Chave única para identificar cada linha',
-      control: 'text'
+      control: 'text',
+      description: 'Chave única para identificar cada linha'
     },
     selectable: {
-      description: 'Permite seleção múltipla de linhas',
-      control: 'boolean'
+      control: 'boolean',
+      description: 'Permite seleção múltipla de linhas'
     },
     expandable: {
-      description: 'Permite expandir linhas para mostrar detalhes',
-      control: 'boolean'
+      control: 'boolean',
+      description: 'Permite expandir linhas para mostrar detalhes'
     },
     actions: {
-      description: 'Array de ações disponíveis quando há linhas selecionadas',
-      control: 'object'
+      control: 'object',
+      description: 'Array de ações disponíveis quando há linhas selecionadas'
     }
   }
 };
 
 // Mock data
+// Mapeamento de status para variantes e labels
+const STATUS_CONFIG = {
+  'not-started': { variant: 'gray', label: 'Não iniciada' },
+  'in-progress': { variant: 'blue', label: 'Em andamento' },
+  'ready-for-approval': { variant: 'blue-dark', label: 'Para aprovação' },
+  'audited': { variant: 'teal', label: 'Auditada' },
+  'about-to-expire': { variant: 'orange', label: 'A expirar' },
+  'expired': { variant: 'red', label: 'Expirada' },
+  'completed': { variant: 'green', label: 'Concluída' },
+  'waiting-response': { variant: 'gray', label: 'Em resposta' },
+  'responded': { variant: 'cyan', label: 'Respondido' },
+  'validating': { variant: 'purple', label: 'Em validação' },
+  'adjusting': { variant: 'pink', label: 'Em ajuste' },
+  'validated': { variant: 'blue-dark', label: 'Validado' },
+};
+
 const mockRows = [
   {
     id: 1,
@@ -101,83 +110,98 @@ const actions = [
   { key: 'assign', label: 'Reatribuir', icon: 'ph ph-user-switch' },
 ];
 
-// Template padrão
-const Template = (args) => ({
-  components: { DataTable, AvatarCell, ProgressCell, StatusCell },
+const breadcrumbItems = [
+  { label: 'Home', href: '#' },
+  { label: 'Components', href: '#' },
+  { label: 'DataTable' }
+];
+
+// Playground
+export const Playground = (args) => ({
+  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
   setup() {
     function onAction(payload) {
-      console.log('🔥 Action:', payload.key, 'Rows:', payload.rows);
+      console.log('Action:', payload.key, 'Rows:', payload.rows);
       alert(`Ação: ${payload.key}\nLinhas selecionadas: ${payload.rows.length}`);
     }
-    
+
     function onSort(sort) {
-      console.log('📊 Sort:', sort);
+      console.log('Sort:', sort);
     }
-    
-    return { args, onAction, onSort };
+
+    return { args, onAction, onSort, breadcrumbItems };
   },
   template: `
-    <DataTable
-      v-bind="args"
-      @action="onAction"
-      @update:sort="onSort"
-    >
-      <!-- Célula: Responsável -->
-      <template #cell-responsavel="{ row }">
-        <AvatarCell 
-          :name="row.responsavel.name" 
-          :image="row.responsavel.image" 
-        />
-      </template>
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
 
-      <!-- Célula: Progresso (barra) -->
-      <template #cell-tarefas="{ row }">
-        <ProgressCell 
-          :value="row.tarefas.total > 0 ? (row.tarefas.completed / row.tarefas.total) * 100 : 0" 
-          :label="\`\${row.tarefas.completed}/\${row.tarefas.total}\`" 
-        />
-      </template>
+      <h1 style="margin: 0 0 4px 0; font-size: 32px; font-weight: 600; color: #111827;">
+        DataTable
+      </h1>
 
-      <!-- Célula: Em atraso -->
-      <template #cell-atraso="{ value }">
-        <div style="display: flex; justify-content: center; width: 100%;">
-          <span :style="{ 
-            color: value > 0 ? '#EF4444' : '#6B7280',
-            fontWeight: value > 0 ? 600 : 400
-          }">
-            {{ value }}
-          </span>
-        </div>
-      </template>
+      <p style="margin: 0 0 32px 0; font-size: 16px; color: #6B7280; line-height: 1.5;">
+        Tabela de dados completa com seleção múltipla, ordenação, expansão de linhas e ações em lote.
+      </p>
 
-      <!-- Célula: Última atividade -->
-      <template #cell-ultima="{ value }">
-        <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
-      </template>
+      <DataTable
+        v-bind="args"
+        @action="onAction"
+        @update:sort="onSort"
+      >
+        <!-- Célula: Responsável -->
+        <template #cell-responsavel="{ row }">
+          <AvatarCell
+            :name="row.responsavel.name"
+            :image="row.responsavel.image"
+          />
+        </template>
 
-      <!-- Célula: Status -->
-      <template #cell-status="{ row }">
-        <StatusCell :status="row.status" />
-      </template>
+        <!-- Célula: Progresso -->
+        <template #cell-tarefas="{ row }">
+          <TaskBar
+            :current="row.tarefas.completed"
+            :total="row.tarefas.total"
+          />
+        </template>
 
-      <!-- Conteúdo expandido -->
-      <template #expanded="{ row }">
-        <div style="padding: 12px 0; color: #6B7280; font-size: 13px; line-height: 1.6;">
-          <div style="margin-bottom: 8px;">
-            <strong style="color: #1F2937;">Detalhes de {{ row.responsavel.name }}</strong>
+        <!-- Célula: Em atraso -->
+        <template #cell-atraso="{ value }">
+          <div style="display: flex; justify-content: center; width: 100%;">
+            <span :style="{
+              color: value > 0 ? '#EF4444' : '#6B7280',
+              fontWeight: value > 0 ? 600 : 400
+            }">
+              {{ value }}
+            </span>
           </div>
-          <div>📅 Última atividade: {{ row.ultima }}</div>
-          <div>⏰ Tarefas em atraso: {{ row.atraso }}</div>
-          <div>✅ Progresso: {{ row.tarefas.completed }}/{{ row.tarefas.total }} tarefas</div>
-        </div>
-      </template>
-    </DataTable>
+        </template>
+
+        <!-- Célula: Última atividade -->
+        <template #cell-ultima="{ value }">
+          <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
+        </template>
+
+        <!-- Célula: Status -->
+        <template #cell-status="{ row }">
+          <Status :status="row.status" />
+        </template>
+
+        <!-- Conteúdo expandido -->
+        <template #expanded="{ row }">
+          <div style="padding: 12px 0; color: #6B7280; font-size: 13px; line-height: 1.6;">
+            <div style="margin-bottom: 8px;">
+              <strong style="color: #1F2937;">Detalhes de {{ row.responsavel.name }}</strong>
+            </div>
+            <div>Última atividade: {{ row.ultima }}</div>
+            <div>Tarefas em atraso: {{ row.atraso }}</div>
+            <div>Progresso: {{ row.tarefas.completed }}/{{ row.tarefas.total }} tarefas</div>
+          </div>
+        </template>
+      </DataTable>
+    </div>
   `,
 });
-
-// Stories
-export const Default = Template.bind({});
-Default.args = {
+Playground.args = {
   rows: mockRows,
   columns: columns,
   rowKey: 'id',
@@ -186,7 +210,57 @@ Default.args = {
   actions: actions,
 };
 
-export const OnlyTable = Template.bind({});
+// Only Table
+export const OnlyTable = (args) => ({
+  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
+  setup() {
+    return { args, breadcrumbItems };
+  },
+  template: `
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
+
+      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
+        Tabela Simples
+      </h2>
+
+      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
+        Tabela sem seleção ou expansão de linhas.
+      </p>
+
+      <DataTable v-bind="args">
+        <template #cell-responsavel="{ row }">
+          <AvatarCell
+            :name="row.responsavel.name"
+            :image="row.responsavel.image"
+          />
+        </template>
+        <template #cell-tarefas="{ row }">
+          <TaskBar
+            :current="row.tarefas.completed"
+            :total="row.tarefas.total"
+          />
+        </template>
+        <template #cell-atraso="{ value }">
+          <div style="display: flex; justify-content: center; width: 100%;">
+            <span :style="{
+              color: value > 0 ? '#EF4444' : '#6B7280',
+              fontWeight: value > 0 ? 600 : 400
+            }">
+              {{ value }}
+            </span>
+          </div>
+        </template>
+        <template #cell-ultima="{ value }">
+          <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
+        </template>
+        <template #cell-status="{ row }">
+          <Status :status="row.status" />
+        </template>
+      </DataTable>
+    </div>
+  `,
+});
 OnlyTable.args = {
   rows: mockRows,
   columns: columns,
@@ -195,15 +269,63 @@ OnlyTable.args = {
   expandable: false,
   actions: [],
 };
-OnlyTable.parameters = {
-  docs: {
-    description: {
-      story: 'Tabela simples sem seleção ou expansão de linhas.'
-    }
-  }
-};
 
-export const WithSelection = Template.bind({});
+// With Selection
+export const WithSelection = (args) => ({
+  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
+  setup() {
+    function onAction(payload) {
+      console.log('Action:', payload.key, 'Rows:', payload.rows);
+      alert(`Ação: ${payload.key}\nLinhas selecionadas: ${payload.rows.length}`);
+    }
+
+    return { args, onAction, breadcrumbItems };
+  },
+  template: `
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
+
+      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
+        Com Seleção Múltipla
+      </h2>
+
+      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
+        Tabela com seleção múltipla e ações em lote, mas sem expansão de linhas.
+      </p>
+
+      <DataTable v-bind="args" @action="onAction">
+        <template #cell-responsavel="{ row }">
+          <AvatarCell
+            :name="row.responsavel.name"
+            :image="row.responsavel.image"
+          />
+        </template>
+        <template #cell-tarefas="{ row }">
+          <TaskBar
+            :current="row.tarefas.completed"
+            :total="row.tarefas.total"
+          />
+        </template>
+        <template #cell-atraso="{ value }">
+          <div style="display: flex; justify-content: center; width: 100%;">
+            <span :style="{
+              color: value > 0 ? '#EF4444' : '#6B7280',
+              fontWeight: value > 0 ? 600 : 400
+            }">
+              {{ value }}
+            </span>
+          </div>
+        </template>
+        <template #cell-ultima="{ value }">
+          <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
+        </template>
+        <template #cell-status="{ row }">
+          <Status :status="row.status" />
+        </template>
+      </DataTable>
+    </div>
+  `,
+});
 WithSelection.args = {
   rows: mockRows,
   columns: columns,
@@ -212,16 +334,10 @@ WithSelection.args = {
   expandable: false,
   actions: actions,
 };
-WithSelection.parameters = {
-  docs: {
-    description: {
-      story: 'Tabela com seleção múltipla e ações em lote, mas sem expansão de linhas.'
-    }
-  }
-};
 
+// All Statuses
 export const AllStatuses = () => ({
-  components: { DataTable, StatusCell },
+  components: { DataTable, Status, Breadcrumb },
   setup() {
     const statusRows = [
       { id: 1, name: 'Tarefa 1', status: 'not-started' },
@@ -243,40 +359,46 @@ export const AllStatuses = () => ({
       { key: 'status', header: 'Status', width: '250px' },
     ];
 
-    return { statusRows, statusColumns };
+    return { statusRows, statusColumns, breadcrumbItems };
   },
   template: `
-    <DataTable
-      :rows="statusRows"
-      :columns="statusColumns"
-      row-key="id"
-      :selectable="false"
-      :expandable="false"
-      :actions="[]"
-    >
-      <template #cell-status="{ row }">
-        <StatusCell :status="row.status" />
-      </template>
-    </DataTable>
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
+
+      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
+        Todos os Status
+      </h2>
+
+      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
+        Demonstração de todos os status disponíveis no componente Status.
+      </p>
+
+      <DataTable
+        :rows="statusRows"
+        :columns="statusColumns"
+        row-key="id"
+        :selectable="false"
+        :expandable="false"
+        :actions="[]"
+      >
+        <template #cell-status="{ row }">
+          <Status :status="row.status" />
+        </template>
+      </DataTable>
+    </div>
   `,
 });
-AllStatuses.parameters = {
-  docs: {
-    description: {
-      story: 'Demonstração de todos os status disponíveis no StatusCell.'
-    }
-  }
-};
 
+// Progress States
 export const ProgressStates = () => ({
-  components: { DataTable, ProgressCell },
+  components: { DataTable, TaskBar, Breadcrumb },
   setup() {
     const progressRows = [
-      { id: 1, name: 'Projeto A', progress: 0, label: '0/100' },
-      { id: 2, name: 'Projeto B', progress: 13, label: '13/100' },
-      { id: 3, name: 'Projeto C', progress: 50, label: '50/100' },
-      { id: 4, name: 'Projeto D', progress: 87, label: '87/100' },
-      { id: 5, name: 'Projeto E', progress: 100, label: '100/100' },
+      { id: 1, name: 'Projeto A', completed: 0, total: 100 },
+      { id: 2, name: 'Projeto B', completed: 13, total: 100 },
+      { id: 3, name: 'Projeto C', completed: 50, total: 100 },
+      { id: 4, name: 'Projeto D', completed: 87, total: 100 },
+      { id: 5, name: 'Projeto E', completed: 100, total: 100 },
     ];
 
     const progressColumns = [
@@ -284,27 +406,32 @@ export const ProgressStates = () => ({
       { key: 'progress', header: 'Progresso', width: '300px' },
     ];
 
-    return { progressRows, progressColumns };
+    return { progressRows, progressColumns, breadcrumbItems };
   },
   template: `
-    <DataTable
-      :rows="progressRows"
-      :columns="progressColumns"
-      row-key="id"
-      :selectable="false"
-      :expandable="false"
-      :actions="[]"
-    >
-      <template #cell-progress="{ row }">
-        <ProgressCell :value="row.progress" :label="row.label" />
-      </template>
-    </DataTable>
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
+
+      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
+        Estados de Progresso
+      </h2>
+
+      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
+        Demonstração dos estados da barra de progresso: 0%, 1-99%, e 100%.
+      </p>
+
+      <DataTable
+        :rows="progressRows"
+        :columns="progressColumns"
+        row-key="id"
+        :selectable="false"
+        :expandable="false"
+        :actions="[]"
+      >
+        <template #cell-progress="{ row }">
+          <TaskBar :current="row.completed" :total="row.total" />
+        </template>
+      </DataTable>
+    </div>
   `,
 });
-ProgressStates.parameters = {
-  docs: {
-    description: {
-      story: 'Demonstração dos 3 estados da barra de progresso: 0%, 1-99%, e 100%.'
-    }
-  }
-};

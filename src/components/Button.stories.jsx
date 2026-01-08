@@ -1,54 +1,5 @@
 import Button from './Button/Button.vue';
 
-// Lista de ícones Phosphor mais comuns
-const PHOSPHOR_ICONS = {
-  'Nenhum': '',
-  '👤 Usuário': 'ph-user',
-  '🔒 Cadeado': 'ph-lock',
-  '✉️ Email': 'ph-envelope',
-  '📞 Telefone': 'ph-phone',
-  '📅 Calendário': 'ph-calendar',
-  '🕐 Relógio': 'ph-clock',
-  '🔍 Busca': 'ph-magnifying-glass',
-  '👁️ Olho': 'ph-eye',
-  '👁️‍🗨️ Olho Fechado': 'ph-eye-slash',
-  '❤️ Coração': 'ph-heart',
-  '⭐ Estrela': 'ph-star',
-  '🔔 Sino': 'ph-bell',
-  '⚙️ Engrenagem': 'ph-gear',
-  '🏠 Casa': 'ph-house',
-  '📍 Pin': 'ph-map-pin',
-  '🛒 Carrinho': 'ph-shopping-cart',
-  '💳 Cartão': 'ph-credit-card',
-  '💰 Dólar': 'ph-currency-dollar',
-  '🔗 Link': 'ph-link',
-  '📄 Arquivo': 'ph-file',
-  '📁 Pasta': 'ph-folder',
-  '🖼️ Imagem': 'ph-image',
-  '🎥 Vídeo': 'ph-video',
-  '🎵 Música': 'ph-music-note',
-  '✓ Check': 'ph-check',
-  '✕ X': 'ph-x',
-  '+ Plus': 'ph-plus',
-  '− Minus': 'ph-minus',
-  '→ Seta Direita': 'ph-arrow-right',
-  '← Seta Esquerda': 'ph-arrow-left',
-  '↑ Seta Cima': 'ph-arrow-up',
-  '↓ Seta Baixo': 'ph-arrow-down',
-  'ℹ️ Info': 'ph-info',
-  '⚠️ Aviso': 'ph-warning',
-  '❓ Pergunta': 'ph-question',
-  '@ Arroba': 'ph-at',
-  '# Hash': 'ph-hash',
-  'Aa Texto': 'ph-text-aa',
-  '📎 Anexo': 'ph-paperclip',
-  '⬇️ Download': 'ph-download',
-  '⬆️ Upload': 'ph-upload',
-  '🗑️ Lixeira': 'ph-trash',
-  '✏️ Lápis': 'ph-pencil',
-  '↗️ Compartilhar': 'ph-share',
-};
-
 export default {
   title: 'Scuba/Button',
   component: Button,
@@ -73,14 +24,12 @@ export default {
       description: 'Estado desabilitado'
     },
     iconLeft: {
-      control: 'select',
-      options: PHOSPHOR_ICONS,
-      description: '🎨 Ícone esquerda'
+      control: 'text',
+      description: 'Ícone esquerda (ex: ph-user, ph-star)'
     },
     iconRight: {
-      control: 'select',
-      options: PHOSPHOR_ICONS,
-      description: '🎨 Ícone direita'
+      control: 'text',
+      description: 'Ícone direita (ex: ph-arrow-right, ph-check)'
     },
     fullWidth: {
       control: 'boolean',
@@ -105,7 +54,6 @@ Playground.args = {
   variant: 'solid',
   size: 'md',
   label: 'Label',
-  iconLeft: 'ph-heart',
   iconRight: 'ph-arrow-right',
 };
 Playground.parameters = {
@@ -122,7 +70,6 @@ Solid.args = {
   variant: 'solid',
   size: 'md',
   label: 'Label',
-  iconLeft: 'ph-heart',
   iconRight: 'ph-arrow-right',
 };
 
@@ -131,7 +78,6 @@ Outline.args = {
   variant: 'outline',
   size: 'md',
   label: 'Label',
-  iconLeft: 'ph-heart',
   iconRight: 'ph-arrow-right',
 };
 
@@ -140,7 +86,6 @@ Text.args = {
   variant: 'text',
   size: 'md',
   label: 'Label',
-  iconLeft: 'ph-heart',
   iconRight: 'ph-arrow-right',
 };
 

@@ -238,8 +238,8 @@ const togglePasswordVisibility = () => {
 .scuba-input-wrapper {
   display: inline-flex;
   flex-direction: column;
-  gap: 8px;
-  font-family: 'Poppins', sans-serif;
+  gap: var(--spacing-3xs);
+  font-family: var(--type-font-family-body);
 }
 
 .scuba-input-wrapper--full-width {
@@ -249,76 +249,75 @@ const togglePasswordVisibility = () => {
 .scuba-input__label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  color: #191919;
+  gap: var(--spacing-3xs);
+  font-size: var(--type-font-size-base);
+  font-weight: var(--type-font-weight-semibold);
+  line-height: var(--type-line-height-normal);
+  color: var(--context-color-text-primary);
 }
 
 .scuba-input__label--disabled {
-  color: #aaaaaa;
+  color: var(--context-color-text-disabled);
 }
 
 .scuba-input__required {
-  color: #ea2255;
+  color: var(--semantic-color-error-normal);
 }
 
 .scuba-input__optional {
-  font-weight: 400;
-  color: #555555;
+  font-weight: var(--type-font-weight-regular);
+  color: var(--context-color-text-secondary);
 }
 
 .scuba-input__help-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: var(--scale-400);
+  height: var(--scale-400);
   padding: 0;
   background: transparent;
   border: none;
-  border-radius: 50%;
-  color: #555555;
+  border-radius: var(--border-radius-rounded-full);
+  color: var(--context-color-text-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 16px;
+  transition: all var(--transition-base);
+  font-size: var(--type-font-size-base);
 }
 
 .scuba-input__help-button:hover {
-  color: #2a2a2a;
-  background: #eeeeee;
+  color: var(--context-color-text-primary);
+  background: var(--context-color-surface-action);
 }
 
 .scuba-input__container {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  background: #eeeeee;
-  border: 2px solid transparent;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  min-height: 48px;
+  gap: var(--spacing-2xs);
+  padding: 0 var(--spacing-xs);
+  background: var(--context-color-surface-action);
+  border: var(--border-width-border-md) solid transparent;
+  border-radius: var(--border-radius-rounded);
+  transition: all var(--transition-base);
+  min-height: var(--scale-800);
 }
 
 .scuba-input__container:hover:not(.scuba-input__container--disabled) {
-  border-color: #0086cd;
+  border-color: var(--context-color-border-action-hover);
 }
 
 .scuba-input__container--focused {
-  border-color: #0086cd;
-  outline: 2px solid rgba(0, 134, 205, 0.2);
-  outline-offset: 0;
+  border-color: var(--context-color-border-focus);
+  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light);
 }
 
 .scuba-input__container--error {
-  border-color: #ea2255;
+  border-color: var(--context-color-border-error);
 }
 
 .scuba-input__container--disabled {
-  background: #e5e5e5;
+  background: var(--context-color-surface-disabled);
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -326,83 +325,83 @@ const togglePasswordVisibility = () => {
 .scuba-input__field {
   flex: 1;
   width: 100%;
-  padding: 12px 0;
+  padding: var(--spacing-2xs) 0;
   background: transparent;
   border: none;
   outline: none;
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  line-height: 24px;
-  color: #191919;
+  font-family: var(--type-font-family-body);
+  font-size: var(--type-font-size-base);
+  line-height: var(--type-line-height-normal);
+  color: var(--context-color-text-primary);
 }
 
 .scuba-input__field::placeholder {
-  color: #555555;
+  color: var(--context-color-text-secondary);
   opacity: 0.6;
 }
 
 .scuba-input__field:disabled {
   cursor: not-allowed;
-  color: #aaaaaa;
+  color: var(--context-color-text-disabled);
 }
 
 .scuba-input__textarea {
   resize: vertical;
   min-height: 100px;
-  padding: 12px 0;
+  padding: var(--spacing-2xs) 0;
 }
 
 .scuba-input__container:has(.scuba-input__textarea) {
   align-items: flex-start;
   min-height: auto;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: var(--spacing-2xs);
+  padding-bottom: var(--spacing-2xs);
 }
 
 .scuba-input__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  color: #555555;
+  font-size: var(--type-font-size-xl);
+  color: var(--context-color-icon-secondary);
   flex-shrink: 0;
 }
 
 .scuba-input__container--disabled .scuba-input__icon {
-  color: #aaaaaa;
+  color: var(--context-color-icon-disabled);
 }
 
 .scuba-input__container--error .scuba-input__icon {
-  color: #ea2255;
+  color: var(--context-color-icon-error);
 }
 
 .scuba-input__toggle-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4px;
+  padding: var(--spacing-4xs);
   background: transparent;
   border: none;
-  border-radius: 4px;
-  color: #555555;
+  border-radius: var(--border-radius-rounded-sm);
+  color: var(--context-color-icon-secondary);
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 20px;
+  transition: all var(--transition-base);
+  font-size: var(--type-font-size-xl);
 }
 
 .scuba-input__toggle-button:hover {
-  color: #2a2a2a;
-  background: #f6f6f6;
+  color: var(--context-color-icon-primary);
+  background: var(--context-color-surface-secondary);
 }
 
 .scuba-input__hint {
-  font-size: 14px;
-  line-height: 20px;
-  color: #555555;
+  font-size: var(--type-font-size-sm);
+  line-height: var(--type-line-height-normal);
+  color: var(--context-color-text-secondary);
 }
 
 .scuba-input__hint--error {
-  color: #ea2255;
+  color: var(--context-color-text-error);
 }
 
 .scuba-input__field[type="number"]::-webkit-inner-spin-button,

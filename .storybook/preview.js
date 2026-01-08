@@ -1,3 +1,5 @@
+import '../src/styles/tokens.css';
+import '../src/styles/global.css';
 
 /** @type { import('@storybook/vue3').Preview } */
 const preview = {

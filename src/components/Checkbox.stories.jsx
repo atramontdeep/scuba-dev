@@ -376,7 +376,7 @@ export const DesignTokens = () => ({
         <div>
           <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Icons</h3>
           <table style="width: 100%; font-size: 14px;">
-            <tr><td style="padding: 8px 0;">Check</td><td style="text-align: right;"><code>ph-check</code></td></tr>
+            <tr><td style="padding: 8px 0;">PhCheck</td><td style="text-align: right;"><code>ph-check</code></td></tr>
             <tr><td style="padding: 8px 0;">Minus (Indeterminate)</td><td style="text-align: right;"><code>ph-minus</code></td></tr>
             <tr><td style="padding: 8px 0;">Biblioteca</td><td style="text-align: right;">Phosphor Icons</td></tr>
           </table>

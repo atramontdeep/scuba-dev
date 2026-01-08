@@ -27,23 +27,23 @@ const PHOSPHOR_ICONS = {
   '🖼️ Imagem': 'ph-image',
   '🎥 Vídeo': 'ph-video',
   '🎵 Música': 'ph-music-note',
-  '✓ Check': 'ph-check',
-  '✕ X': 'ph-x',
-  '+ Plus': 'ph-plus',
+  '✓ PhCheck': 'ph-check',
+  '✕ PhX': 'ph-x',
+  '+ PhPlus': 'ph-plus',
   '− Minus': 'ph-minus',
   '→ Seta Direita': 'ph-arrow-right',
   '← Seta Esquerda': 'ph-arrow-left',
   '↑ Seta Cima': 'ph-arrow-up',
   '↓ Seta Baixo': 'ph-arrow-down',
-  'ℹ️ Info': 'ph-info',
+  'ℹ️ PhInfo': 'ph-info',
   '⚠️ Aviso': 'ph-warning',
   '❓ Pergunta': 'ph-question',
   '@ Arroba': 'ph-at',
   '# Hash': 'ph-hash',
   'Aa Texto': 'ph-text-aa',
   '📎 Anexo': 'ph-paperclip',
-  '⬇️ Download': 'ph-download',
-  '⬆️ Upload': 'ph-upload',
+  '⬇️ PhDownload': 'ph-download',
+  '⬆️ PhUpload': 'ph-upload',
   '🗑️ Lixeira': 'ph-trash',
   '✏️ Lápis': 'ph-pencil',
   '↗️ Compartilhar': 'ph-share',
@@ -169,9 +169,9 @@ Email.args = {
   iconLeft: 'ph-envelope',
 };
 
-// Phone
-export const Phone = Template.bind({});
-Phone.args = {
+// Phone Input
+export const PhoneInput = Template.bind({});
+PhoneInput.args = {
   type: 'tel',
   label: 'Telefone',
   placeholder: '(00) 00000-0000',

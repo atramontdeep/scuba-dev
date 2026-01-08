@@ -1,16 +1,19 @@
 <template>
-  <button 
+  <button
     :class="buttonClasses"
     :disabled="disabled"
+    :aria-label="ariaLabel"
+    :aria-disabled="disabled"
+    :type="type"
     @click="handleClick"
   >
-    <i v-if="iconLeft" :class="iconLeftClasses"></i>
-    
-    <span class="scuba-button__label">
+    <i v-if="iconLeft" :class="iconLeftClasses" aria-hidden="true"></i>
+
+    <span v-if="label || $slots.default" class="scuba-button__label">
       <slot>{{ label }}</slot>
     </span>
-    
-    <i v-if="iconRight" :class="iconRightClasses"></i>
+
+    <i v-if="iconRight" :class="iconRightClasses" aria-hidden="true"></i>
   </button>
 </template>
 
@@ -30,7 +33,7 @@ const props = defineProps({
   },
   label: {
     type: String,
-    default: 'Button'
+    default: ''
   },
   disabled: {
     type: Boolean,
@@ -47,6 +50,15 @@ const props = defineProps({
   fullWidth: {
     type: Boolean,
     default: false
+  },
+  type: {
+    type: String,
+    default: 'button',
+    validator: (value) => ['button', 'submit', 'reset'].includes(value)
+  },
+  ariaLabel: {
+    type: String,
+    default: ''
   }
 });
 
@@ -94,25 +106,23 @@ const handleClick = (event) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-  padding: var( --spacing-px-3) var( --spacing-px-6);
-  border: 2px solid transparent;
-  border-radius: 8px;
+  gap: var(--spacing-3xs);
+  font-family: var(--type-font-family-body);
+  font-weight: var(--type-font-weight-semibold);
+  border: var(--border-width-border-md) solid transparent;
+  border-radius: var(--border-radius-rounded);
   cursor: pointer;
   user-select: none;
-  transition: all 0.2s ease;
+  transition: all var(--transition-base);
   background: none;
   outline: none;
   text-decoration: none;
   white-space: nowrap;
+  position: relative;
 }
 
 .scuba-button:focus-visible {
-  outline: 2px solid #0086cd;
+  outline: var(--border-width-border-md) solid var(--context-color-border-focus);
   outline-offset: 2px;
 }
 
@@ -128,110 +138,122 @@ const handleClick = (event) => {
 }
 
 .scuba-button--sm {
-  height: 32px;
-  padding: 0 16px;
-  font-size: 14px;
-  line-height: 20px;
-  gap: 6px;
+  height: var(--scale-600);
+  padding: 0 var(--spacing-xs);
+  font-size: var(--type-font-size-sm);
+  line-height: var(--type-line-height-normal);
+  gap: var(--spacing-4xs);
 }
 
 .scuba-button--md {
-  height: 40px;
-  padding: var( --spacing-px-3) var( --spacing-px-6);
-  font-size: 16px;
-  line-height: 24px;
+  height: var(--scale-700);
+  padding: 0 var(--spacing-md);
+  font-size: var(--type-font-size-base);
+  line-height: var(--type-line-height-normal);
 }
 
 .scuba-button--lg {
-  height: 48px;
-  padding: 0 24px;
-  font-size: 18px;
-  line-height: 32px;
-  gap: 12px;
+  height: var(--scale-800);
+  padding: 0 var(--spacing-lg);
+  font-size: var(--type-font-size-lg);
+  line-height: var(--type-line-height-normal);
+  gap: var(--spacing-2xs);
 }
 
+/* Solid Variant */
 .scuba-button--solid {
-  background: #0086cd;
-  color: #ffffff;
+  background: var(--context-color-surface-inverted);
+  color: var(--primitives-color-white);
   border-color: transparent;
 }
 
 .scuba-button--solid:hover:not(:disabled) {
-  background: #0942a1;
-  color: #ffffff;
+  background: var(--context-color-surface-action-hover);
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--solid:active:not(:disabled) {
-  background: #0942a1;
-  color: #ffffff;
+  background: var(--context-color-surface-action-hover);
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--solid:focus-visible {
-  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.3);
+  background: var(--context-color-surface-inverted);
+  outline: var(--border-width-border-md) solid var(--semantic-color-primary-default);
+  outline-offset: 2px;
 }
 
+/* Outline Variant */
 .scuba-button--outline {
   background: transparent;
-  color: #191919;
-  border-color: #0086cd;
+  color: var(--context-color-text-primary);
+  border-color: var(--context-color-border-action);
 }
 
 .scuba-button--outline:hover:not(:disabled) {
-  background: rgba(0, 134, 205, 0.1);
-  border-color: #0086cd;
-  color: #0942a1;
+  background: var(--context-color-surface-action-hover);
+  border-color: transparent;
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--outline:active:not(:disabled) {
-  background: rgba(0, 134, 205, 0.2);
-  border-color: #0942a1;
+  background: var(--context-color-surface-action-hover);
+  border-color: transparent;
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--outline:focus-visible {
-  border-color: #0086cd;
-  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
+  background: transparent;
+  border-color: var(--semantic-color-primary-default);
+  outline: var(--border-width-border-md) solid var(--context-color-surface-focus-light);
+  outline-offset: 0;
 }
 
+/* Text Variant */
 .scuba-button--text {
   background: transparent;
-  color: #0086cd;
+  color: var(--context-color-text-primary);
   border-color: transparent;
-  padding: 8px 12px;
 }
 
 .scuba-button--text:hover:not(:disabled) {
-  background: rgba(0, 134, 205, 0.1);
-  color: #0942a1;
+  background: var(--context-color-surface-action-hover);
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--text:active:not(:disabled) {
-  background: rgba(0, 134, 205, 0.2);
+  background: var(--context-color-surface-action-hover);
+  color: var(--context-color-text-action-hover);
 }
 
 .scuba-button--text:focus-visible {
-  box-shadow: 0 0 0 3px rgba(0, 134, 205, 0.2);
+  background: transparent;
+  outline: var(--border-width-border-md) solid var(--context-color-surface-focus-light);
+  outline-offset: 0;
 }
 
+/* Disabled State */
 .scuba-button--disabled,
 .scuba-button:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+  pointer-events: none;
 }
 
 .scuba-button--solid.scuba-button--disabled,
 .scuba-button--solid:disabled {
-  background: #e5e5e5;
-  color: #aaaaaa;
+  background: var(--context-color-surface-disabled);
+  color: var(--context-color-text-disabled);
 }
 
 .scuba-button--outline.scuba-button--disabled,
 .scuba-button--outline:disabled {
-  border-color: #e5e5e5;
-  color: #aaaaaa;
+  border-color: var(--context-color-border-disabled);
+  color: var(--context-color-text-disabled);
 }
 
 .scuba-button--text.scuba-button--disabled,
 .scuba-button--text:disabled {
-  color: #aaaaaa;
+  color: var(--context-color-text-disabled);
 }
 </style>  
