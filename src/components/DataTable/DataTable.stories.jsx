@@ -58,7 +58,6 @@ const mockRows = [
     id: 1,
     responsavel: { name: 'Ana Silva', image: 'https://i.pravatar.cc/64?img=5' },
     tarefas: { completed: 21, total: 200 },
-    atraso: 3,
     ultima: '2 dias atrás',
     status: 'in-progress',
   },
@@ -66,7 +65,6 @@ const mockRows = [
     id: 2,
     responsavel: { name: 'Carlos Santos', image: 'https://i.pravatar.cc/64?img=11' },
     tarefas: { completed: 0, total: 0 },
-    atraso: 0,
     ultima: '5 dias atrás',
     status: 'not-started',
   },
@@ -74,7 +72,6 @@ const mockRows = [
     id: 3,
     responsavel: { name: 'Maria Oliveira', image: 'https://i.pravatar.cc/64?img=8' },
     tarefas: { completed: 10, total: 10 },
-    atraso: 0,
     ultima: '1 hora atrás',
     status: 'completed',
   },
@@ -82,7 +79,6 @@ const mockRows = [
     id: 4,
     responsavel: { name: 'João Pereira', image: 'https://i.pravatar.cc/64?img=12' },
     tarefas: { completed: 45, total: 80 },
-    atraso: 5,
     ultima: '3 dias atrás',
     status: 'about-to-expire',
   },
@@ -90,7 +86,6 @@ const mockRows = [
     id: 5,
     responsavel: { name: 'Beatriz Costa', image: 'https://i.pravatar.cc/64?img=15' },
     tarefas: { completed: 90, total: 100 },
-    atraso: 0,
     ultima: '30 minutos atrás',
     status: 'ready-for-approval',
   },
@@ -99,7 +94,6 @@ const mockRows = [
 const columns = [
   { key: 'responsavel', header: 'Responsável', sortable: true, width: '280px' },
   { key: 'tarefas', header: 'Progresso', sortable: false, width: '260px' },
-  { key: 'atraso', header: 'Em atraso', sortable: true, width: '120px', align: 'center' },
   { key: 'ultima', header: 'Última atividade', sortable: true, width: '180px' },
   { key: 'status', header: 'Status', sortable: false, width: '200px' },
 ];
@@ -129,7 +123,7 @@ export const Playground = (args) => ({
       console.log('Sort:', sort);
     }
 
-    return { args, onAction, onSort, breadcrumbItems };
+    return { args, onAction, onSort, breadcrumbItems, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
@@ -164,18 +158,6 @@ export const Playground = (args) => ({
           />
         </template>
 
-        <!-- Célula: Em atraso -->
-        <template #cell-atraso="{ value }">
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <span :style="{
-              color: value > 0 ? '#EF4444' : '#6B7280',
-              fontWeight: value > 0 ? 600 : 400
-            }">
-              {{ value }}
-            </span>
-          </div>
-        </template>
-
         <!-- Célula: Última atividade -->
         <template #cell-ultima="{ value }">
           <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
@@ -183,7 +165,9 @@ export const Playground = (args) => ({
 
         <!-- Célula: Status -->
         <template #cell-status="{ row }">
-          <Status :status="row.status" />
+          <Status :variant="STATUS_CONFIG[row.status].variant">
+            {{ STATUS_CONFIG[row.status].label }}
+          </Status>
         </template>
 
         <!-- Conteúdo expandido -->
@@ -193,7 +177,6 @@ export const Playground = (args) => ({
               <strong style="color: #1F2937;">Detalhes de {{ row.responsavel.name }}</strong>
             </div>
             <div>Última atividade: {{ row.ultima }}</div>
-            <div>Tarefas em atraso: {{ row.atraso }}</div>
             <div>Progresso: {{ row.tarefas.completed }}/{{ row.tarefas.total }} tarefas</div>
           </div>
         </template>
@@ -214,7 +197,7 @@ Playground.args = {
 export const OnlyTable = (args) => ({
   components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
   setup() {
-    return { args, breadcrumbItems };
+    return { args, breadcrumbItems, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
@@ -241,21 +224,13 @@ export const OnlyTable = (args) => ({
             :total="row.tarefas.total"
           />
         </template>
-        <template #cell-atraso="{ value }">
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <span :style="{
-              color: value > 0 ? '#EF4444' : '#6B7280',
-              fontWeight: value > 0 ? 600 : 400
-            }">
-              {{ value }}
-            </span>
-          </div>
-        </template>
         <template #cell-ultima="{ value }">
           <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
         </template>
         <template #cell-status="{ row }">
-          <Status :status="row.status" />
+          <Status :variant="STATUS_CONFIG[row.status].variant">
+            {{ STATUS_CONFIG[row.status].label }}
+          </Status>
         </template>
       </DataTable>
     </div>
@@ -279,7 +254,7 @@ export const WithSelection = (args) => ({
       alert(`Ação: ${payload.key}\nLinhas selecionadas: ${payload.rows.length}`);
     }
 
-    return { args, onAction, breadcrumbItems };
+    return { args, onAction, breadcrumbItems, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
@@ -306,21 +281,13 @@ export const WithSelection = (args) => ({
             :total="row.tarefas.total"
           />
         </template>
-        <template #cell-atraso="{ value }">
-          <div style="display: flex; justify-content: center; width: 100%;">
-            <span :style="{
-              color: value > 0 ? '#EF4444' : '#6B7280',
-              fontWeight: value > 0 ? 600 : 400
-            }">
-              {{ value }}
-            </span>
-          </div>
-        </template>
         <template #cell-ultima="{ value }">
           <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
         </template>
         <template #cell-status="{ row }">
-          <Status :status="row.status" />
+          <Status :variant="STATUS_CONFIG[row.status].variant">
+            {{ STATUS_CONFIG[row.status].label }}
+          </Status>
         </template>
       </DataTable>
     </div>
@@ -359,7 +326,7 @@ export const AllStatuses = () => ({
       { key: 'status', header: 'Status', width: '250px' },
     ];
 
-    return { statusRows, statusColumns, breadcrumbItems };
+    return { statusRows, statusColumns, breadcrumbItems, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
@@ -382,7 +349,9 @@ export const AllStatuses = () => ({
         :actions="[]"
       >
         <template #cell-status="{ row }">
-          <Status :status="row.status" />
+          <Status :variant="STATUS_CONFIG[row.status].variant">
+            {{ STATUS_CONFIG[row.status].label }}
+          </Status>
         </template>
       </DataTable>
     </div>

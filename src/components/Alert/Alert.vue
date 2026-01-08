@@ -95,7 +95,6 @@ const handleClose = (event) => {
   padding: var(--spacing-xs);
   border-radius: var(--border-radius-rounded);
   font-family: var(--type-font-family-body);
-  border: var(--border-width-border-sm) solid transparent;
 }
 
 .scuba-alert--closable {
@@ -159,27 +158,23 @@ const handleClose = (event) => {
 .scuba-alert--success {
   background: var(--semantic-color-success-light);
   color: var(--semantic-color-success-dark);
-  border-color: var(--semantic-color-success-normal);
 }
 
 /* Warning Variant */
 .scuba-alert--warning {
   background: var(--semantic-color-warning-light);
   color: var(--semantic-color-warning-dark);
-  border-color: var(--semantic-color-warning-normal);
 }
 
 /* Error Variant */
 .scuba-alert--error {
   background: var(--semantic-color-error-light);
   color: var(--semantic-color-error-dark);
-  border-color: var(--semantic-color-error-normal);
 }
 
 /* Info Variant */
 .scuba-alert--info {
   background: var(--semantic-color-info-light);
   color: var(--semantic-color-info-dark);
-  border-color: var(--semantic-color-info-normal);
 }
 </style>

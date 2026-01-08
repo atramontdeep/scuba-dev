@@ -32,7 +32,7 @@ const statusClasses = computed(() => {
   justify-content: center;
   padding: var(--spacing-4xs) var(--spacing-2xs);
   font-family: var(--type-font-family-body);
-  font-size: var(--type-font-size-sm);
+  font-size: var(--type-font-size-xs);
   font-weight: var(--type-font-weight-semibold);
   line-height: var(--type-line-height-normal);
   border-radius: var(--border-radius-rounded-pill);
