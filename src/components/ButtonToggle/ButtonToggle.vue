@@ -1,21 +1,27 @@
 <template>
-  <div :class="toggleGroupClasses" role="group">
+  <div :class="toggleGroupClasses" role="group" ref="containerRef">
+    <div
+      v-if="!multiple && modelValue !== null"
+      class="scuba-button-toggle__slider"
+      :style="sliderStyle"
+    ></div>
     <button
-      v-for="option in options"
+      v-for="(option, index) in options"
       :key="option.value"
+      :ref="el => { if (el) buttonRefs[index] = el }"
       :class="getButtonClasses(option.value)"
       :aria-pressed="isSelected(option.value)"
       @click="handleToggle(option.value)"
       :disabled="disabled"
     >
       <component
-        v-if="option.icon"
+        v-if="option.icon && showIcons"
         :is="option.icon"
         :size="iconSize"
         :weight="iconWeight"
         class="scuba-button-toggle__icon"
       />
-      <span v-if="option.label" class="scuba-button-toggle__label">
+      <span class="scuba-button-toggle__label">
         {{ option.label }}
       </span>
     </button>
@@ -23,7 +29,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch, nextTick, onMounted } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -44,15 +50,14 @@ const props = defineProps({
     default: 'md',
     validator: (value) => ['sm', 'md', 'lg'].includes(value)
   },
-  variant: {
-    type: String,
-    default: 'default',
-    validator: (value) => ['default', 'outlined'].includes(value)
-  },
   iconWeight: {
     type: String,
     default: 'regular',
     validator: (value) => ['thin', 'light', 'regular', 'bold', 'fill'].includes(value)
+  },
+  showIcons: {
+    type: Boolean,
+    default: false
   },
   disabled: {
     type: Boolean,
@@ -62,11 +67,14 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const containerRef = ref(null);
+const buttonRefs = ref([]);
+const sliderStyle = ref({});
+
 const toggleGroupClasses = computed(() => {
   return [
     'scuba-button-toggle',
-    `scuba-button-toggle--${props.size}`,
-    `scuba-button-toggle--${props.variant}`
+    `scuba-button-toggle--${props.size}`
   ];
 });
 
@@ -114,23 +122,62 @@ const handleToggle = (value) => {
     emit('update:modelValue', props.modelValue === value ? null : value);
   }
 };
+
+const updateSliderPosition = () => {
+  if (props.multiple || props.modelValue === null) return;
+
+  nextTick(() => {
+    const selectedIndex = props.options.findIndex(opt => opt.value === props.modelValue);
+    if (selectedIndex === -1 || !buttonRefs.value[selectedIndex]) return;
+
+    const button = buttonRefs.value[selectedIndex];
+    const container = containerRef.value;
+
+    if (!button || !container) return;
+
+    const buttonRect = button.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    sliderStyle.value = {
+      width: `${buttonRect.width}px`,
+      height: `${buttonRect.height}px`,
+      transform: `translateX(${buttonRect.left - containerRect.left}px)`,
+      transition: 'transform 0.3s ease, width 0.3s ease'
+    };
+  });
+};
+
+watch(() => props.modelValue, updateSliderPosition);
+watch(() => props.options, updateSliderPosition);
+
+onMounted(() => {
+  updateSliderPosition();
+});
 </script>
 
 <style scoped>
 .scuba-button-toggle {
   display: inline-flex;
-  border-radius: var(--border-radius-rounded-sm);
+  position: relative;
+  background: #FFFFFF;
+  border-radius: 64px;
   font-family: var(--type-font-family-body);
-  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  height: 40px;
 }
 
-.scuba-button-toggle--default {
-  background: var(--context-color-surface-secondary);
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+.scuba-button-toggle__slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #374151;
+  border-radius: 64px;
+  pointer-events: none;
+  z-index: 0;
 }
 
-.scuba-button-toggle--outlined {
-  gap: var(--spacing-2xs);
+.scuba-button-toggle:has(.scuba-button-toggle__button:disabled) .scuba-button-toggle__slider {
+  background: #F3F4F6;
 }
 
 .scuba-button-toggle__button {
@@ -141,70 +188,64 @@ const handleToggle = (value) => {
   border: none;
   background: transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, font-weight 0.2s ease, background 0.2s ease;
   font-family: var(--type-font-family-body);
-  font-weight: var(--type-font-weight-medium);
-  color: var(--context-color-text-secondary);
+  font-weight: 400;
+  font-size: 14px;
+  color: #1F2937;
   flex-shrink: 0;
+  border-radius: 64px;
+  padding: 0 24px;
+  white-space: nowrap;
   position: relative;
-}
-
-.scuba-button-toggle--default .scuba-button-toggle__button {
-  border-right: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-}
-
-.scuba-button-toggle--default .scuba-button-toggle__button:last-child {
-  border-right: none;
-}
-
-.scuba-button-toggle--outlined .scuba-button-toggle__button {
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-  border-radius: var(--border-radius-rounded-sm);
-  background: var(--context-color-surface-primary);
+  z-index: 1;
 }
 
 .scuba-button-toggle__button:hover:not(:disabled):not(.scuba-button-toggle__button--selected) {
-  background: var(--context-color-surface-tertiary);
-  color: var(--context-color-text-primary);
+  background: var(--context-color-surface-action, #F3F4F6);
 }
 
 .scuba-button-toggle__button:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: 0.4;
+  color: #9CA3AF;
 }
 
 .scuba-button-toggle__button--selected {
-  background: var(--color-primary-500);
-  color: var(--color-white);
-}
-
-.scuba-button-toggle--outlined .scuba-button-toggle__button--selected {
-  border-color: var(--color-primary-500);
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
 .scuba-button-toggle__button:focus {
   outline: none;
-  z-index: 1;
-  box-shadow: 0 0 0 2px #BFDBFE;
 }
 
 /* Sizes */
+.scuba-button-toggle--sm {
+  height: 32px;
+}
+
 .scuba-button-toggle--sm .scuba-button-toggle__button {
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  font-size: var(--type-font-size-sm);
-  min-height: 32px;
+  padding: 0 16px;
+  font-size: 12px;
+}
+
+.scuba-button-toggle--md {
+  height: 40px;
 }
 
 .scuba-button-toggle--md .scuba-button-toggle__button {
-  padding: var(--spacing-xs) var(--spacing-md);
-  font-size: var(--type-font-size-base);
-  min-height: 40px;
+  padding: 0 24px;
+  font-size: 14px;
+}
+
+.scuba-button-toggle--lg {
+  height: 48px;
 }
 
 .scuba-button-toggle--lg .scuba-button-toggle__button {
-  padding: var(--spacing-sm) var(--spacing-lg);
-  font-size: var(--type-font-size-lg);
-  min-height: 48px;
+  padding: 0 32px;
+  font-size: 16px;
 }
 
 .scuba-button-toggle__icon {

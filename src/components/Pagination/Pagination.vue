@@ -1,95 +1,71 @@
 <template>
-  <nav :class="paginationClasses" :aria-label="ariaLabel">
-    <ul class="scuba-pagination__list">
-      <!-- First page button -->
-      <li v-if="showFirstLast" class="scuba-pagination__item">
-        <button
-          :class="getButtonClasses('first')"
-          @click="goToFirst"
-          :disabled="isFirstPage"
-          :aria-label="firstLabel"
-        >
-          <i class="ph ph-caret-double-left"></i>
-        </button>
-      </li>
-
-      <!-- Previous button -->
-      <li class="scuba-pagination__item">
-        <button
-          :class="getButtonClasses('prev')"
-          @click="goToPrevious"
-          :disabled="isFirstPage"
-          :aria-label="previousLabel"
-        >
-          <i class="ph ph-caret-left"></i>
-        </button>
-      </li>
-
-      <!-- Page numbers -->
-      <li
-        v-for="page in displayedPages"
-        :key="page"
-        class="scuba-pagination__item"
+  <div :class="paginationClasses">
+    <!-- Items per page selector -->
+    <div class="scuba-pagination__per-page">
+      <label class="scuba-pagination__label">{{ perPageLabel }}</label>
+      <select
+        :value="itemsPerPage"
+        @change="handlePerPageChange"
+        class="scuba-pagination__select"
       >
-        <button
-          v-if="page !== '...'"
-          :class="getPageButtonClasses(page)"
-          @click="goToPage(page)"
-          :aria-label="`${pageLabel} ${page}`"
-          :aria-current="page === currentPage ? 'page' : undefined"
+        <option
+          v-for="option in perPageOptions"
+          :key="option"
+          :value="option"
         >
-          {{ page }}
-        </button>
-        <span v-else class="scuba-pagination__ellipsis">
-          <i class="ph ph-dots-three"></i>
-        </span>
-      </li>
+          {{ option }}
+        </option>
+      </select>
+    </div>
 
-      <!-- Next button -->
-      <li class="scuba-pagination__item">
-        <button
-          :class="getButtonClasses('next')"
-          @click="goToNext"
-          :disabled="isLastPage"
-          :aria-label="nextLabel"
-        >
-          <i class="ph ph-caret-right"></i>
-        </button>
-      </li>
-
-      <!-- Last page button -->
-      <li v-if="showFirstLast" class="scuba-pagination__item">
-        <button
-          :class="getButtonClasses('last')"
-          @click="goToLast"
-          :disabled="isLastPage"
-          :aria-label="lastLabel"
-        >
-          <i class="ph ph-caret-double-right"></i>
-        </button>
-      </li>
-
-      <!-- Page input -->
-      <li v-if="showPageInput" class="scuba-pagination__item scuba-pagination__item--input">
-        <span class="scuba-pagination__input-label">{{ pageInputLabel }}</span>
-        <input
-          type="number"
-          :class="inputClasses"
-          :value="inputValue"
-          @input="handleInput"
-          @keydown.enter="handleInputSubmit"
-          :min="1"
-          :max="totalPages"
-          :aria-label="pageInputAriaLabel"
-        />
-      </li>
-    </ul>
-
-    <!-- Page info -->
-    <div v-if="showPageInfo" class="scuba-pagination__info">
+    <!-- Page info text -->
+    <div class="scuba-pagination__info">
       {{ pageInfoText }}
     </div>
-  </nav>
+
+    <!-- Navigation -->
+    <nav class="scuba-pagination__nav" :aria-label="ariaLabel">
+      <!-- Previous button -->
+      <button
+        :class="['scuba-pagination__button', 'scuba-pagination__button--nav']"
+        @click="goToPrevious"
+        :disabled="isFirstPage"
+        :aria-label="previousLabel"
+      >
+        <i class="ph ph-caret-left"></i>
+      </button>
+
+      <!-- Page numbers -->
+      <button
+        v-for="page in displayedPages"
+        :key="page"
+        v-if="page !== '...'"
+        :class="getPageButtonClasses(page)"
+        @click="goToPage(page)"
+        :aria-label="`${pageLabel} ${page}`"
+        :aria-current="page === currentPage ? 'page' : undefined"
+      >
+        {{ page }}
+      </button>
+      <span
+        v-else
+        :key="`ellipsis-${page}`"
+        class="scuba-pagination__ellipsis"
+      >
+        ...
+      </span>
+
+      <!-- Next button -->
+      <button
+        :class="['scuba-pagination__button', 'scuba-pagination__button--nav']"
+        @click="goToNext"
+        :disabled="isLastPage"
+        :aria-label="nextLabel"
+      >
+        <i class="ph ph-caret-right"></i>
+      </button>
+    </nav>
+  </div>
 </template>
 
 <script setup>
@@ -97,12 +73,14 @@ import { ref, computed, watch } from 'vue';
 
 const props = defineProps({
   modelValue: { type: Number, default: 1 },
-  totalPages: { type: Number, required: true },
+  totalItems: { type: Number, required: true },
+  itemsPerPage: { type: Number, default: 10 },
+  perPageOptions: {
+    type: Array,
+    default: () => [10, 25, 50, 100]
+  },
   siblingCount: { type: Number, default: 1 },
   boundaryCount: { type: Number, default: 1 },
-  showFirstLast: { type: Boolean, default: true },
-  showPageInput: { type: Boolean, default: false },
-  showPageInfo: { type: Boolean, default: false },
   size: {
     type: String,
     default: 'md',
@@ -111,23 +89,18 @@ const props = defineProps({
   ariaLabel: { type: String, default: 'Paginação' },
   previousLabel: { type: String, default: 'Página anterior' },
   nextLabel: { type: String, default: 'Próxima página' },
-  firstLabel: { type: String, default: 'Primeira página' },
-  lastLabel: { type: String, default: 'Última página' },
   pageLabel: { type: String, default: 'Página' },
-  pageInputLabel: { type: String, default: 'Ir para:' },
-  pageInputAriaLabel: { type: String, default: 'Ir para página' },
-  totalItems: { type: Number, default: null },
-  itemsPerPage: { type: Number, default: 10 },
+  perPageLabel: { type: String, default: 'Itens por página' },
+  ofLabel: { type: String, default: 'de' }
 });
 
-const emit = defineEmits(['update:modelValue', 'change']);
-
-const inputValue = ref(props.modelValue);
+const emit = defineEmits(['update:modelValue', 'update:itemsPerPage', 'change']);
 
 const currentPage = computed(() => props.modelValue);
+const totalPages = computed(() => Math.ceil(props.totalItems / props.itemsPerPage));
 
 const isFirstPage = computed(() => currentPage.value === 1);
-const isLastPage = computed(() => currentPage.value === props.totalPages);
+const isLastPage = computed(() => currentPage.value === totalPages.value);
 
 const paginationClasses = computed(() => {
   const classes = ['scuba-pagination'];
@@ -135,37 +108,28 @@ const paginationClasses = computed(() => {
   return classes;
 });
 
-const inputClasses = computed(() => {
-  const classes = ['scuba-pagination__input'];
-  return classes;
-});
-
 const pageInfoText = computed(() => {
-  if (!props.totalItems) {
-    return `Página ${currentPage.value} de ${props.totalPages}`;
-  }
-
   const start = (currentPage.value - 1) * props.itemsPerPage + 1;
   const end = Math.min(currentPage.value * props.itemsPerPage, props.totalItems);
-  return `${start}-${end} de ${props.totalItems}`;
+  return `${start}-${end} ${props.ofLabel} ${props.totalItems}`;
 });
 
 // Calculate displayed page numbers with ellipsis
 const displayedPages = computed(() => {
   const pages = [];
-  const totalPages = props.totalPages;
+  const total = totalPages.value;
   const current = currentPage.value;
   const sibling = props.siblingCount;
   const boundary = props.boundaryCount;
 
   // Always show first boundary pages
-  for (let i = 1; i <= Math.min(boundary, totalPages); i++) {
+  for (let i = 1; i <= Math.min(boundary, total); i++) {
     pages.push(i);
   }
 
   // Calculate start and end of sibling pages around current
   const siblingStart = Math.max(current - sibling, boundary + 1);
-  const siblingEnd = Math.min(current + sibling, totalPages - boundary);
+  const siblingEnd = Math.min(current + sibling, total - boundary);
 
   // Add left ellipsis if needed
   if (siblingStart > boundary + 1) {
@@ -174,18 +138,18 @@ const displayedPages = computed(() => {
 
   // Add sibling pages
   for (let i = siblingStart; i <= siblingEnd; i++) {
-    if (i > boundary && i <= totalPages - boundary) {
+    if (i > boundary && i <= total - boundary) {
       pages.push(i);
     }
   }
 
   // Add right ellipsis if needed
-  if (siblingEnd < totalPages - boundary) {
+  if (siblingEnd < total - boundary) {
     pages.push('...');
   }
 
   // Always show last boundary pages
-  for (let i = Math.max(totalPages - boundary + 1, boundary + 1); i <= totalPages; i++) {
+  for (let i = Math.max(total - boundary + 1, boundary + 1); i <= total; i++) {
     if (!pages.includes(i)) {
       pages.push(i);
     }
@@ -193,12 +157,6 @@ const displayedPages = computed(() => {
 
   return pages;
 });
-
-const getButtonClasses = (type) => {
-  const classes = ['scuba-pagination__button'];
-  classes.push(`scuba-pagination__button--${type}`);
-  return classes;
-};
 
 const getPageButtonClasses = (page) => {
   const classes = ['scuba-pagination__button', 'scuba-pagination__button--page'];
@@ -211,18 +169,9 @@ const getPageButtonClasses = (page) => {
 };
 
 const goToPage = (page) => {
-  if (page < 1 || page > props.totalPages || page === currentPage.value) return;
+  if (page < 1 || page > totalPages.value || page === currentPage.value) return;
   emit('update:modelValue', page);
   emit('change', page);
-  inputValue.value = page;
-};
-
-const goToFirst = () => {
-  goToPage(1);
-};
-
-const goToLast = () => {
-  goToPage(props.totalPages);
 };
 
 const goToPrevious = () => {
@@ -233,53 +182,72 @@ const goToNext = () => {
   goToPage(currentPage.value + 1);
 };
 
-const handleInput = (event) => {
-  inputValue.value = event.target.value;
-};
-
-const handleInputSubmit = () => {
-  const page = parseInt(inputValue.value);
-  if (!isNaN(page) && page >= 1 && page <= props.totalPages) {
-    goToPage(page);
-  } else {
-    // Reset to current page if invalid
-    inputValue.value = currentPage.value;
+const handlePerPageChange = (event) => {
+  const newPerPage = parseInt(event.target.value);
+  emit('update:itemsPerPage', newPerPage);
+  // Reset to first page when changing items per page
+  if (currentPage.value !== 1) {
+    emit('update:modelValue', 1);
   }
 };
-
-watch(() => props.modelValue, (newValue) => {
-  inputValue.value = newValue;
-});
 </script>
 
 <style scoped>
 .scuba-pagination {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-md);
   font-family: var(--type-font-family-body);
 }
 
-.scuba-pagination__list {
+.scuba-pagination__per-page {
   display: flex;
   align-items: center;
-  gap: var(--spacing-4xs);
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  gap: var(--spacing-2xs);
 }
 
-.scuba-pagination__item {
-  display: flex;
-  align-items: center;
+.scuba-pagination__label {
+  font-size: 14px;
+  color: #6B7280;
+  white-space: nowrap;
 }
 
-.scuba-pagination__item--input {
+.scuba-pagination__select {
+  padding: 8px 32px 8px 12px;
+  background: #F3F4F6;
+  border: none;
+  border-radius: 4px;
+  color: #1F2937;
+  font-family: var(--type-font-family-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231F2937' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  min-width: 80px;
+}
+
+.scuba-pagination__select:hover {
+  background: #E5E7EB;
+}
+
+.scuba-pagination__select:focus {
+  outline: 2px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+.scuba-pagination__info {
+  font-size: 14px;
+  color: #6B7280;
+  white-space: nowrap;
+}
+
+.scuba-pagination__nav {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3xs);
-  margin-left: var(--spacing-2xs);
+  gap: 4px;
 }
 
 .scuba-pagination__button {
@@ -288,45 +256,44 @@ watch(() => props.modelValue, (newValue) => {
   justify-content: center;
   min-width: 40px;
   height: 40px;
-  padding: 0 var(--spacing-2xs);
+  padding: 0 8px;
   background: transparent;
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-  border-radius: var(--border-radius-rounded-sm);
-  color: var(--context-color-text-primary);
+  border: none;
+  border-radius: 50%;
+  color: #1F2937;
   font-family: var(--type-font-family-body);
-  font-size: var(--type-font-size-base);
-  font-weight: var(--type-font-weight-semibold);
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
   user-select: none;
 }
 
-.scuba-pagination__button:hover:not(:disabled) {
-  background: var(--context-color-surface-action);
-  border-color: var(--context-color-border-action);
+.scuba-pagination__button--page {
+  border-radius: 50%;
+}
+
+.scuba-pagination__button:hover:not(:disabled):not(.scuba-pagination__button--active) {
+  background: #F3F4F6;
 }
 
 .scuba-pagination__button:focus-visible {
-  outline: var(--border-width-border-md) solid var(--context-color-border-focus);
+  outline: 2px solid #3B82F6;
   outline-offset: 2px;
 }
 
 .scuba-pagination__button:disabled {
-  color: var(--context-color-text-disabled);
-  border-color: var(--context-color-border-disabled);
+  color: #D1D5DB;
   cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .scuba-pagination__button--active {
-  background: var(--semantic-color-primary-500);
-  border-color: var(--semantic-color-primary-500);
-  color: var(--primitives-color-white);
+  background: #1F2937;
+  color: #FFFFFF;
 }
 
 .scuba-pagination__button--active:hover {
-  background: var(--semantic-color-primary-600);
-  border-color: var(--semantic-color-primary-600);
+  background: #111827;
 }
 
 .scuba-pagination__ellipsis {
@@ -335,149 +302,78 @@ watch(() => props.modelValue, (newValue) => {
   justify-content: center;
   min-width: 40px;
   height: 40px;
-  color: var(--context-color-text-secondary);
-  font-size: 1.2em;
-}
-
-.scuba-pagination__input-label {
-  font-size: var(--type-font-size-sm);
-  color: var(--context-color-text-secondary);
-  white-space: nowrap;
-}
-
-.scuba-pagination__input {
-  width: 60px;
-  height: 40px;
-  padding: 0 var(--spacing-3xs);
-  background: var(--context-color-surface-primary);
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-  border-radius: var(--border-radius-rounded-sm);
-  color: var(--context-color-text-primary);
-  font-family: var(--type-font-family-body);
-  font-size: var(--type-font-size-base);
-  text-align: center;
-  transition: all var(--transition-fast);
-}
-
-.scuba-pagination__input:hover {
-  border-color: var(--context-color-border-action);
-}
-
-.scuba-pagination__input:focus {
-  outline: none;
-  border-color: var(--context-color-border-focus);
-  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light);
-}
-
-.scuba-pagination__input::-webkit-inner-spin-button,
-.scuba-pagination__input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.scuba-pagination__input[type='number'] {
-  -moz-appearance: textfield;
-}
-
-.scuba-pagination__info {
-  font-size: var(--type-font-size-sm);
-  color: var(--context-color-text-secondary);
+  color: #6B7280;
+  font-size: 14px;
+  user-select: none;
 }
 
 /* Sizes */
 .scuba-pagination--sm .scuba-pagination__button {
   min-width: 32px;
   height: 32px;
-  padding: 0 var(--spacing-3xs);
-  font-size: var(--type-font-size-sm);
+  font-size: 12px;
 }
 
 .scuba-pagination--sm .scuba-pagination__ellipsis {
   min-width: 32px;
   height: 32px;
+  font-size: 12px;
 }
 
-.scuba-pagination--sm .scuba-pagination__input {
-  width: 50px;
-  height: 32px;
-  font-size: var(--type-font-size-sm);
+.scuba-pagination--sm .scuba-pagination__select {
+  padding: 6px 28px 6px 10px;
+  font-size: 12px;
+  min-width: 70px;
 }
 
-.scuba-pagination--sm .scuba-pagination__input-label {
-  font-size: var(--type-font-size-xs);
-}
-
+.scuba-pagination--sm .scuba-pagination__label,
 .scuba-pagination--sm .scuba-pagination__info {
-  font-size: var(--type-font-size-xs);
+  font-size: 12px;
 }
 
 .scuba-pagination--md .scuba-pagination__button {
   min-width: 40px;
   height: 40px;
-  padding: 0 var(--spacing-2xs);
-  font-size: var(--type-font-size-base);
+  font-size: 14px;
 }
 
 .scuba-pagination--md .scuba-pagination__ellipsis {
   min-width: 40px;
   height: 40px;
+  font-size: 14px;
 }
 
-.scuba-pagination--md .scuba-pagination__input {
-  width: 60px;
-  height: 40px;
-  font-size: var(--type-font-size-base);
+.scuba-pagination--md .scuba-pagination__select {
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  min-width: 80px;
 }
 
-.scuba-pagination--md .scuba-pagination__input-label {
-  font-size: var(--type-font-size-sm);
-}
-
+.scuba-pagination--md .scuba-pagination__label,
 .scuba-pagination--md .scuba-pagination__info {
-  font-size: var(--type-font-size-sm);
+  font-size: 14px;
 }
 
 .scuba-pagination--lg .scuba-pagination__button {
   min-width: 48px;
   height: 48px;
-  padding: 0 var(--spacing-xs);
-  font-size: var(--type-font-size-lg);
+  font-size: 16px;
 }
 
 .scuba-pagination--lg .scuba-pagination__ellipsis {
   min-width: 48px;
   height: 48px;
+  font-size: 16px;
 }
 
-.scuba-pagination--lg .scuba-pagination__input {
-  width: 70px;
-  height: 48px;
-  font-size: var(--type-font-size-lg);
+.scuba-pagination--lg .scuba-pagination__select {
+  padding: 10px 36px 10px 14px;
+  font-size: 16px;
+  min-width: 90px;
 }
 
-.scuba-pagination--lg .scuba-pagination__input-label {
-  font-size: var(--type-font-size-base);
-}
-
+.scuba-pagination--lg .scuba-pagination__label,
 .scuba-pagination--lg .scuba-pagination__info {
-  font-size: var(--type-font-size-base);
-}
-
-/* Responsive */
-@media (max-width: 640px) {
-  .scuba-pagination__list {
-    gap: var(--spacing-4xs);
-  }
-
-  .scuba-pagination__button {
-    min-width: 36px;
-    height: 36px;
-    padding: 0 var(--spacing-3xs);
-    font-size: var(--type-font-size-sm);
-  }
-
-  .scuba-pagination__item--input {
-    margin-left: var(--spacing-3xs);
-  }
+  font-size: 16px;
 }
 </style>
