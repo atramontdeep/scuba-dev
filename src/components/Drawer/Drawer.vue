@@ -34,8 +34,37 @@
           <slot />
         </div>
 
-        <div v-if="$slots.footer" class="scuba-drawer__footer">
-          <slot name="footer" />
+        <div v-if="$slots.footer || showTertiaryButton || showSecondaryButton || showPrimaryButton" class="scuba-drawer__footer">
+          <slot name="footer">
+            <div v-if="showTertiaryButton || showSecondaryButton || showPrimaryButton" class="scuba-drawer__footer-actions">
+              <Button
+                v-if="showTertiaryButton"
+                variant="text"
+                :size="buttonSize"
+                :label="tertiaryButtonLabel"
+                @click="handleTertiaryClick"
+                class="scuba-drawer__button-tertiary"
+              />
+              <div class="scuba-drawer__footer-actions-right">
+                <Button
+                  v-if="showSecondaryButton"
+                  variant="outline"
+                  :size="buttonSize"
+                  :label="secondaryButtonLabel"
+                  @click="handleSecondaryClick"
+                  class="scuba-drawer__button-secondary"
+                />
+                <Button
+                  v-if="showPrimaryButton"
+                  variant="solid"
+                  :size="buttonSize"
+                  :label="primaryButtonLabel"
+                  @click="handlePrimaryClick"
+                  class="scuba-drawer__button-primary"
+                />
+              </div>
+            </div>
+          </slot>
         </div>
       </div>
     </Transition>
@@ -45,6 +74,7 @@
 <script setup>
 import { computed, watch, onMounted, onUnmounted } from 'vue';
 import { PhX } from '@phosphor-icons/vue';
+import Button from '../Button/Button.vue';
 
 const props = defineProps({
   modelValue: {
@@ -76,10 +106,39 @@ const props = defineProps({
   closeOnEscape: {
     type: Boolean,
     default: true
+  },
+  showTertiaryButton: {
+    type: Boolean,
+    default: false
+  },
+  tertiaryButtonLabel: {
+    type: String,
+    default: 'Limpar'
+  },
+  showSecondaryButton: {
+    type: Boolean,
+    default: false
+  },
+  secondaryButtonLabel: {
+    type: String,
+    default: 'Cancelar'
+  },
+  showPrimaryButton: {
+    type: Boolean,
+    default: false
+  },
+  primaryButtonLabel: {
+    type: String,
+    default: 'Confirmar'
+  },
+  buttonSize: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md', 'lg'].includes(value)
   }
 });
 
-const emit = defineEmits(['update:modelValue', 'close', 'open']);
+const emit = defineEmits(['update:modelValue', 'close', 'open', 'tertiary-click', 'secondary-click', 'primary-click']);
 
 const headerId = computed(() => {
   return 'drawer-title-' + Math.random().toString(36).substr(2, 9);
@@ -108,6 +167,18 @@ const handleEscape = (event) => {
   if (event.key === 'Escape' && props.modelValue && props.closeOnEscape) {
     close();
   }
+};
+
+const handleTertiaryClick = () => {
+  emit('tertiary-click');
+};
+
+const handleSecondaryClick = () => {
+  emit('secondary-click');
+};
+
+const handlePrimaryClick = () => {
+  emit('primary-click');
 };
 
 watch(() => props.modelValue, (newValue) => {
@@ -280,6 +351,19 @@ onUnmounted(() => {
   padding: var(--spacing-lg) var(--spacing-xl);
   border-top: var(--border-width-border-sm) solid var(--context-color-border-secondary);
   flex-shrink: 0;
+}
+
+.scuba-drawer__footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.scuba-drawer__footer-actions-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 /* Backdrop transitions */

@@ -34,6 +34,7 @@ import { ref, computed, watch } from 'vue';
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
   label: { type: String, default: '' },
+  showLabel: { type: Boolean, default: true },
   labelPosition: {
     type: String,
     default: 'right',
@@ -60,8 +61,8 @@ const inputId = computed(() => {
 
 const isChecked = computed(() => internalValue.value === true);
 const isIndeterminate = computed(() => props.indeterminate);
-const showLabelLeft = computed(() => props.label && props.labelPosition === 'left');
-const showLabelRight = computed(() => props.label && props.labelPosition === 'right');
+const showLabelLeft = computed(() => props.label && props.showLabel && props.labelPosition === 'left');
+const showLabelRight = computed(() => props.label && props.showLabel && props.labelPosition === 'right');
 const showCheckIcon = computed(() => isChecked.value && !isIndeterminate.value);
 
 const labelLeftClasses = computed(() => {
@@ -220,13 +221,13 @@ const handleChange = (event) => {
 }
 
 .scuba-checkbox__box--indeterminate {
-  background: var(--semantic-color-primary-500);
-  border-color: var(--semantic-color-primary-500);
+  background: var(--semantic-color-primary-600);
+  border-color: var(--semantic-color-primary-600);
 }
 
 .scuba-checkbox:hover:not(.scuba-checkbox--disabled) .scuba-checkbox__box--indeterminate {
-  background: var(--semantic-color-primary-600);
-  border-color: var(--semantic-color-primary-600);
+  background: var(--semantic-color-primary-700);
+  border-color: var(--semantic-color-primary-700);
 }
 
 .scuba-checkbox__input:focus-visible + .scuba-checkbox__box {

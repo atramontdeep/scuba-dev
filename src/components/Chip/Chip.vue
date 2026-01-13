@@ -1,20 +1,15 @@
 <template>
   <span :class="chipClasses" @click="handleClick">
     <span v-if="count" class="scuba-chip__count">
-      {{ count }}
+      {{ countValue }}
     </span>
 
     <component
       v-if="icon && iconPosition === 'left'"
       :is="icon"
       :size="iconSize"
-      :weight="iconWeight"
       class="scuba-chip__icon scuba-chip__icon--left"
     />
-
-    <span v-if="avatar" class="scuba-chip__avatar">
-      <img :src="avatar" :alt="avatarAlt" />
-    </span>
 
     <span class="scuba-chip__label">
       <slot>{{ label }}</slot>
@@ -24,7 +19,6 @@
       v-if="icon && iconPosition === 'right'"
       :is="icon"
       :size="iconSize"
-      :weight="iconWeight"
       class="scuba-chip__icon scuba-chip__icon--right"
     />
 
@@ -56,13 +50,12 @@ const props = defineProps({
     default: ''
   },
   count: {
-    type: [String, Number],
-    default: null
+    type: Boolean,
+    default: false
   },
-  variant: {
-    type: String,
-    default: 'neutral',
-    validator: (value) => ['neutral', 'primary', 'success', 'warning', 'danger', 'info'].includes(value)
+  countValue: {
+    type: [String, Number],
+    default: '32'
   },
   size: {
     type: String,
@@ -77,19 +70,6 @@ const props = defineProps({
     type: String,
     default: 'left',
     validator: (value) => ['left', 'right'].includes(value)
-  },
-  iconWeight: {
-    type: String,
-    default: 'regular',
-    validator: (value) => ['thin', 'light', 'regular', 'bold', 'fill'].includes(value)
-  },
-  avatar: {
-    type: String,
-    default: null
-  },
-  avatarAlt: {
-    type: String,
-    default: ''
   },
   removable: {
     type: Boolean,
@@ -110,10 +90,6 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
-  },
-  outlined: {
-    type: Boolean,
-    default: false
   }
 });
 
@@ -122,14 +98,11 @@ const emit = defineEmits(['click', 'remove']);
 const chipClasses = computed(() => {
   return [
     'scuba-chip',
-    `scuba-chip--${props.variant}`,
     `scuba-chip--${props.size}`,
     {
       'scuba-chip--clickable': props.clickable,
       'scuba-chip--selected': props.selected,
-      'scuba-chip--disabled': props.disabled,
-      'scuba-chip--outlined': props.outlined,
-      'scuba-chip--with-avatar': props.avatar
+      'scuba-chip--disabled': props.disabled
     }
   ];
 });
@@ -221,38 +194,6 @@ const handleRemove = (event) => {
   margin-right: calc(var(--spacing-2xs) * -0.5);
 }
 
-/* Avatar */
-.scuba-chip__avatar {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-left: calc(var(--spacing-2xs) * -0.5);
-}
-
-.scuba-chip--sm .scuba-chip__avatar {
-  width: 20px;
-  height: 20px;
-}
-
-.scuba-chip--md .scuba-chip__avatar {
-  width: 24px;
-  height: 24px;
-}
-
-.scuba-chip--lg .scuba-chip__avatar {
-  width: 28px;
-  height: 28px;
-}
-
-.scuba-chip__avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 /* Remove button */
 .scuba-chip__remove {
   flex-shrink: 0;
@@ -273,135 +214,30 @@ const handleRemove = (event) => {
   opacity: 1;
 }
 
-/* States */
-.scuba-chip--selected {
-  background: #BFDBFE !important;
-  color: #1E40AF !important;
+/* Default State */
+.scuba-chip {
+  background: #E5E7EB;
+  color: #374151;
 }
 
+/* Hover State */
+.scuba-chip.scuba-chip--clickable:hover:not(.scuba-chip--selected):not(.scuba-chip--disabled) {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+/* Selected State */
+.scuba-chip--selected {
+  background: #BFDBFE;
+  color: #1E40AF;
+  font-weight: var(--type-font-weight-semibold);
+}
+
+/* Disabled State */
 .scuba-chip--disabled {
-  opacity: 0.5;
+  background: #E5E7EB;
+  color: #9CA3AF;
   cursor: not-allowed !important;
   pointer-events: none;
-}
-
-/* Variant: Neutral (Filled) */
-.scuba-chip--neutral {
-  background: var(--context-color-surface-secondary);
-  color: var(--context-color-text-primary);
-}
-
-.scuba-chip--neutral.scuba-chip--clickable:hover:not(.scuba-chip--selected):not(.scuba-chip--disabled) {
-  background: var(--context-color-surface-tertiary);
-}
-
-.scuba-chip--neutral.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-  color: var(--context-color-text-primary);
-}
-
-.scuba-chip--neutral.scuba-chip--outlined.scuba-chip--clickable:hover:not(.scuba-chip--selected):not(.scuba-chip--disabled) {
-  background: var(--context-color-surface-secondary);
-}
-
-/* Variant: Primary */
-.scuba-chip--primary {
-  background: var(--color-primary-100);
-  color: var(--color-primary-700);
-}
-
-.scuba-chip--primary.scuba-chip--clickable:hover {
-  background: var(--color-primary-200);
-}
-
-.scuba-chip--primary.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--color-primary-500);
-  color: var(--color-primary-700);
-}
-
-.scuba-chip--primary.scuba-chip--outlined.scuba-chip--clickable:hover {
-  background: var(--color-primary-50);
-}
-
-/* Variant: Success */
-.scuba-chip--success {
-  background: var(--color-green-100);
-  color: var(--color-green-700);
-}
-
-.scuba-chip--success.scuba-chip--clickable:hover {
-  background: var(--color-green-200);
-}
-
-.scuba-chip--success.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--color-green-500);
-  color: var(--color-green-700);
-}
-
-.scuba-chip--success.scuba-chip--outlined.scuba-chip--clickable:hover {
-  background: var(--color-green-50);
-}
-
-/* Variant: Warning */
-.scuba-chip--warning {
-  background: var(--color-yellow-100);
-  color: var(--color-yellow-800);
-}
-
-.scuba-chip--warning.scuba-chip--clickable:hover {
-  background: var(--color-yellow-200);
-}
-
-.scuba-chip--warning.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--color-yellow-500);
-  color: var(--color-yellow-800);
-}
-
-.scuba-chip--warning.scuba-chip--outlined.scuba-chip--clickable:hover {
-  background: var(--color-yellow-50);
-}
-
-/* Variant: Danger */
-.scuba-chip--danger {
-  background: var(--color-red-100);
-  color: var(--color-red-700);
-}
-
-.scuba-chip--danger.scuba-chip--clickable:hover {
-  background: var(--color-red-200);
-}
-
-.scuba-chip--danger.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--color-red-500);
-  color: var(--color-red-700);
-}
-
-.scuba-chip--danger.scuba-chip--outlined.scuba-chip--clickable:hover {
-  background: var(--color-red-50);
-}
-
-/* Variant: Info */
-.scuba-chip--info {
-  background: var(--color-blue-100);
-  color: var(--color-blue-700);
-}
-
-.scuba-chip--info.scuba-chip--clickable:hover {
-  background: var(--color-blue-200);
-}
-
-.scuba-chip--info.scuba-chip--outlined {
-  background: transparent;
-  border: var(--border-width-border-sm) solid var(--color-blue-500);
-  color: var(--color-blue-700);
-}
-
-.scuba-chip--info.scuba-chip--outlined.scuba-chip--clickable:hover {
-  background: var(--color-blue-50);
 }
 </style>

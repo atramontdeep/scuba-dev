@@ -68,9 +68,12 @@ const Template = (args) => ({
 export const Playground = Template.bind({});
 Playground.args = {
   totalPages: 10,
+  totalItems: 237,
+  itemsPerPage: 25,
   siblingCount: 1,
   boundaryCount: 1,
   showFirstLast: true,
+  showPageInfo: true,
   size: 'md',
 };
 Playground.parameters = {

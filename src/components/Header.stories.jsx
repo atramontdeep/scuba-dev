@@ -13,6 +13,14 @@ export default {
     description: {
       control: 'text',
       description: 'Descrição opcional da página'
+    },
+    showBreadcrumb: {
+      control: 'boolean',
+      description: 'Exibe o breadcrumb'
+    },
+    showDescription: {
+      control: 'boolean',
+      description: 'Exibe a descrição'
     }
   },
 };
@@ -39,7 +47,9 @@ export const Playground = (args) => ({
 });
 Playground.args = {
   title: 'Page Title',
-  description: 'This is an optional description that provides additional context about the page.'
+  description: 'This is an optional description that provides additional context about the page.',
+  showBreadcrumb: true,
+  showDescription: true
 };
 
 // Basic Header
@@ -127,6 +137,52 @@ export const LongContent = () => ({
         <Breadcrumb :items="items" />
       </template>
     </Header>
+  `,
+});
+
+// Without Breadcrumb
+export const WithoutBreadcrumb = () => ({
+  components: { Header },
+  template: `
+    <Header
+      title="Page Title"
+      description="This page has no breadcrumb navigation."
+      :showBreadcrumb="false"
+    />
+  `,
+});
+
+// Without Description
+export const WithoutDescription = () => ({
+  components: { Header, Breadcrumb },
+  setup() {
+    const items = [
+      { label: 'Home', href: '#' },
+      { label: 'Dashboard' }
+    ];
+    return { items };
+  },
+  template: `
+    <Header
+      title="Dashboard"
+      :showDescription="false"
+    >
+      <template #breadcrumb>
+        <Breadcrumb :items="items" />
+      </template>
+    </Header>
+  `,
+});
+
+// Title Only
+export const TitleOnly = () => ({
+  components: { Header },
+  template: `
+    <Header
+      title="Simple Page Title"
+      :showBreadcrumb="false"
+      :showDescription="false"
+    />
   `,
 });
 

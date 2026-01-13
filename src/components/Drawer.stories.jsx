@@ -30,6 +30,35 @@ export default {
     closeOnEscape: {
       control: 'boolean',
       description: 'Fecha ao pressionar ESC'
+    },
+    showTertiaryButton: {
+      control: 'boolean',
+      description: 'Exibe botão terciário (text variant) à esquerda'
+    },
+    tertiaryButtonLabel: {
+      control: 'text',
+      description: 'Texto do botão terciário'
+    },
+    showSecondaryButton: {
+      control: 'boolean',
+      description: 'Exibe botão secundário (outline variant) à direita'
+    },
+    secondaryButtonLabel: {
+      control: 'text',
+      description: 'Texto do botão secundário'
+    },
+    showPrimaryButton: {
+      control: 'boolean',
+      description: 'Exibe botão primário (solid variant) à direita'
+    },
+    primaryButtonLabel: {
+      control: 'text',
+      description: 'Texto do botão primário'
+    },
+    buttonSize: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Tamanho dos botões no rodapé'
     }
   },
 };
@@ -342,6 +371,86 @@ export const SettingsPanel = () => ({
                   <div style="font-weight: 500;">Push Notifications</div>
                   <div style="font-size: 14px; color: #6b7280;">Receive browser notifications</div>
                 </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </Drawer>
+    </div>
+  `,
+});
+
+// With Action Buttons (Filtros)
+export const WithActionButtons = () => ({
+  components: { Drawer, Button },
+  setup() {
+    const isOpen = ref(false);
+
+    const handleClear = () => {
+      console.log('Limpar clicked');
+    };
+
+    const handleCancel = () => {
+      console.log('Cancelar clicked');
+      isOpen.value = false;
+    };
+
+    const handleApply = () => {
+      console.log('Aplicar filtros clicked');
+      isOpen.value = false;
+    };
+
+    return { isOpen, handleClear, handleCancel, handleApply };
+  },
+  template: `
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Button @click="isOpen = true">Abrir Filtros</Button>
+      <Drawer
+        v-model="isOpen"
+        title="Filtros"
+        :showTertiaryButton="true"
+        tertiaryButtonLabel="Limpar"
+        :showSecondaryButton="true"
+        secondaryButtonLabel="Cancelar"
+        :showPrimaryButton="true"
+        primaryButtonLabel="Aplicar filtros"
+        @tertiary-click="handleClear"
+        @secondary-click="handleCancel"
+        @primary-click="handleApply"
+      >
+        <div style="display: flex; flex-direction: column; gap: 24px;">
+          <div>
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600;">Situação</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Em resposta</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Respondido</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Em validação</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 600;">Temas materiais</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Emissões GEE</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Gestão hídrica</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <input type="checkbox" style="width: 18px; height: 18px;" />
+                <span>Diversidade e Inclusão</span>
               </label>
             </div>
           </div>

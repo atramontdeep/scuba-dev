@@ -1,397 +1,210 @@
 <template>
-  <div :class="actionBoxClasses">
-    <div v-if="icon || $slots.icon" class="scuba-action-box__icon-container">
-      <div :class="iconWrapperClasses">
-        <component v-if="icon" :is="icon" :size="iconSize" :weight="iconWeight" />
-        <slot v-else name="icon" />
-      </div>
-    </div>
+  <div :class="actionBoxClasses" @click="handleClick">
+    <Checkbox
+      v-if="showCheckbox"
+      v-model="internalChecked"
+      :showLabel="false"
+      @click.stop
+      @change="handleCheckboxChange"
+      class="scuba-action-box__checkbox"
+    />
+
+    <Avatar
+      v-if="showAvatar"
+      :initials="avatarInitials"
+      :src="avatarSrc"
+      size="md"
+      variant="default"
+      class="scuba-action-box__avatar"
+    />
 
     <div class="scuba-action-box__content">
-      <div class="scuba-action-box__header">
-        <h3 v-if="title || $slots.title" class="scuba-action-box__title">
-          <slot name="title">{{ title }}</slot>
-        </h3>
-        <div v-if="$slots.badge" class="scuba-action-box__badge">
-          <slot name="badge" />
-        </div>
-      </div>
-
-      <p v-if="description || $slots.description" class="scuba-action-box__description">
-        <slot name="description">{{ description }}</slot>
-      </p>
-
-      <div v-if="$slots.default" class="scuba-action-box__body">
-        <slot />
-      </div>
-
-      <div v-if="$slots.actions || hasDefaultActions" class="scuba-action-box__actions">
-        <slot name="actions">
-          <button
-            v-if="actionLabel"
-            :class="actionButtonClasses"
-            @click="handleActionClick"
-            :disabled="disabled"
-          >
-            {{ actionLabel }}
-          </button>
-          <button
-            v-if="dismissLabel"
-            class="scuba-action-box__button scuba-action-box__button--secondary"
-            @click="handleDismiss"
-            :disabled="disabled"
-          >
-            {{ dismissLabel }}
-          </button>
-        </slot>
-      </div>
+      <h3 class="scuba-action-box__title">{{ title }}</h3>
+      <p v-if="showSubtitle && subtitle" class="scuba-action-box__subtitle">{{ subtitle }}</p>
     </div>
 
-    <button
-      v-if="closable && !disabled"
-      class="scuba-action-box__close"
-      @click="handleClose"
-      aria-label="Close"
-    >
-      <PhX :size="20" weight="bold" />
-    </button>
+    <Chip
+      v-if="showChip"
+      :label="chipLabel"
+      :count="chipCount"
+      :countValue="chipCountValue"
+      :icon="chipIcon"
+      size="md"
+      class="scuba-action-box__chip"
+    />
+
+    <component
+      v-if="showIcon"
+      :is="icon"
+      :size="24"
+      class="scuba-action-box__icon"
+    />
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { PhX } from '@phosphor-icons/vue';
+import { computed, ref, watch } from 'vue';
+import Avatar from '../Avatar/Avatar.vue';
+import Chip from '../Chip/Chip.vue';
+import Checkbox from '../Checkbox/Checkbox.vue';
+import { PhCaretRight } from '@phosphor-icons/vue';
 
 const props = defineProps({
-  icon: {
+  title: {
+    type: String,
+    required: true
+  },
+  subtitle: {
+    type: String,
+    default: ''
+  },
+  showCheckbox: {
+    type: Boolean,
+    default: false
+  },
+  checked: {
+    type: Boolean,
+    default: false
+  },
+  showAvatar: {
+    type: Boolean,
+    default: false
+  },
+  avatarInitials: {
+    type: String,
+    default: 'AB'
+  },
+  avatarSrc: {
+    type: String,
+    default: ''
+  },
+  showSubtitle: {
+    type: Boolean,
+    default: false
+  },
+  showChip: {
+    type: Boolean,
+    default: false
+  },
+  chipLabel: {
+    type: String,
+    default: 'Chip'
+  },
+  chipCount: {
+    type: Boolean,
+    default: false
+  },
+  chipCountValue: {
+    type: [String, Number],
+    default: '32'
+  },
+  chipIcon: {
     type: [Object, Function],
     default: null
   },
-  iconVariant: {
-    type: String,
-    default: 'primary',
-    validator: (value) => ['primary', 'success', 'warning', 'danger', 'info', 'neutral'].includes(value)
-  },
-  iconWeight: {
-    type: String,
-    default: 'regular',
-    validator: (value) => ['thin', 'light', 'regular', 'bold', 'fill'].includes(value)
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  description: {
-    type: String,
-    default: ''
-  },
-  actionLabel: {
-    type: String,
-    default: ''
-  },
-  dismissLabel: {
-    type: String,
-    default: ''
-  },
-  variant: {
-    type: String,
-    default: 'default',
-    validator: (value) => ['default', 'bordered', 'elevated'].includes(value)
-  },
-  size: {
-    type: String,
-    default: 'md',
-    validator: (value) => ['sm', 'md', 'lg'].includes(value)
-  },
-  closable: {
+  showIcon: {
     type: Boolean,
     default: false
   },
-  disabled: {
+  icon: {
+    type: [Object, Function],
+    default: () => PhCaretRight
+  },
+  clickable: {
     type: Boolean,
-    default: false
+    default: true
   }
 });
 
-const emit = defineEmits(['action', 'dismiss', 'close']);
+const emit = defineEmits(['click', 'checkbox-change']);
 
-const iconSize = computed(() => {
-  const sizes = {
-    sm: 20,
-    md: 24,
-    lg: 32
-  };
-  return sizes[props.size];
+const internalChecked = ref(props.checked);
+
+watch(() => props.checked, (newValue) => {
+  internalChecked.value = newValue;
 });
 
-const hasDefaultActions = computed(() => {
-  return Boolean(props.actionLabel || props.dismissLabel);
+watch(internalChecked, (newValue) => {
+  emit('checkbox-change', newValue);
 });
 
 const actionBoxClasses = computed(() => {
   return [
     'scuba-action-box',
-    `scuba-action-box--${props.variant}`,
-    `scuba-action-box--${props.size}`,
     {
-      'scuba-action-box--disabled': props.disabled
+      'scuba-action-box--clickable': props.clickable
     }
   ];
 });
 
-const iconWrapperClasses = computed(() => {
-  return [
-    'scuba-action-box__icon',
-    `scuba-action-box__icon--${props.iconVariant}`
-  ];
-});
-
-const actionButtonClasses = computed(() => {
-  return [
-    'scuba-action-box__button',
-    'scuba-action-box__button--primary'
-  ];
-});
-
-const handleActionClick = () => {
-  emit('action');
+const handleClick = () => {
+  if (props.clickable) {
+    emit('click');
+  }
 };
 
-const handleDismiss = () => {
-  emit('dismiss');
-};
-
-const handleClose = () => {
-  emit('close');
+const handleCheckboxChange = () => {
+  // The checkbox change is already handled by the v-model and watch
 };
 </script>
 
 <style scoped>
 .scuba-action-box {
-  position: relative;
   display: flex;
-  gap: var(--spacing-md);
-  background: var(--context-color-surface-primary);
-  border-radius: var(--border-radius-rounded-md);
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
   font-family: var(--type-font-family-body);
   transition: all 0.2s ease;
 }
 
-.scuba-action-box--default {
-  padding: var(--spacing-md);
+.scuba-action-box--clickable {
+  cursor: pointer;
 }
 
-.scuba-action-box--bordered {
-  padding: var(--spacing-md);
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+.scuba-action-box--clickable:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
 }
 
-.scuba-action-box--elevated {
-  padding: var(--spacing-md);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-}
-
-.scuba-action-box--elevated:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-}
-
-.scuba-action-box--disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Sizes */
-.scuba-action-box--sm {
-  padding: var(--spacing-sm);
-  gap: var(--spacing-sm);
-}
-
-.scuba-action-box--lg {
-  padding: var(--spacing-lg);
-  gap: var(--spacing-lg);
-}
-
-.scuba-action-box__icon-container {
+.scuba-action-box__checkbox {
   flex-shrink: 0;
 }
 
-.scuba-action-box__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--border-radius-rounded-md);
-  transition: all 0.2s ease;
-}
-
-.scuba-action-box--sm .scuba-action-box__icon {
-  width: 40px;
-  height: 40px;
-}
-
-.scuba-action-box--lg .scuba-action-box__icon {
-  width: 56px;
-  height: 56px;
-}
-
-.scuba-action-box__icon--primary {
-  background: var(--color-primary-100);
-  color: var(--color-primary-600);
-}
-
-.scuba-action-box__icon--success {
-  background: var(--color-green-100);
-  color: var(--color-green-600);
-}
-
-.scuba-action-box__icon--warning {
-  background: var(--color-yellow-100);
-  color: var(--color-yellow-600);
-}
-
-.scuba-action-box__icon--danger {
-  background: var(--color-red-100);
-  color: var(--color-red-600);
-}
-
-.scuba-action-box__icon--info {
-  background: var(--color-blue-100);
-  color: var(--color-blue-600);
-}
-
-.scuba-action-box__icon--neutral {
-  background: var(--context-color-surface-secondary);
-  color: var(--context-color-text-secondary);
+.scuba-action-box__avatar {
+  flex-shrink: 0;
 }
 
 .scuba-action-box__content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
   min-width: 0;
-}
-
-.scuba-action-box__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
 }
 
 .scuba-action-box__title {
   margin: 0;
-  font-size: var(--type-font-size-lg);
-  font-weight: var(--type-font-weight-semibold);
-  color: var(--context-color-text-primary);
-  line-height: var(--type-line-height-tight);
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  line-height: 1.5;
 }
 
-.scuba-action-box--sm .scuba-action-box__title {
-  font-size: var(--type-font-size-base);
+.scuba-action-box__subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6B7280;
+  line-height: 1.4;
 }
 
-.scuba-action-box--lg .scuba-action-box__title {
-  font-size: var(--type-font-size-xl);
-}
-
-.scuba-action-box__badge {
+.scuba-action-box__chip {
   flex-shrink: 0;
 }
 
-.scuba-action-box__description {
-  margin: 0;
-  font-size: var(--type-font-size-sm);
-  color: var(--context-color-text-secondary);
-  line-height: var(--type-line-height-normal);
-}
-
-.scuba-action-box--sm .scuba-action-box__description {
-  font-size: var(--type-font-size-xs);
-}
-
-.scuba-action-box--lg .scuba-action-box__description {
-  font-size: var(--type-font-size-base);
-}
-
-.scuba-action-box__body {
-  font-size: var(--type-font-size-sm);
-  color: var(--context-color-text-primary);
-}
-
-.scuba-action-box__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-wrap: wrap;
-  margin-top: var(--spacing-xs);
-}
-
-.scuba-action-box__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xs) var(--spacing-md);
-  border: none;
-  border-radius: var(--border-radius-rounded-sm);
-  font-family: var(--type-font-family-body);
-  font-size: var(--type-font-size-sm);
-  font-weight: var(--type-font-weight-semibold);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.scuba-action-box__button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-.scuba-action-box__button--primary {
-  background: var(--color-primary-500);
-  color: var(--color-white);
-}
-
-.scuba-action-box__button--primary:hover:not(:disabled) {
-  background: var(--color-primary-600);
-}
-
-.scuba-action-box__button--secondary {
-  background: transparent;
-  color: var(--context-color-text-secondary);
-  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
-}
-
-.scuba-action-box__button--secondary:hover:not(:disabled) {
-  background: var(--context-color-surface-secondary);
-  color: var(--context-color-text-primary);
-}
-
-.scuba-action-box__close {
-  position: absolute;
-  top: var(--spacing-sm);
-  right: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  border-radius: var(--border-radius-rounded-sm);
-  color: var(--context-color-text-secondary);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.scuba-action-box__close:hover {
-  background: var(--context-color-surface-secondary);
-  color: var(--context-color-text-primary);
-}
-
-.scuba-action-box__close:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #BFDBFE;
+.scuba-action-box__icon {
+  flex-shrink: 0;
+  color: #6B7280;
 }
 </style>

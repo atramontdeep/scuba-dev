@@ -1,7 +1,7 @@
 <template>
-  <div :class="wrapperClasses">
-    <label 
-      v-if="label" 
+  <div :class="wrapperClasses" ref="inputWrapperRef">
+    <label
+      v-if="label"
       :for="inputId"
       :class="labelClasses"
     >
@@ -13,9 +13,13 @@
         type="button"
         :class="'scuba-input__help-button'"
         :aria-label="helpAriaLabel"
-        @click="$emit('help-click')"
+        @mouseenter="showTooltip = true"
+        @mouseleave="showTooltip = false"
+        @focus="showTooltip = true"
+        @blur="showTooltip = false"
       >
         <i :class="'ph ph-question'"></i>
+        <span v-if="showTooltip" :class="'scuba-input__tooltip'">{{ helpText }}</span>
       </button>
     </label>
 
@@ -55,6 +59,7 @@
         @blur="handleBlur"
         @focus="handleFocus"
         @input="handleInput"
+        @click="type === 'date' ? handleDateInputClick() : type === 'time' ? handleTimeInputClick() : null"
       />
 
       <span v-if="iconRight || showPasswordToggle" :class="iconRightClasses">
@@ -75,11 +80,77 @@
     <div v-if="hint || error" :class="hintClasses">
       {{ error || hint }}
     </div>
+
+    <!-- Date Picker -->
+    <div v-if="showDatePicker && type === 'date'" class="scuba-input__picker scuba-input__date-picker">
+      <div class="scuba-input__date-picker-header">
+        <button type="button" @click="previousMonth" class="scuba-input__date-picker-nav">
+          <i class="ph ph-caret-left"></i>
+        </button>
+        <span class="scuba-input__date-picker-title">
+          {{ monthNames[currentMonth] }} {{ currentYear }}
+        </span>
+        <button type="button" @click="nextMonth" class="scuba-input__date-picker-nav">
+          <i class="ph ph-caret-right"></i>
+        </button>
+      </div>
+      <div class="scuba-input__date-picker-weekdays">
+        <div v-for="day in weekDays" :key="day" class="scuba-input__date-picker-weekday">
+          {{ day }}
+        </div>
+      </div>
+      <div class="scuba-input__date-picker-days">
+        <button
+          v-for="(day, index) in calendarDays"
+          :key="index"
+          type="button"
+          :class="['scuba-input__date-picker-day', { 'scuba-input__date-picker-day--empty': !day }]"
+          @click="selectDate(day)"
+          :disabled="!day"
+        >
+          {{ day || '' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Time Picker -->
+    <div v-if="showTimePicker && type === 'time'" class="scuba-input__picker scuba-input__time-picker">
+      <div class="scuba-input__time-picker-columns">
+        <div class="scuba-input__time-picker-column">
+          <div class="scuba-input__time-picker-header">Hora</div>
+          <div class="scuba-input__time-picker-list">
+            <button
+              v-for="hour in hours"
+              :key="hour"
+              type="button"
+              class="scuba-input__time-picker-item"
+              @click="selectTime(hour, selectedTime?.minute || 0)"
+            >
+              {{ String(hour).padStart(2, '0') }}
+            </button>
+          </div>
+        </div>
+        <div class="scuba-input__time-picker-column">
+          <div class="scuba-input__time-picker-header">Minuto</div>
+          <div class="scuba-input__time-picker-list">
+            <button
+              v-for="minute in minutes"
+              :key="minute"
+              type="button"
+              class="scuba-input__time-picker-item"
+              @click="selectTime(selectedTime?.hour || 0, minute)"
+            >
+              {{ String(minute).padStart(2, '0') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -113,9 +184,17 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'blur', 'focus', 'input', 'help-click']);
 
+const inputWrapperRef = ref(null);
 const internalValue = ref(props.modelValue);
 const isFocused = ref(false);
 const passwordVisible = ref(false);
+const showTooltip = ref(false);
+const showDatePicker = ref(false);
+const showTimePicker = ref(false);
+const selectedDate = ref(null);
+const selectedTime = ref(null);
+const currentMonth = ref(new Date().getMonth());
+const currentYear = ref(new Date().getFullYear());
 
 const inputId = computed(() => {
   if (props.id) return props.id;
@@ -226,16 +305,144 @@ const handleFocus = (event) => {
 };
 
 const handleInput = (event) => {
+  // Aplica máscara de telefone brasileiro se type="tel"
+  if (props.type === 'tel') {
+    let value = event.target.value.replace(/\D/g, '');
+
+    // Limita a 11 dígitos (celular com DDD)
+    if (value.length > 11) {
+      value = value.slice(0, 11);
+    }
+
+    // Aplica a máscara
+    if (value.length <= 10) {
+      // Formato fixo: (XX) XXXX-XXXX
+      value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    } else {
+      // Formato celular: (XX) XXXXX-XXXX
+      value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+    }
+
+    // Remove traços finais vazios
+    value = value.replace(/-$/, '');
+
+    internalValue.value = value;
+    event.target.value = value;
+  }
+
   emit('input', event);
 };
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
+
+// Date picker utilities
+const monthNames = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+];
+
+const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+
+const getDaysInMonth = (month, year) => {
+  return new Date(year, month + 1, 0).getDate();
+};
+
+const getFirstDayOfMonth = (month, year) => {
+  return new Date(year, month, 1).getDay();
+};
+
+const calendarDays = computed(() => {
+  const daysInMonth = getDaysInMonth(currentMonth.value, currentYear.value);
+  const firstDay = getFirstDayOfMonth(currentMonth.value, currentYear.value);
+  const days = [];
+
+  // Empty cells before first day
+  for (let i = 0; i < firstDay; i++) {
+    days.push(null);
+  }
+
+  // Days of month
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(i);
+  }
+
+  return days;
+});
+
+const handleDateInputClick = () => {
+  if (props.type === 'date' && !props.disabled && !props.readonly) {
+    showDatePicker.value = !showDatePicker.value;
+    showTimePicker.value = false;
+  }
+};
+
+const handleTimeInputClick = () => {
+  if (props.type === 'time' && !props.disabled && !props.readonly) {
+    showTimePicker.value = !showTimePicker.value;
+    showDatePicker.value = false;
+  }
+};
+
+const selectDate = (day) => {
+  if (!day) return;
+
+  const date = new Date(currentYear.value, currentMonth.value, day);
+  const formattedDate = date.toISOString().split('T')[0];
+  internalValue.value = formattedDate;
+  selectedDate.value = date;
+  showDatePicker.value = false;
+};
+
+const previousMonth = () => {
+  if (currentMonth.value === 0) {
+    currentMonth.value = 11;
+    currentYear.value--;
+  } else {
+    currentMonth.value--;
+  }
+};
+
+const nextMonth = () => {
+  if (currentMonth.value === 11) {
+    currentMonth.value = 0;
+    currentYear.value++;
+  } else {
+    currentMonth.value++;
+  }
+};
+
+const selectTime = (hour, minute) => {
+  const formattedTime = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+  internalValue.value = formattedTime;
+  selectedTime.value = { hour, minute };
+  showTimePicker.value = false;
+};
+
+const hours = Array.from({ length: 24 }, (_, i) => i);
+const minutes = Array.from({ length: 60 }, (_, i) => i);
+
+// Close pickers when clicking outside
+const handleClickOutside = (event) => {
+  if (inputWrapperRef.value && !inputWrapperRef.value.contains(event.target)) {
+    showDatePicker.value = false;
+    showTimePicker.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside);
+});
 </script>
 
 <style scoped>
 .scuba-input-wrapper {
+  position: relative;
   display: inline-flex;
   flex-direction: column;
   gap: var(--spacing-3xs);
@@ -270,6 +477,7 @@ const togglePasswordVisibility = () => {
 }
 
 .scuba-input__help-button {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -288,6 +496,34 @@ const togglePasswordVisibility = () => {
 .scuba-input__help-button:hover {
   color: var(--context-color-text-primary);
   background: var(--context-color-surface-action);
+}
+
+.scuba-input__tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  background: var(--context-color-surface-inverted);
+  color: var(--primitives-color-white);
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-regular);
+  line-height: 1.4;
+  border-radius: var(--border-radius-rounded-sm);
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.scuba-input__tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--context-color-surface-inverted);
 }
 
 .scuba-input__container {
@@ -412,5 +648,173 @@ const togglePasswordVisibility = () => {
 
 .scuba-input__field[type="number"] {
   -moz-appearance: textfield;
+}
+
+/* Custom Pickers */
+.scuba-input__picker {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 1000;
+  background: var(--context-color-surface-primary);
+  border: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+  border-radius: var(--border-radius-rounded-md);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: var(--spacing-2xs);
+  font-family: var(--type-font-family-body);
+}
+
+/* Date Picker */
+.scuba-input__date-picker {
+  width: 280px;
+}
+
+.scuba-input__date-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-2xs);
+  margin-bottom: var(--spacing-2xs);
+}
+
+.scuba-input__date-picker-title {
+  font-size: var(--type-font-size-base);
+  font-weight: var(--type-font-weight-semibold);
+  color: var(--context-color-text-primary);
+}
+
+.scuba-input__date-picker-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-sm);
+  color: var(--context-color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-size: var(--type-font-size-lg);
+}
+
+.scuba-input__date-picker-nav:hover {
+  background: var(--context-color-surface-secondary);
+  color: var(--context-color-text-primary);
+}
+
+.scuba-input__date-picker-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: var(--spacing-3xs);
+}
+
+.scuba-input__date-picker-weekday {
+  text-align: center;
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-semibold);
+  color: var(--context-color-text-secondary);
+  padding: var(--spacing-3xs);
+}
+
+.scuba-input__date-picker-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.scuba-input__date-picker-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-sm);
+  color: var(--context-color-text-primary);
+  font-size: var(--type-font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.scuba-input__date-picker-day:hover:not(:disabled):not(.scuba-input__date-picker-day--empty) {
+  background: var(--context-color-surface-secondary);
+}
+
+.scuba-input__date-picker-day--empty {
+  cursor: default;
+  visibility: hidden;
+}
+
+/* Time Picker */
+.scuba-input__time-picker {
+  width: 200px;
+}
+
+.scuba-input__time-picker-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-2xs);
+}
+
+.scuba-input__time-picker-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.scuba-input__time-picker-header {
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-semibold);
+  color: var(--context-color-text-primary);
+  padding: var(--spacing-2xs);
+  text-align: center;
+  border-bottom: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+  margin-bottom: var(--spacing-3xs);
+}
+
+.scuba-input__time-picker-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 200px;
+  overflow-y: auto;
+  gap: 2px;
+}
+
+.scuba-input__time-picker-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scuba-input__time-picker-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scuba-input__time-picker-list::-webkit-scrollbar-thumb {
+  background: var(--context-color-border-secondary);
+  border-radius: var(--border-radius-rounded-full);
+}
+
+.scuba-input__time-picker-list::-webkit-scrollbar-thumb:hover {
+  background: var(--context-color-border-primary);
+}
+
+.scuba-input__time-picker-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xs);
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-sm);
+  color: var(--context-color-text-primary);
+  font-size: var(--type-font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.scuba-input__time-picker-item:hover {
+  background: var(--context-color-surface-secondary);
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <header :class="headerClasses">
-    <div class="scuba-header__breadcrumb">
+    <div v-if="showBreadcrumb && $slots.breadcrumb" class="scuba-header__breadcrumb">
       <slot name="breadcrumb" />
     </div>
 
@@ -9,7 +9,7 @@
         <slot name="title">{{ title }}</slot>
       </h1>
 
-      <div v-if="description || $slots.description" class="scuba-header__description">
+      <div v-if="showDescription && (description || $slots.description)" class="scuba-header__description">
         <slot name="description">{{ description }}</slot>
       </div>
     </div>
@@ -27,6 +27,14 @@ const props = defineProps({
   description: {
     type: String,
     default: null
+  },
+  showBreadcrumb: {
+    type: Boolean,
+    default: true
+  },
+  showDescription: {
+    type: Boolean,
+    default: true
   }
 });
 
