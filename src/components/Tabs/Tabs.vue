@@ -76,11 +76,6 @@ const props = defineProps({
     validator: (value) => ['horizontal', 'vertical'].includes(value)
   },
   fullWidth: { type: Boolean, default: false },
-  size: {
-    type: String,
-    default: 'sm',
-    validator: (value) => ['sm'].includes(value)
-  },
   showIcons: { type: Boolean, default: false },
   id: { type: String, default: null },
 });
@@ -117,7 +112,6 @@ const wrapperClasses = computed(() => {
   const classes = ['scuba-tabs'];
   classes.push('scuba-tabs--underline');
   classes.push(`scuba-tabs--${props.orientation}`);
-  classes.push(`scuba-tabs--${props.size}`);
   return classes;
 });
 
@@ -298,33 +292,18 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   gap: var(--spacing-3xs);
-  padding: var(--spacing-2xs) var(--spacing-xs);
+  padding: var(--spacing-3xs) var(--spacing-2xs);
   background: transparent;
   border: none;
   cursor: pointer;
   font-family: var(--type-font-family-body);
-  font-weight: var(--type-font-weight-semibold);
+  font-weight: var(--type-font-weight-regular);
+  font-size: var(--type-font-size-sm);
   color: var(--context-color-text-secondary);
   transition: all var(--transition-base);
   white-space: nowrap;
   position: relative;
   user-select: none;
-}
-
-/* Sizes */
-.scuba-tabs--sm .scuba-tabs__tab {
-  padding: var(--spacing-3xs) var(--spacing-2xs);
-  font-size: var(--type-font-size-sm);
-}
-
-.scuba-tabs--md .scuba-tabs__tab {
-  padding: var(--spacing-2xs) var(--spacing-xs);
-  font-size: var(--type-font-size-base);
-}
-
-.scuba-tabs--lg .scuba-tabs__tab {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--type-font-size-lg);
 }
 
 .scuba-tabs__tab:hover:not(.scuba-tabs__tab--disabled) {
@@ -338,7 +317,8 @@ onMounted(() => {
 }
 
 .scuba-tabs__tab--active {
-  color: var(--context-color-text-action);
+  color: var(--context-color-text-primary);
+  font-weight: var(--type-font-weight-semibold);
 }
 
 .scuba-tabs__tab--disabled {
@@ -385,8 +365,8 @@ onMounted(() => {
   position: absolute;
   bottom: -1px;
   left: 0;
-  height: 2px;
-  background: var(--semantic-color-primary-500);
+  height: 4px;
+  background: var(--context-color-border-focus);
   transition: all var(--transition-base);
 }
 

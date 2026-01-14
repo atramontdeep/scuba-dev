@@ -47,11 +47,6 @@ export default {
       control: 'boolean',
       description: 'Tabs ocupam largura total'
     },
-    size: {
-      control: 'select',
-      options: ['sm'],
-      description: 'Tamanho das tabs'
-    },
     showIcons: {
       control: 'boolean',
       description: 'Exibir ícones nas tabs'
@@ -75,7 +70,6 @@ Playground.args = {
   tabs: SAMPLE_TABS,
   modelValue: 'tab1',
   orientation: 'horizontal',
-  size: 'sm',
   showIcons: false,
 };
 Playground.parameters = {
@@ -92,7 +86,6 @@ Basic.args = {
   tabs: SAMPLE_TABS,
   modelValue: 'tab1',
   orientation: 'horizontal',
-  size: 'sm',
   showIcons: false,
 };
 
@@ -271,25 +264,25 @@ export const Showcase = () => ({
         <!-- Basic -->
         <div>
           <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">Basic</h3>
-          <Tabs :tabs="basicTabs" v-model="active1" size="sm" />
+          <Tabs :tabs="basicTabs" v-model="active1"  />
         </div>
 
         <!-- With Icons -->
         <div>
           <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">With Icons</h3>
-          <Tabs :tabs="iconTabs" v-model="active2" size="sm" showIcons />
+          <Tabs :tabs="iconTabs" v-model="active2"  showIcons />
         </div>
 
         <!-- With Badges -->
         <div>
           <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">With Badges</h3>
-          <Tabs :tabs="badgeTabs" v-model="active3" size="sm" />
+          <Tabs :tabs="badgeTabs" v-model="active3"  />
         </div>
 
         <!-- Full Width -->
         <div>
           <h3 style="margin-bottom: 12px; font-size: 16px; font-weight: 600;">Full Width</h3>
-          <Tabs :tabs="basicTabs" v-model="active4" size="sm" fullWidth />
+          <Tabs :tabs="basicTabs" v-model="active4"  fullWidth />
         </div>
       </div>
     </div>

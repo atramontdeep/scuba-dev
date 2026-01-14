@@ -7,6 +7,20 @@
     >
       {{ label }}
       <span v-if="required" class="scuba-combobox__required">*</span>
+      <span v-if="optional" class="scuba-combobox__optional">opcional</span>
+      <button
+        v-if="helpText"
+        type="button"
+        class="scuba-combobox__help-button"
+        :aria-label="helpAriaLabel"
+        @mouseenter="showTooltip = true"
+        @mouseleave="showTooltip = false"
+        @focus="showTooltip = true"
+        @blur="showTooltip = false"
+      >
+        <i class="ph ph-question"></i>
+        <span v-if="showTooltip" class="scuba-combobox__tooltip">{{ helpText }}</span>
+      </button>
     </label>
 
     <div
@@ -166,6 +180,14 @@ const props = defineProps({
     type: Boolean,
     default: false
   },
+  optional: {
+    type: Boolean,
+    default: false
+  },
+  helpText: {
+    type: String,
+    default: ''
+  },
   hint: {
     type: String,
     default: ''
@@ -217,6 +239,7 @@ const isOpen = ref(false);
 const isFocused = ref(false);
 const searchQuery = ref('');
 const highlightedIndex = ref(-1);
+const showTooltip = ref(false);
 
 const comboboxId = computed(() => {
   return props.id || 'scuba-combobox-' + Math.random().toString(36).substr(2, 9);
@@ -227,6 +250,10 @@ const dropdownId = computed(() => comboboxId.value + '-dropdown');
 const iconSize = computed(() => {
   const sizes = { sm: 16, md: 20, lg: 24 };
   return sizes[props.size];
+});
+
+const helpAriaLabel = computed(() => {
+  return 'Ajuda para ' + props.label;
 });
 
 const selectedOptions = computed(() => {
@@ -529,13 +556,69 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: var(--spacing-3xs);
-  font-size: var(--type-font-size-sm);
+  font-size: var(--type-font-size-base);
   font-weight: var(--type-font-weight-semibold);
+  line-height: var(--type-line-height-normal);
   color: var(--context-color-text-primary);
 }
 
 .scuba-combobox__required {
-  color: var(--color-red-500);
+  color: var(--semantic-color-error-normal);
+}
+
+.scuba-combobox__optional {
+  font-weight: var(--type-font-weight-regular);
+  color: var(--context-color-text-secondary);
+}
+
+.scuba-combobox__help-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--scale-400);
+  height: var(--scale-400);
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-full);
+  color: var(--context-color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-size: var(--type-font-size-base);
+}
+
+.scuba-combobox__help-button:hover {
+  color: var(--context-color-text-primary);
+  background: var(--context-color-surface-action);
+}
+
+.scuba-combobox__tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  background: var(--context-color-surface-inverted);
+  color: var(--primitives-color-white);
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-regular);
+  line-height: 1.4;
+  border-radius: var(--border-radius-rounded-sm);
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.scuba-combobox__tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--context-color-surface-inverted);
 }
 
 .scuba-combobox__container {
@@ -544,51 +627,45 @@ onUnmounted(() => {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--spacing-2xs);
-  background: var(--context-color-surface-primary);
-  border: var(--border-width-border-sm) solid var(--context-color-border-primary);
-  border-radius: var(--border-radius-rounded-sm);
-  transition: all 0.2s ease;
+  background: var(--context-color-surface-action);
+  border: var(--border-width-border-md) solid transparent;
+  border-radius: var(--border-radius-rounded);
+  transition: all var(--transition-base);
   cursor: text;
+  padding: var(--spacing-2xs) var(--spacing-xs);
+  min-height: var(--scale-800);
 }
 
 .scuba-combobox__container:hover:not(.scuba-combobox__container--disabled) {
-  border-color: var(--color-primary-500);
+  border-color: var(--context-color-border-action-hover);
 }
 
 .scuba-combobox__container--focused {
-  border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 2px #BFDBFE;
+  border-color: var(--context-color-border-focus);
+  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light);
 }
 
 .scuba-combobox__container--error {
-  border-color: var(--color-red-500);
-}
-
-.scuba-combobox__container--error.scuba-combobox__container--focused {
-  box-shadow: 0 0 0 2px var(--color-red-100);
+  border-color: var(--context-color-border-error);
 }
 
 .scuba-combobox__container--disabled {
-  background: var(--context-color-surface-secondary);
-  border-color: var(--context-color-border-secondary);
+  background: var(--context-color-surface-disabled);
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 /* Sizes */
 .scuba-combobox__container--sm {
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  min-height: 32px;
+  min-height: var(--scale-600);
 }
 
 .scuba-combobox__container--md {
-  padding: var(--spacing-xs) var(--spacing-md);
-  min-height: 40px;
+  min-height: var(--scale-700);
 }
 
 .scuba-combobox__container--lg {
-  padding: var(--spacing-sm) var(--spacing-md);
-  min-height: 48px;
+  min-height: var(--scale-800);
 }
 
 .scuba-combobox__container--multiple {
@@ -607,10 +684,10 @@ onUnmounted(() => {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2xs);
-  padding: 2px var(--spacing-2xs);
-  background: var(--color-primary-100);
-  color: var(--color-primary-700);
-  border-radius: var(--border-radius-rounded-sm);
+  padding: 4px var(--spacing-xs);
+  background: var(--context-color-surface-focus);
+  color: var(--context-color-text-focus);
+  border-radius: var(--border-radius-rounded-full);
   font-size: var(--type-font-size-sm);
   font-weight: var(--type-font-weight-medium);
 }
@@ -622,7 +699,8 @@ onUnmounted(() => {
 .scuba-combobox__tag-remove {
   cursor: pointer;
   flex-shrink: 0;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--transition-base);
+  color: var(--context-color-text-focus);
 }
 
 .scuba-combobox__tag-remove:hover {
@@ -773,12 +851,13 @@ onUnmounted(() => {
 }
 
 .scuba-combobox__hint {
-  font-size: var(--type-font-size-xs);
+  font-size: var(--type-font-size-sm);
+  line-height: var(--type-line-height-normal);
   color: var(--context-color-text-secondary);
 }
 
 .scuba-combobox__hint--error {
-  color: var(--color-red-600);
+  color: var(--context-color-text-error);
 }
 
 /* Transitions */

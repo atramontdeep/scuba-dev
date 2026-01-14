@@ -159,21 +159,21 @@ const handleChange = (event) => {
 }
 
 .scuba-toggle--sm .scuba-toggle__track {
-  width: var(--scale-700);
-  height: var(--scale-500);
-  padding: var(--scale-50);
+  width: 32px;
+  height: 20px;
+  padding: 2px;
 }
 
 .scuba-toggle--md .scuba-toggle__track {
-  width: var(--scale-800);
-  height: var(--scale-600);
-  padding: var(--scale-50);
+  width: 40px;
+  height: 24px;
+  padding: 2px;
 }
 
 .scuba-toggle--lg .scuba-toggle__track {
-  width: var(--scale-1000);
-  height: var(--scale-800);
-  padding: var(--scale-100);
+  width: 48px;
+  height: 28px;
+  padding: 2px;
 }
 
 .scuba-toggle__track--unchecked {

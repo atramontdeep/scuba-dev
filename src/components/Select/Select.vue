@@ -7,6 +7,20 @@
     >
       {{ label }}
       <span v-if="required" class="scuba-select__required">*</span>
+      <span v-if="optional" class="scuba-select__optional">opcional</span>
+      <button
+        v-if="helpText"
+        type="button"
+        class="scuba-select__help-button"
+        :aria-label="helpAriaLabel"
+        @mouseenter="showTooltip = true"
+        @mouseleave="showTooltip = false"
+        @focus="showTooltip = true"
+        @blur="showTooltip = false"
+      >
+        <i class="ph ph-question"></i>
+        <span v-if="showTooltip" class="scuba-select__tooltip">{{ helpText }}</span>
+      </button>
     </label>
 
     <div
@@ -90,6 +104,8 @@ const props = defineProps({
   label: { type: String, default: '' },
   placeholder: { type: String, default: 'Selecione uma opção' },
   required: { type: Boolean, default: false },
+  optional: { type: Boolean, default: false },
+  helpText: { type: String, default: '' },
   hint: { type: String, default: '' },
   error: { type: String, default: '' },
   disabled: { type: Boolean, default: false },
@@ -111,6 +127,7 @@ const emit = defineEmits(['update:modelValue', 'change', 'open', 'close']);
 const selectWrapper = ref(null);
 const isOpen = ref(false);
 const highlightedIndex = ref(-1);
+const showTooltip = ref(false);
 
 const selectId = computed(() => {
   if (props.id) return props.id;
@@ -128,6 +145,10 @@ const displayText = computed(() => {
     return selectedOption.value.label;
   }
   return props.placeholder;
+});
+
+const helpAriaLabel = computed(() => {
+  return 'Ajuda para ' + props.label;
 });
 
 const wrapperClasses = computed(() => {
@@ -325,6 +346,61 @@ onUnmounted(() => {
   color: var(--semantic-color-error-normal);
 }
 
+.scuba-select__optional {
+  font-weight: var(--type-font-weight-regular);
+  color: var(--context-color-text-secondary);
+}
+
+.scuba-select__help-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--scale-400);
+  height: var(--scale-400);
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius-rounded-full);
+  color: var(--context-color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-size: var(--type-font-size-base);
+}
+
+.scuba-select__help-button:hover {
+  color: var(--context-color-text-primary);
+  background: var(--context-color-surface-action);
+}
+
+.scuba-select__tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  background: var(--context-color-surface-inverted);
+  color: var(--primitives-color-white);
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-regular);
+  line-height: 1.4;
+  border-radius: var(--border-radius-rounded-sm);
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  pointer-events: none;
+}
+
+.scuba-select__tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--context-color-surface-inverted);
+}
+
 .scuba-select__container {
   position: relative;
   display: flex;
@@ -360,12 +436,12 @@ onUnmounted(() => {
 
 .scuba-select__container:focus-visible {
   border-color: var(--context-color-border-focus);
-  outline: var(--border-width-border-md) solid var(--context-color-surface-focus-light);
-  outline-offset: 0;
+  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light);
 }
 
 .scuba-select__container--open {
   border-color: var(--context-color-border-focus);
+  box-shadow: 0 0 0 3px var(--context-color-surface-focus-light);
 }
 
 .scuba-select__container--error {
