@@ -13,7 +13,7 @@ const props = defineProps({
     default: 'gray',
     validator: (value) => [
       'gray', 'blue', 'blue-dark', 'purple', 'pink', 'red',
-      'orange', 'yellow', 'green', 'green-approved', 'teal', 'teal-light', 'cyan'
+      'orange', 'yellow', 'green', 'green-approved', 'teal', 'teal-light', 'cyan', 'audit-adjustment'
     ].includes(value)
   }
 });
@@ -115,5 +115,11 @@ const statusClasses = computed(() => {
 .scuba-status--cyan {
   background: var(--semantic-color-status-cyan-background);
   color: var(--semantic-color-status-cyan-text);
+}
+
+/* Audit Adjustment variant */
+.scuba-status--audit-adjustment {
+  background: #EAE055;
+  color: #3E3D05;
 }
 </style>

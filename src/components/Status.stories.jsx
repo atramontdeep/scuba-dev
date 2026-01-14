@@ -17,7 +17,8 @@ const STATUS_MAP = {
   'Auditada': 'teal',
   'Concluída': 'green',
   'Auditado': 'yellow',
-  'Aprovado': 'green-approved'
+  'Aprovado': 'green-approved',
+  'Em ajuste de auditoria': 'audit-adjustment'
 };
 
 export default {
