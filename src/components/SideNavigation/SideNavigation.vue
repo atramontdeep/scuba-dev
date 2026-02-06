@@ -545,15 +545,12 @@ const handleLanguageChange = (langCode) => {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .scuba-sidenav__content::-webkit-scrollbar {
-  width: 4px;
-}
-
-.scuba-sidenav__content::-webkit-scrollbar-thumb {
-  background: var(--context-color-border-secondary);
-  border-radius: 2px;
+  display: none;
 }
 
 /* Section dividers for collapsed state */
