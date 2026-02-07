@@ -224,16 +224,6 @@
       </a>
     </div>
 
-    <!-- Footer Logo -->
-    <div class="scuba-sidenav__footer">
-      <slot name="logo">
-        <svg class="scuba-sidenav__logo" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.7425 64H0V0H17.7425C35.0452 0 49.0681 13.949 49.0681 31.1607V32.8393C49.0681 50.051 35.0452 64 17.7425 64Z" fill="#00305B"/>
-          <path d="M25.9066 63.9999H0C21.6166 40.5821 37.3863 2.09229 37.3863 2.09229C49.484 6.69073 58.076 18.3464 58.076 31.9999C58.076 49.6726 43.6728 63.9999 25.9066 63.9999" fill="#0086CD"/>
-          <path d="M32.1694 64H0C36.5188 52.6635 61.7005 19.2922 61.7005 19.2922C63.3999 23.1932 64.3387 27.4843 64.3387 32C64.3387 49.6727 49.9356 64 32.1694 64Z" fill="#A2C617"/>
-        </svg>
-      </slot>
-    </div>
   </nav>
 </template>
 
@@ -642,29 +632,6 @@ const handleLanguageChange = (langCode) => {
   overflow: hidden;
   text-overflow: ellipsis;
   transition: none;
-}
-
-/* Footer */
-.scuba-sidenav__footer {
-  margin-top: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 0;
-}
-
-.scuba-sidenav--expanded .scuba-sidenav__footer {
-  justify-content: flex-start;
-}
-
-.scuba-sidenav__logo {
-  width: 26px;
-  height: 36px;
-}
-
-.scuba-sidenav--expanded .scuba-sidenav__logo {
-  width: 64px;
-  height: 64px;
 }
 
 /* Transitions */
