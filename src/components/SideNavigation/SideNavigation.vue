@@ -4,71 +4,6 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <!-- Header -->
-    <div class="scuba-sidenav__header">
-      <Avatar
-        :initials="avatarInitials"
-        size="lg"
-        variant="neutral"
-      />
-
-      <transition name="fade">
-        <div v-if="isExpanded" class="scuba-sidenav__user-info">
-          <div class="scuba-sidenav__user-name">{{ userName }}</div>
-          <div class="scuba-sidenav__user-company">{{ userCompany }}</div>
-        </div>
-      </transition>
-
-      <button
-        class="scuba-sidenav__menu-button"
-        @click="toggleMenu"
-        aria-label="Menu"
-      >
-        <i class="ph ph-dots-three"></i>
-      </button>
-    </div>
-
-    <!-- Menu Dropdown -->
-    <transition name="fade">
-      <div v-if="showMenu" class="scuba-sidenav__dropdown">
-        <button
-          class="scuba-sidenav__dropdown-item"
-          @click="handleMenuAction('change-company')"
-        >
-          <i class="ph ph-buildings"></i>
-          <span>Trocar empresa</span>
-        </button>
-        <button
-          class="scuba-sidenav__dropdown-item"
-          @click="handleMenuAction('profile')"
-        >
-          <i class="ph ph-user-circle"></i>
-          <span>Perfil</span>
-        </button>
-        <button
-          class="scuba-sidenav__dropdown-item"
-          @click="handleMenuAction('logout')"
-        >
-          <i class="ph ph-sign-out"></i>
-          <span>Sair</span>
-        </button>
-
-        <div class="scuba-sidenav__dropdown-divider"></div>
-
-        <div class="scuba-sidenav__language-selector">
-          <button
-            v-for="lang in languages"
-            :key="lang.code"
-            :class="['scuba-sidenav__language-btn', { 'active': currentLanguage === lang.code }]"
-            @click="handleLanguageChange(lang.code)"
-            :aria-label="lang.label"
-            v-html="lang.svg"
-          ></button>
-          <span class="scuba-sidenav__language-label">Português</span>
-        </div>
-      </div>
-    </transition>
-
     <!-- Navigation Items -->
     <div class="scuba-sidenav__content">
       <!-- Home -->
@@ -222,6 +157,71 @@
           <span v-if="isExpanded" class="scuba-sidenav__label">Acessos</span>
         </transition>
       </a>
+    </div>
+
+    <!-- User Footer -->
+    <div class="scuba-sidenav__footer">
+      <Avatar
+        :initials="avatarInitials"
+        size="lg"
+        variant="neutral"
+      />
+
+      <transition name="fade">
+        <div v-if="isExpanded" class="scuba-sidenav__user-info">
+          <div class="scuba-sidenav__user-name">{{ userName }}</div>
+          <div class="scuba-sidenav__user-company">{{ userCompany }}</div>
+        </div>
+      </transition>
+
+      <button
+        class="scuba-sidenav__menu-button"
+        @click="toggleMenu"
+        aria-label="Menu"
+      >
+        <i class="ph ph-dots-three"></i>
+      </button>
+
+      <!-- Menu Dropdown -->
+      <transition name="fade">
+        <div v-if="showMenu" class="scuba-sidenav__dropdown">
+          <button
+            class="scuba-sidenav__dropdown-item"
+            @click="handleMenuAction('change-company')"
+          >
+            <i class="ph ph-buildings"></i>
+            <span>Trocar empresa</span>
+          </button>
+          <button
+            class="scuba-sidenav__dropdown-item"
+            @click="handleMenuAction('profile')"
+          >
+            <i class="ph ph-user-circle"></i>
+            <span>Perfil</span>
+          </button>
+          <button
+            class="scuba-sidenav__dropdown-item"
+            @click="handleMenuAction('logout')"
+          >
+            <i class="ph ph-sign-out"></i>
+            <span>Sair</span>
+          </button>
+
+          <div class="scuba-sidenav__dropdown-divider"></div>
+
+          <div class="scuba-sidenav__language-selector">
+            <button
+              v-for="lang in languages"
+              :key="lang.code"
+              :class="['scuba-sidenav__language-btn', { 'active': currentLanguage === lang.code }]"
+              @click="handleLanguageChange(lang.code)"
+              :aria-label="lang.label"
+              v-html="lang.svg"
+            ></button>
+            <span class="scuba-sidenav__language-label">Português</span>
+          </div>
+        </div>
+      </transition>
     </div>
 
   </nav>
@@ -392,13 +392,14 @@ const handleLanguageChange = (langCode) => {
   transition: width 0.3s ease;
 }
 
-/* Header */
-.scuba-sidenav__header {
+/* Footer (User area) */
+.scuba-sidenav__footer {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-top: 24px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .scuba-sidenav__user-info {
@@ -451,8 +452,9 @@ const handleLanguageChange = (langCode) => {
 /* Dropdown Menu */
 .scuba-sidenav__dropdown {
   position: absolute;
-  top: 70px;
-  right: 24px;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
   background: #FFFFFF;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
