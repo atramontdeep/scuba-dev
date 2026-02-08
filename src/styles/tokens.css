@@ -38,6 +38,15 @@
   --primitives-color-purple-blue-100: #d7ddff;
   --primitives-color-purple-blue-200: #adbafe;
   --primitives-color-purple-blue-700: #1b28b5;
+  --primitives-color-azure: #70cdff;
+  --primitives-color-citrus: #eae055;
+  --primitives-color-emerald: #63d59e;
+  --primitives-color-frost: #e6edf5;
+  --primitives-color-fuchsia: #ef7efc;
+  --primitives-color-lavanda: #bab8f4;
+  --primitives-color-lime: #cfea7a;
+  --primitives-color-mint: #cff5e8;
+  --primitives-color-navy: #0942a1;
   --scale-0: 0px;
   --scale-25: 1px;
   --scale-50: 2px;
@@ -91,6 +100,20 @@
   --semantic-color-info-light: #d7ddff;
   --semantic-color-info-dark: #1b28b5;
   --semantic-color-info-normal: #adbafe;
+
+  /* Alert Colors (reorganized) */
+  --semantic-color-alert-error-dark: var(--primitives-color-red-800);
+  --semantic-color-alert-error-light: var(--primitives-color-red-200);
+  --semantic-color-alert-error-normal: var(--primitives-color-red-400);
+  --semantic-color-alert-info-dark: var(--primitives-color-purple-blue-700);
+  --semantic-color-alert-info-light: var(--primitives-color-purple-blue-100);
+  --semantic-color-alert-info-normal: var(--primitives-color-purple-blue-200);
+  --semantic-color-alert-success-dark: var(--primitives-color-green-900);
+  --semantic-color-alert-success-light: var(--primitives-color-green-200);
+  --semantic-color-alert-success-normal: var(--primitives-color-green-500);
+  --semantic-color-alert-warning-dark: var(--primitives-color-orange-900);
+  --semantic-color-alert-warning-light: var(--primitives-color-orange-200);
+  --semantic-color-alert-warning-normal: var(--primitives-color-orange-500);
   --border-width-border-0: 0px;
   --border-width-border-sm: 1px;
   --border-width-border-md: 2px;
@@ -247,34 +270,28 @@
   --z-index-popover: 1060;
   --z-index-tooltip: 1070;
 
-  /* Status Colors - Background */
-  --semantic-color-status-gray-background: #e6edf5;
-  --semantic-color-status-cyan-background: #70cdff;
-  --semantic-color-status-purple-background: #bab8f4;
-  --semantic-color-status-pink-background: #ef7efc;
-  --semantic-color-status-blue-background: #70cdff;
-  --semantic-color-status-blue-dark-background: #0942a1;
-  --semantic-color-status-teal-background: #cfea7a;
-  --semantic-color-status-teal-light-background: #cff5e8;
-  --semantic-color-status-yellow-background: #cfea7a;
-  --semantic-color-status-green-background: #63d59e;
-  --semantic-color-status-green-approved-background: #63d59e;
-  --semantic-color-status-orange-background: #eae055;
-  --semantic-color-status-red-background: #ea2255;
+  /* Status Colors */
+  --semantic-color-status-adjusting: var(--primitives-color-fuchsia);
+  --semantic-color-status-adjusting-auditing: var(--primitives-color-citrus);
+  --semantic-color-status-answered: var(--primitives-color-azure);
+  --semantic-color-status-answering: var(--primitives-color-frost);
+  --semantic-color-status-approved: var(--primitives-color-emerald);
+  --semantic-color-status-audited: var(--primitives-color-lime);
+  --semantic-color-status-auditing: var(--primitives-color-mint);
+  --semantic-color-status-expired: var(--primitives-color-red-600);
+  --semantic-color-status-validated: var(--primitives-color-navy);
+  --semantic-color-status-validating: var(--primitives-color-lavanda);
 
   /* Status Colors - Text */
-  --semantic-color-status-gray-text: #2a2a2a;
-  --semantic-color-status-cyan-text: #06327a;
-  --semantic-color-status-purple-text: #1b28b5;
-  --semantic-color-status-pink-text: #792d0d;
-  --semantic-color-status-blue-text: #06327a;
-  --semantic-color-status-blue-dark-text: #ffffff;
-  --semantic-color-status-teal-text: #245900;
-  --semantic-color-status-teal-light-text: #245900;
-  --semantic-color-status-yellow-text: #245900;
-  --semantic-color-status-green-text: #245900;
-  --semantic-color-status-green-approved-text: #245900;
-  --semantic-color-status-orange-text: #2a2a2a;
-  --semantic-color-status-red-text: #ffffff;
+  --semantic-color-status-adjusting-text: #792d0d;
+  --semantic-color-status-adjusting-auditing-text: #2a2a2a;
+  --semantic-color-status-answered-text: #06327a;
+  --semantic-color-status-answering-text: #2a2a2a;
+  --semantic-color-status-approved-text: #245900;
+  --semantic-color-status-audited-text: #245900;
+  --semantic-color-status-auditing-text: #245900;
+  --semantic-color-status-expired-text: #ffffff;
+  --semantic-color-status-validated-text: #ffffff;
+  --semantic-color-status-validating-text: #1b28b5;
 }
 

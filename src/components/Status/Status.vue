@@ -10,10 +10,11 @@ import { computed } from 'vue';
 const props = defineProps({
   variant: {
     type: String,
-    default: 'gray',
+    default: 'answering',
     validator: (value) => [
-      'gray', 'blue', 'blue-dark', 'purple', 'pink', 'red',
-      'orange', 'yellow', 'green', 'green-approved', 'teal', 'teal-light', 'cyan', 'audit-adjustment'
+      'answering', 'answered', 'validating', 'validated',
+      'adjusting', 'adjusting-auditing', 'auditing', 'audited',
+      'approved', 'expired'
     ].includes(value)
   }
 });
@@ -39,87 +40,63 @@ const statusClasses = computed(() => {
   white-space: nowrap;
 }
 
-/* Gray variant */
-.scuba-status--gray {
-  background: var(--semantic-color-status-gray-background);
-  color: var(--semantic-color-status-gray-text);
+/* Em resposta */
+.scuba-status--answering {
+  background: var(--semantic-color-status-answering);
+  color: var(--semantic-color-status-answering-text);
 }
 
-/* Blue variant */
-.scuba-status--blue {
-  background: var(--semantic-color-status-blue-background);
-  color: var(--semantic-color-status-blue-text);
+/* Respondido */
+.scuba-status--answered {
+  background: var(--semantic-color-status-answered);
+  color: var(--semantic-color-status-answered-text);
 }
 
-/* Blue Dark variant */
-.scuba-status--blue-dark {
-  background: var(--semantic-color-status-blue-dark-background);
-  color: var(--semantic-color-status-blue-dark-text);
+/* Em validação */
+.scuba-status--validating {
+  background: var(--semantic-color-status-validating);
+  color: var(--semantic-color-status-validating-text);
 }
 
-/* Purple variant */
-.scuba-status--purple {
-  background: var(--semantic-color-status-purple-background);
-  color: var(--semantic-color-status-purple-text);
+/* Validado */
+.scuba-status--validated {
+  background: var(--semantic-color-status-validated);
+  color: var(--semantic-color-status-validated-text);
 }
 
-/* Pink variant */
-.scuba-status--pink {
-  background: var(--semantic-color-status-pink-background);
-  color: var(--semantic-color-status-pink-text);
+/* Em ajuste */
+.scuba-status--adjusting {
+  background: var(--semantic-color-status-adjusting);
+  color: var(--semantic-color-status-adjusting-text);
 }
 
-/* Red variant */
-.scuba-status--red {
-  background: var(--semantic-color-status-red-background);
-  color: var(--semantic-color-status-red-text);
+/* Em ajuste de auditoria */
+.scuba-status--adjusting-auditing {
+  background: var(--semantic-color-status-adjusting-auditing);
+  color: var(--semantic-color-status-adjusting-auditing-text);
 }
 
-/* Orange variant */
-.scuba-status--orange {
-  background: var(--semantic-color-status-orange-background);
-  color: var(--semantic-color-status-orange-text);
+/* Em auditoria */
+.scuba-status--auditing {
+  background: var(--semantic-color-status-auditing);
+  color: var(--semantic-color-status-auditing-text);
 }
 
-/* Yellow variant */
-.scuba-status--yellow {
-  background: var(--semantic-color-status-yellow-background);
-  color: var(--semantic-color-status-yellow-text);
+/* Auditado */
+.scuba-status--audited {
+  background: var(--semantic-color-status-audited);
+  color: var(--semantic-color-status-audited-text);
 }
 
-/* Green variant */
-.scuba-status--green {
-  background: var(--semantic-color-status-green-background);
-  color: var(--semantic-color-status-green-text);
+/* Aprovado */
+.scuba-status--approved {
+  background: var(--semantic-color-status-approved);
+  color: var(--semantic-color-status-approved-text);
 }
 
-/* Green Approved variant */
-.scuba-status--green-approved {
-  background: var(--semantic-color-status-green-approved-background);
-  color: var(--semantic-color-status-green-approved-text);
-}
-
-/* Teal variant */
-.scuba-status--teal {
-  background: var(--semantic-color-status-teal-background);
-  color: var(--semantic-color-status-teal-text);
-}
-
-/* Teal Light variant */
-.scuba-status--teal-light {
-  background: var(--semantic-color-status-teal-light-background);
-  color: var(--semantic-color-status-teal-light-text);
-}
-
-/* Cyan variant */
-.scuba-status--cyan {
-  background: var(--semantic-color-status-cyan-background);
-  color: var(--semantic-color-status-cyan-text);
-}
-
-/* Audit Adjustment variant */
-.scuba-status--audit-adjustment {
-  background: #EAE055;
-  color: #3E3D05;
+/* Expirada */
+.scuba-status--expired {
+  background: var(--semantic-color-status-expired);
+  color: var(--semantic-color-status-expired-text);
 }
 </style>

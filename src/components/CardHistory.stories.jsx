@@ -226,11 +226,11 @@ export const DesignTokens = () => ({
         <div>
           <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Cores de Status</h3>
           <table style="width: 100%; font-size: 14px;">
-            <tr><td style="padding: 8px 0;"><strong>Respondido</strong></td><td><code>--semantic-color-info-500</code></td></tr>
-            <tr><td style="padding: 8px 0;"><strong>Em ajuste (1º)</strong></td><td><code>--semantic-color-warning-500</code></td></tr>
-            <tr><td style="padding: 8px 0;"><strong>Validado</strong></td><td><code>--semantic-color-primary-500</code></td></tr>
-            <tr><td style="padding: 8px 0;"><strong>Em ajuste (2º)</strong></td><td><code>--semantic-color-warning-500</code></td></tr>
-            <tr><td style="padding: 8px 0;"><strong>Aprovado</strong></td><td><code>--semantic-color-success-500</code></td></tr>
+            <tr><td style="padding: 8px 0;"><strong>Respondido</strong></td><td><code>--semantic-color-status-answered</code></td></tr>
+            <tr><td style="padding: 8px 0;"><strong>Em ajuste (validação)</strong></td><td><code>--semantic-color-status-adjusting</code></td></tr>
+            <tr><td style="padding: 8px 0;"><strong>Validado</strong></td><td><code>--semantic-color-status-validating</code></td></tr>
+            <tr><td style="padding: 8px 0;"><strong>Em ajuste (auditoria)</strong></td><td><code>--semantic-color-status-adjusting-auditing</code></td></tr>
+            <tr><td style="padding: 8px 0;"><strong>Aprovado</strong></td><td><code>--semantic-color-status-approved</code></td></tr>
           </table>
         </div>
 

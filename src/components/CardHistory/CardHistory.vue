@@ -114,24 +114,24 @@ const borderClasses = computed(() => {
   word-break: break-word;
 }
 
-/* Cores das bordas baseadas no status (matching Status component backgrounds) */
+/* Cores das bordas baseadas no status (matching Status component tokens) */
 .scuba-card-history--respondido .scuba-card-history__border {
-  background: var(--semantic-color-status-cyan-background);
+  background: var(--semantic-color-status-answered);
 }
 
 .scuba-card-history--em-ajuste-validacao .scuba-card-history__border {
-  background: var(--semantic-color-status-pink-background);
+  background: var(--semantic-color-status-adjusting);
 }
 
 .scuba-card-history--validado .scuba-card-history__border {
-  background: var(--semantic-color-status-purple-background);
+  background: var(--semantic-color-status-validating);
 }
 
 .scuba-card-history--em-ajuste-auditoria .scuba-card-history__border {
-  background: #EAE055;
+  background: var(--semantic-color-status-adjusting-auditing);
 }
 
 .scuba-card-history--aprovado .scuba-card-history__border {
-  background: var(--semantic-color-status-green-approved-background);
+  background: var(--semantic-color-status-approved);
 }
 </style>

@@ -37,18 +37,18 @@ export default {
 
 // Mock data
 const STATUS_CONFIG = {
-  'not-started': { variant: 'gray', label: 'Não iniciada' },
-  'in-progress': { variant: 'blue', label: 'Em andamento' },
-  'ready-for-approval': { variant: 'blue-dark', label: 'Para aprovação' },
-  'audited': { variant: 'teal', label: 'Auditada' },
-  'about-to-expire': { variant: 'orange', label: 'A expirar' },
-  'expired': { variant: 'red', label: 'Expirada' },
-  'completed': { variant: 'green', label: 'Concluída' },
-  'waiting-response': { variant: 'gray', label: 'Em resposta' },
-  'responded': { variant: 'cyan', label: 'Respondido' },
-  'validating': { variant: 'purple', label: 'Em validação' },
-  'adjusting': { variant: 'pink', label: 'Em ajuste' },
-  'validated': { variant: 'blue-dark', label: 'Validado' },
+  'not-started': { variant: 'answering', label: 'Não iniciada' },
+  'in-progress': { variant: 'answered', label: 'Em andamento' },
+  'ready-for-approval': { variant: 'validated', label: 'Para aprovação' },
+  'audited': { variant: 'audited', label: 'Auditada' },
+  'about-to-expire': { variant: 'adjusting-auditing', label: 'A expirar' },
+  'expired': { variant: 'expired', label: 'Expirada' },
+  'completed': { variant: 'approved', label: 'Concluída' },
+  'waiting-response': { variant: 'answering', label: 'Em resposta' },
+  'responded': { variant: 'answered', label: 'Respondido' },
+  'validating': { variant: 'validating', label: 'Em validação' },
+  'adjusting': { variant: 'adjusting', label: 'Em ajuste' },
+  'validated': { variant: 'validated', label: 'Validado' },
 };
 
 const mockRows = [
