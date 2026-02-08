@@ -50,7 +50,16 @@ export default {
         "100": "#d7ddff",
         "200": "#adbafe",
         "700": "#1b28b5"
-      }
+      },
+      "azure": "#70cdff",
+      "citrus": "#eae055",
+      "emerald": "#63d59e",
+      "frost": "#e6edf5",
+      "fuchsia": "#ef7efc",
+      "lavanda": "#bab8f4",
+      "lime": "#cfea7a",
+      "mint": "#cff5e8",
+      "navy": "#0942a1"
     }
   },
   "scale": {
@@ -121,6 +130,48 @@ export default {
         "light": "#d7ddff",
         "dark": "#1b28b5",
         "normal": "#adbafe"
+      },
+      "alert-error": {
+        "dark": "#921535",
+        "light": "#ffc7b4",
+        "normal": "#fe7e71"
+      },
+      "alert-info": {
+        "dark": "#1b28b5",
+        "light": "#d7ddff",
+        "normal": "#adbafe"
+      },
+      "alert-success": {
+        "dark": "#245900",
+        "light": "#deffc8",
+        "normal": "#7fe13d"
+      },
+      "alert-warning": {
+        "dark": "#792d0d",
+        "light": "#ffe5b4",
+        "normal": "#ffa145"
+      },
+      "status": {
+        "adjusting": "#ef7efc",
+        "adjusting-auditing": "#eae055",
+        "answered": "#70cdff",
+        "answering": "#e6edf5",
+        "approved": "#63d59e",
+        "audited": "#cfea7a",
+        "auditing": "#cff5e8",
+        "expired": "#ea2255",
+        "validated": "#0942a1",
+        "validating": "#bab8f4",
+        "adjusting-text": "#792d0d",
+        "adjusting-auditing-text": "#2a2a2a",
+        "answered-text": "#06327a",
+        "answering-text": "#2a2a2a",
+        "approved-text": "#245900",
+        "audited-text": "#245900",
+        "auditing-text": "#245900",
+        "expired-text": "#ffffff",
+        "validated-text": "#ffffff",
+        "validating-text": "#1b28b5"
       }
     }
   },

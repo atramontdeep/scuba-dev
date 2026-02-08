@@ -1,5 +1,5 @@
 export default {
-  title: 'Scuba/Typography',
+  title: 'Design System/Tokens/Typography',
   parameters: {
     docs: {
       description: {
