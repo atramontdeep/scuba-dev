@@ -2,7 +2,6 @@ import DataTable from './DataTable.vue';
 import AvatarCell from './cells/AvatarCell.vue';
 import TaskBar from '../TaskBar/TaskBar.vue';
 import Status from '../Status/Status.vue';
-import Breadcrumb from '../Breadcrumb/Breadcrumb.vue';
 
 export default {
   title: 'Scuba/DataTable',
@@ -31,13 +30,12 @@ export default {
     },
     actions: {
       control: 'object',
-      description: 'Array de ações disponíveis quando há linhas selecionadas'
+      description: 'Array de ações disponíveis quando há linhas selecionadas (com tooltips)'
     }
   }
 };
 
 // Mock data
-// Mapeamento de status para variantes e labels
 const STATUS_CONFIG = {
   'not-started': { variant: 'gray', label: 'Não iniciada' },
   'in-progress': { variant: 'blue', label: 'Em andamento' },
@@ -104,15 +102,9 @@ const actions = [
   { key: 'assign', label: 'Reatribuir', icon: 'ph ph-user-switch' },
 ];
 
-const breadcrumbItems = [
-  { label: 'Home', href: '#' },
-  { label: 'Components', href: '#' },
-  { label: 'DataTable' }
-];
-
 // Playground
 export const Playground = (args) => ({
-  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
+  components: { DataTable, AvatarCell, TaskBar, Status },
   setup() {
     function onAction(payload) {
       console.log('Action:', payload.key, 'Rows:', payload.rows);
@@ -123,26 +115,15 @@ export const Playground = (args) => ({
       console.log('Sort:', sort);
     }
 
-    return { args, onAction, onSort, breadcrumbItems, STATUS_CONFIG };
+    return { args, onAction, onSort, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
-
-      <h1 style="margin: 0 0 4px 0; font-size: 32px; font-weight: 600; color: #111827;">
-        DataTable
-      </h1>
-
-      <p style="margin: 0 0 32px 0; font-size: 16px; color: #6B7280; line-height: 1.5;">
-        Tabela de dados completa com seleção múltipla, ordenação, expansão de linhas e ações em lote.
-      </p>
-
       <DataTable
         v-bind="args"
         @action="onAction"
         @update:sort="onSort"
       >
-        <!-- Célula: Responsável -->
         <template #cell-responsavel="{ row }">
           <AvatarCell
             :name="row.responsavel.name"
@@ -150,7 +131,6 @@ export const Playground = (args) => ({
           />
         </template>
 
-        <!-- Célula: Progresso -->
         <template #cell-tarefas="{ row }">
           <TaskBar
             :current="row.tarefas.completed"
@@ -158,19 +138,16 @@ export const Playground = (args) => ({
           />
         </template>
 
-        <!-- Célula: Última atividade -->
         <template #cell-ultima="{ value }">
           <span style="color: #6B7280; font-size: 13px;">{{ value }}</span>
         </template>
 
-        <!-- Célula: Status -->
         <template #cell-status="{ row }">
           <Status :variant="STATUS_CONFIG[row.status].variant">
             {{ STATUS_CONFIG[row.status].label }}
           </Status>
         </template>
 
-        <!-- Conteúdo expandido -->
         <template #expanded="{ row }">
           <div style="padding: 12px 0; color: #6B7280; font-size: 13px; line-height: 1.6;">
             <div style="margin-bottom: 8px;">
@@ -195,22 +172,12 @@ Playground.args = {
 
 // Only Table
 export const OnlyTable = (args) => ({
-  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
+  components: { DataTable, AvatarCell, TaskBar, Status },
   setup() {
-    return { args, breadcrumbItems, STATUS_CONFIG };
+    return { args, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
-
-      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
-        Tabela Simples
-      </h2>
-
-      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
-        Tabela sem seleção ou expansão de linhas.
-      </p>
-
       <DataTable v-bind="args">
         <template #cell-responsavel="{ row }">
           <AvatarCell
@@ -247,27 +214,17 @@ OnlyTable.args = {
 
 // With Selection
 export const WithSelection = (args) => ({
-  components: { DataTable, AvatarCell, TaskBar, Status, Breadcrumb },
+  components: { DataTable, AvatarCell, TaskBar, Status },
   setup() {
     function onAction(payload) {
       console.log('Action:', payload.key, 'Rows:', payload.rows);
       alert(`Ação: ${payload.key}\nLinhas selecionadas: ${payload.rows.length}`);
     }
 
-    return { args, onAction, breadcrumbItems, STATUS_CONFIG };
+    return { args, onAction, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
-
-      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
-        Com Seleção Múltipla
-      </h2>
-
-      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
-        Tabela com seleção múltipla e ações em lote, mas sem expansão de linhas.
-      </p>
-
       <DataTable v-bind="args" @action="onAction">
         <template #cell-responsavel="{ row }">
           <AvatarCell
@@ -304,7 +261,7 @@ WithSelection.args = {
 
 // All Statuses
 export const AllStatuses = () => ({
-  components: { DataTable, Status, Breadcrumb },
+  components: { DataTable, Status },
   setup() {
     const statusRows = [
       { id: 1, name: 'Tarefa 1', status: 'not-started' },
@@ -326,20 +283,10 @@ export const AllStatuses = () => ({
       { key: 'status', header: 'Status', width: '250px' },
     ];
 
-    return { statusRows, statusColumns, breadcrumbItems, STATUS_CONFIG };
+    return { statusRows, statusColumns, STATUS_CONFIG };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
-
-      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
-        Todos os Status
-      </h2>
-
-      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
-        Demonstração de todos os status disponíveis no componente Status.
-      </p>
-
       <DataTable
         :rows="statusRows"
         :columns="statusColumns"
@@ -360,7 +307,7 @@ export const AllStatuses = () => ({
 
 // Progress States
 export const ProgressStates = () => ({
-  components: { DataTable, TaskBar, Breadcrumb },
+  components: { DataTable, TaskBar },
   setup() {
     const progressRows = [
       { id: 1, name: 'Projeto A', completed: 0, total: 100 },
@@ -375,20 +322,10 @@ export const ProgressStates = () => ({
       { key: 'progress', header: 'Progresso', width: '300px' },
     ];
 
-    return { progressRows, progressColumns, breadcrumbItems };
+    return { progressRows, progressColumns };
   },
   template: `
     <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <Breadcrumb :items="breadcrumbItems" style="margin-bottom: 8px;" />
-
-      <h2 style="margin: 0 0 4px 0; font-size: 24px; font-weight: 600; color: #111827;">
-        Estados de Progresso
-      </h2>
-
-      <p style="margin: 0 0 32px 0; font-size: 14px; color: #6B7280;">
-        Demonstração dos estados da barra de progresso: 0%, 1-99%, e 100%.
-      </p>
-
       <DataTable
         :rows="progressRows"
         :columns="progressColumns"
