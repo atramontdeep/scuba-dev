@@ -334,23 +334,23 @@ thead tr .dt-th:last-child {
 /* Checkbox column */
 .dt-td--checkbox,
 .dt-th--checkbox {
-  width: 56px;
+  width: 48px;
   padding-left: 20px;
+  padding-right: 0;
 }
 
 /* Expander column */
 .dt-td--expander,
 .dt-th--expander {
-  width: 48px;
+  width: 28px;
   padding: 0;
+  padding-left: 8px;
 }
 
 .dt-expander {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
+  justify-content: flex-start;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -368,7 +368,7 @@ thead tr .dt-th:last-child {
 
 /* Selected row */
 .dt-row--selected .dt-td {
-  background: var(--context-color-surface-focus);
+  background: #FFFFFF;
 }
 
 /* Expanded row */
