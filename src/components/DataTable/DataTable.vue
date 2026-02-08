@@ -97,6 +97,7 @@ function getSortIconClass(column) {
                     :aria-label="a.label"
                   >
                     <i :class="a.icon"></i>
+                    <span>{{ a.label }}</span>
                   </button>
                 </Tooltip>
               </div>
@@ -201,9 +202,6 @@ function getSortIconClass(column) {
 
 <style scoped>
 .dt-wrapper {
-  border: 1px solid var(--context-color-border-secondary);
-  border-radius: 12px;
-  overflow: hidden;
   background: #FFFFFF;
   font-family: var(--type-font-family-body);
 }
@@ -214,26 +212,32 @@ function getSortIconClass(column) {
   border-spacing: 0;
 }
 
-.dt-th, .dt-td {
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--context-color-border-secondary);
+/* Header cells */
+.dt-th {
+  padding: 0 20px;
+  height: 64px;
   color: var(--context-color-text-primary);
   font-size: var(--type-font-size-sm);
-  background: #FFFFFF;
-}
-
-.dt-th {
   font-weight: var(--type-font-weight-semibold);
   text-align: left;
-  background: #FFFFFF;
+  background: var(--context-color-surface-secondary);
   white-space: nowrap;
+  border: none;
   transition: background 0.2s;
+}
+
+/* Header radius: first and last cell */
+thead tr .dt-th:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+thead tr .dt-th:last-child {
+  border-radius: 0 12px 12px 0;
 }
 
 /* Selected header row */
 .dt-header-selected .dt-th {
-  background: var(--semantic-color-primary-100);
-  border-bottom-color: var(--semantic-color-primary-300);
+  background: var(--context-color-surface-focus);
 }
 
 .dt-th--selection-bar {
@@ -250,43 +254,58 @@ function getSortIconClass(column) {
 .dt-selection-bar__counter {
   font-size: var(--type-font-size-sm);
   font-weight: var(--type-font-weight-semibold);
-  color: var(--semantic-color-primary-700);
+  color: var(--context-color-text-focus);
   white-space: nowrap;
 }
 
 .dt-selection-bar__divider {
   width: 1px;
-  height: 20px;
-  background: var(--semantic-color-primary-300);
+  height: 24px;
+  background: var(--context-color-border-focus);
   flex-shrink: 0;
 }
 
 .dt-selection-bar__actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 }
 
 .dt-selection-bar__action-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
+  gap: 6px;
+  padding: 6px 12px;
   border: none;
   border-radius: 6px;
   background: transparent;
-  color: var(--semantic-color-primary-700);
+  color: var(--context-color-text-focus);
   cursor: pointer;
   transition: background 0.2s;
+  font-family: var(--type-font-family-body);
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-semibold);
+  white-space: nowrap;
+}
+
+.dt-selection-bar__action-btn i {
   font-size: 18px;
 }
 
 .dt-selection-bar__action-btn:hover {
-  background: var(--semantic-color-primary-200);
+  background: rgba(0, 0, 0, 0.06);
 }
 
-/* Column header */
+/* Body cells */
+.dt-td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--context-color-border-secondary);
+  color: var(--context-color-text-primary);
+  font-size: var(--type-font-size-sm);
+  background: #FFFFFF;
+}
+
+/* Column header content */
 .dt-th__content {
   display: flex;
   align-items: center;
@@ -299,7 +318,7 @@ function getSortIconClass(column) {
 }
 
 .dt-th--sortable:hover {
-  background: #F9FAFB;
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .dt-sort-icon {
@@ -349,7 +368,7 @@ function getSortIconClass(column) {
 
 /* Selected row */
 .dt-row--selected .dt-td {
-  background: var(--semantic-color-primary-50);
+  background: var(--context-color-surface-focus);
 }
 
 /* Expanded row */
