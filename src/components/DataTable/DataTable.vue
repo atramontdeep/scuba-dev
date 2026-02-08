@@ -62,6 +62,11 @@ function getSortIconClass(column) {
 <template>
   <div class="dt-wrapper">
     <table class="dt-table">
+      <colgroup>
+        <col v-if="selectable" class="dt-col--checkbox" />
+        <col v-if="expandable" class="dt-col--expander" />
+        <col v-for="c in columns" :key="c.key" :style="{ width: c.width }" />
+      </colgroup>
       <thead>
         <!-- Selected header: checkbox + count + actions -->
         <tr v-if="selectable && table.selected.size > 0" class="dt-header-selected">
@@ -75,8 +80,10 @@ function getSortIconClass(column) {
             />
           </th>
 
+          <th v-if="expandable" class="dt-th dt-th--expander" />
+
           <th
-            :colspan="columns.length + (expandable ? 1 : 0)"
+            :colspan="columns.length"
             class="dt-th dt-th--selection-bar"
           >
             <div class="dt-selection-bar">
@@ -210,6 +217,15 @@ function getSortIconClass(column) {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
+}
+
+.dt-col--checkbox {
+  width: 48px;
+}
+
+.dt-col--expander {
+  width: 36px;
 }
 
 /* Header cells */
