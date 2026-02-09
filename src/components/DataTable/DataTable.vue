@@ -209,7 +209,7 @@ function getSortIconClass(column) {
 
 <style scoped>
 .dt-wrapper {
-  background: #FFFFFF;
+  background: transparent;
   font-family: var(--type-font-family-body);
 }
 
@@ -318,7 +318,7 @@ thead tr .dt-th:last-child {
   border-bottom: 1px solid var(--context-color-border-secondary);
   color: var(--context-color-text-primary);
   font-size: var(--type-font-size-sm);
-  background: #FFFFFF;
+  background: transparent;
 }
 
 /* Column header content */
@@ -384,7 +384,7 @@ thead tr .dt-th:last-child {
 
 /* Selected row */
 .dt-row--selected .dt-td {
-  background: #FFFFFF;
+  background: transparent;
 }
 
 /* Expanded row */
