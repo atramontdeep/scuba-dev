@@ -97,9 +97,20 @@ const columns = [
 ];
 
 const actions = [
-  { key: 'reminder', label: 'Enviar lembrete', icon: 'ph ph-envelope' },
-  { key: 'export', label: 'Exportar CSV', icon: 'ph ph-download' },
-  { key: 'assign', label: 'Reatribuir', icon: 'ph ph-user-switch' },
+  {
+    key: 'downloads',
+    label: 'Downloads',
+    icon: 'ph ph-download-simple',
+    children: [
+      { key: 'download-gri-setorial', label: 'Download GRI Setorial', icon: 'ph ph-file-arrow-down' },
+      { key: 'download-sumario-gri', label: 'Download Sumário GRI', icon: 'ph ph-file-arrow-down' },
+      { key: 'download-lista-indicadores', label: 'Download Lista de Indicadores', icon: 'ph ph-list-bullets' },
+    ]
+  },
+  { key: 'edit', label: 'Editar dados gerais', icon: 'ph ph-pencil-simple' },
+  { key: 'link-themes', label: 'Vincular temas materiais', icon: 'ph ph-link' },
+  { key: 'copy', label: 'Copiar coleta', icon: 'ph ph-copy' },
+  { key: 'delete', label: 'Excluir', icon: 'ph ph-trash' },
 ];
 
 // Playground
