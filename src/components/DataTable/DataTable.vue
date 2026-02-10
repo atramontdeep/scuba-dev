@@ -94,7 +94,7 @@ function getSortIconClass(column) {
               :model-value="table.allSelected"
               :indeterminate="table.someSelected"
               size="sm"
-              @update:model-value="table.toggleAll()"
+              @change="table.toggleAll()"
               aria-label="Selecionar tudo"
             />
           </th>
@@ -161,7 +161,7 @@ function getSortIconClass(column) {
               :model-value="table.allSelected"
               :indeterminate="table.someSelected"
               size="sm"
-              @update:model-value="table.toggleAll()"
+              @change="table.toggleAll()"
               aria-label="Selecionar tudo"
             />
           </th>
