@@ -14,7 +14,7 @@ export function useTable(rows, rowKey) {
   const someSelected = computed(() => selected.size > 0 && !allSelected.value);
 
   function toggleAll() {
-    if (allSelected.value) {
+    if (selected.size > 0) {
       selected.clear();
     } else {
       rows.forEach((r) => selected.add(r[rowKey]));

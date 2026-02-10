@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref, toRefs, onMounted, onUnmounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { useTable } from './useTable';
 import Checkbox from '../Checkbox/Checkbox.vue';
 import Tooltip from '../Tooltip/Tooltip.vue';
@@ -15,14 +15,24 @@ const props = defineProps({
 
 const emits = defineEmits(['action', 'update:sort']);
 
-const { rows, rowKey } = toRefs(props);
-const table = reactive(useTable(rows.value, rowKey.value));
-const sortedRows = computed(() => table.sortRows(rows.value));
+const {
+  selected,
+  expanded,
+  sort,
+  allSelected,
+  someSelected,
+  toggleAll,
+  toggleRow,
+  toggleExpanded,
+  setSort,
+  sortRows
+} = useTable(props.rows, props.rowKey);
 
+const sortedRows = computed(() => sortRows(props.rows));
 const openDropdown = ref(null);
 
 function onActionClick(a) {
-  const selectedRows = rows.value.filter((r) => table.selected.has(r[props.rowKey]));
+  const selectedRows = props.rows.filter((r) => selected.has(r[props.rowKey]));
   emits('action', { key: a.key, rows: selectedRows });
 }
 
@@ -32,7 +42,7 @@ function toggleDropdown(key) {
 
 function onDropdownAction(child) {
   openDropdown.value = null;
-  const selectedRows = rows.value.filter((r) => table.selected.has(r[props.rowKey]));
+  const selectedRows = props.rows.filter((r) => selected.has(r[props.rowKey]));
   emits('action', { key: child.key, rows: selectedRows });
 }
 
@@ -47,18 +57,18 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
 
 function onHeaderClick(c) {
   if (!c.sortable) return;
-  table.setSort(c.key);
-  emits('update:sort', table.sort);
+  setSort(c.key);
+  emits('update:sort', sort.value);
 }
 
 function isExpanded(row) {
-  return table.expanded.has(row[props.rowKey]);
+  return expanded.has(row[props.rowKey]);
 }
 
 function getSortIcon(column) {
   if (!column.sortable) return '';
-  const key = table.sort.key;
-  const dir = table.sort.dir;
+  const key = sort.value.key;
+  const dir = sort.value.dir;
 
   if (key !== column.key) {
     return 'ph-arrows-down-up';
@@ -76,6 +86,14 @@ function getSortIconClass(column) {
   if (!icon) return '';
   return 'ph ' + icon + ' dt-sort-icon';
 }
+
+function onToggleAll() {
+  toggleAll();
+}
+
+function onToggleRow(id) {
+  toggleRow(id);
+}
 </script>
 
 <template>
@@ -87,27 +105,29 @@ function getSortIconClass(column) {
         <col v-for="c in columns" :key="c.key" :style="{ width: c.width }" />
       </colgroup>
       <thead>
-        <!-- Selected header: checkbox + count + actions -->
-        <tr v-if="selectable && table.selected.size > 0" class="dt-header-selected">
-          <th class="dt-th dt-th--checkbox">
-            <Checkbox
-              :model-value="table.allSelected"
-              :indeterminate="table.someSelected"
-              size="sm"
-              @change="table.toggleAll()"
-              aria-label="Selecionar tudo"
-            />
+        <tr :class="{ 'dt-header-selected': selectable && selected.size > 0 }">
+          <th v-if="selectable" class="dt-th dt-th--checkbox">
+            <div class="dt-checkbox-hit" @click.prevent="onToggleAll">
+              <Checkbox
+                :model-value="allSelected"
+                :indeterminate="someSelected"
+                size="sm"
+                aria-label="Selecionar tudo"
+              />
+            </div>
           </th>
 
           <th v-if="expandable" class="dt-th dt-th--expander" />
 
+          <!-- Selection bar: count + actions -->
           <th
+            v-if="selectable && selected.size > 0"
             :colspan="columns.length"
             class="dt-th dt-th--selection-bar"
           >
             <div class="dt-selection-bar">
               <span class="dt-selection-bar__counter">
-                {{ table.selected.size }} selecionado{{ table.selected.size > 1 ? 's' : '' }}
+                {{ selected.size }} selecionado{{ selected.size > 1 ? 's' : '' }}
               </span>
               <div class="dt-selection-bar__divider" />
               <div class="dt-selection-bar__actions">
@@ -152,62 +172,51 @@ function getSortIconClass(column) {
               </div>
             </div>
           </th>
-        </tr>
 
-        <!-- Normal header: column names -->
-        <tr v-else>
-          <th v-if="selectable" class="dt-th dt-th--checkbox">
-            <Checkbox
-              :model-value="table.allSelected"
-              :indeterminate="table.someSelected"
-              size="sm"
-              @change="table.toggleAll()"
-              aria-label="Selecionar tudo"
-            />
-          </th>
-
-          <th v-if="expandable" class="dt-th dt-th--expander" />
-
-          <th
-            v-for="c in columns"
-            :key="c.key"
-            class="dt-th"
-            :class="{ 'dt-th--sortable': c.sortable }"
-            :style="{ width: c.width }"
-            @click="onHeaderClick(c)"
-          >
-            <div
-              class="dt-th__content"
-              :style="{
-                justifyContent: c.align === 'right' ? 'flex-end' : c.align === 'center' ? 'center' : 'flex-start'
-              }"
+          <!-- Normal column headers -->
+          <template v-else>
+            <th
+              v-for="c in columns"
+              :key="c.key"
+              class="dt-th"
+              :class="{ 'dt-th--sortable': c.sortable }"
+              :style="{ width: c.width }"
+              @click="onHeaderClick(c)"
             >
-              <span>{{ c.header }}</span>
-              <i
-                v-if="c.sortable && getSortIcon(c)"
-                :class="getSortIconClass(c)"
-              ></i>
-            </div>
-          </th>
+              <div
+                class="dt-th__content"
+                :style="{
+                  justifyContent: c.align === 'right' ? 'flex-end' : c.align === 'center' ? 'center' : 'flex-start'
+                }"
+              >
+                <span>{{ c.header }}</span>
+                <i
+                  v-if="c.sortable && getSortIcon(c)"
+                  :class="getSortIconClass(c)"
+                ></i>
+              </div>
+            </th>
+          </template>
         </tr>
       </thead>
 
       <tbody>
         <template v-for="row in sortedRows" :key="row[rowKey]">
-          <tr :class="{ 'dt-row--selected': table.selected.has(row[rowKey]) }">
+          <tr :class="{ 'dt-row--selected': selected.has(row[rowKey]) }">
             <td v-if="selectable" class="dt-td dt-td--checkbox">
-              <Checkbox
-                :model-value="table.selected.has(row[rowKey])"
-                size="sm"
-                @update:model-value="table.toggleRow(row[rowKey])"
-                :aria-label="`Selecionar linha ${row[rowKey]}`"
-              />
+              <div class="dt-checkbox-hit" @click.prevent="onToggleRow(row[rowKey])">
+                <Checkbox
+                  :model-value="selected.has(row[rowKey])"
+                  size="sm"
+                  :aria-label="`Selecionar linha ${row[rowKey]}`"
+                />
+              </div>
             </td>
 
             <td v-if="expandable" class="dt-td dt-td--expander">
               <button
                 class="dt-expander"
-                @click="table.toggleExpanded(row[rowKey])"
+                @click="toggleExpanded(row[rowKey])"
                 :aria-expanded="isExpanded(row)"
               >
                 <i
@@ -410,6 +419,22 @@ thead tr .dt-th:last-child {
   background: var(--context-color-surface-secondary);
 }
 
+/* Checkbox hit area */
+.dt-checkbox-hit {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Checkbox column */
+.dt-td--checkbox,
+.dt-th--checkbox {
+  width: 48px;
+  padding-left: 20px;
+  padding-right: 0;
+  vertical-align: middle;
+}
+
 /* Body cells */
 .dt-td {
   padding: 16px 20px;
@@ -417,6 +442,7 @@ thead tr .dt-th:last-child {
   color: var(--context-color-text-primary);
   font-size: var(--type-font-size-sm);
   background: transparent;
+  vertical-align: middle;
 }
 
 /* Column header content */
@@ -443,14 +469,6 @@ thead tr .dt-th:last-child {
 
 .dt-th--sortable:hover .dt-sort-icon {
   color: #6B7280;
-}
-
-/* Checkbox column */
-.dt-td--checkbox,
-.dt-th--checkbox {
-  width: 48px;
-  padding-left: 20px;
-  padding-right: 0;
 }
 
 /* Expander column */
