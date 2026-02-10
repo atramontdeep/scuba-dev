@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref, toRefs, onMounted, onUnmounted } from 'vue';
+import { computed, reactive, ref, toRefs, onMounted, onUnmounted } from 'vue';
 import { useTable } from './useTable';
 import Checkbox from '../Checkbox/Checkbox.vue';
 import Tooltip from '../Tooltip/Tooltip.vue';
@@ -16,7 +16,7 @@ const props = defineProps({
 const emits = defineEmits(['action', 'update:sort']);
 
 const { rows, rowKey } = toRefs(props);
-const table = useTable(rows.value, rowKey.value);
+const table = reactive(useTable(rows.value, rowKey.value));
 const sortedRows = computed(() => table.sortRows(rows.value));
 
 const openDropdown = ref(null);
@@ -48,7 +48,7 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside));
 function onHeaderClick(c) {
   if (!c.sortable) return;
   table.setSort(c.key);
-  emits('update:sort', table.sort.value);
+  emits('update:sort', table.sort);
 }
 
 function isExpanded(row) {
@@ -57,8 +57,8 @@ function isExpanded(row) {
 
 function getSortIcon(column) {
   if (!column.sortable) return '';
-  const key = table.sort.value.key;
-  const dir = table.sort.value.dir;
+  const key = table.sort.key;
+  const dir = table.sort.dir;
 
   if (key !== column.key) {
     return 'ph-arrows-down-up';
