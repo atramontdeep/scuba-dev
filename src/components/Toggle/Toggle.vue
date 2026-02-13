@@ -177,13 +177,13 @@ const handleChange = (event) => {
 }
 
 .scuba-toggle__track--unchecked {
-  background: var(--context-color-surface-action);
-  border-color: var(--context-color-border-action);
+  background: var(--primitives-color-neutral-300);
+  border-color: transparent;
 }
 
 .scuba-toggle:hover:not(.scuba-toggle--disabled) .scuba-toggle__track--unchecked {
-  background: var(--context-color-surface-action-hover);
-  border-color: var(--context-color-border-action-hover);
+  background: var(--primitives-color-neutral-400);
+  border-color: transparent;
 }
 
 .scuba-toggle__track--checked {
