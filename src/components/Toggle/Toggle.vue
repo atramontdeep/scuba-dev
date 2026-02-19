@@ -197,8 +197,8 @@ const handleChange = (event) => {
 }
 
 .scuba-toggle__track--disabled {
-  background: var(--context-color-surface-disabled);
-  border-color: var(--context-color-border-disabled);
+  background: var(--primitives-color-neutral-400);
+  border-color: transparent;
   cursor: not-allowed;
 }
 
