@@ -177,12 +177,12 @@ const handleChange = (event) => {
 }
 
 .scuba-toggle__track--unchecked {
-  background: var(--primitives-color-neutral-300);
+  background: var(--semantic-color-neutral-300);
   border-color: transparent;
 }
 
 .scuba-toggle:hover:not(.scuba-toggle--disabled) .scuba-toggle__track--unchecked {
-  background: var(--primitives-color-neutral-400);
+  background: var(--semantic-color-neutral-400);
   border-color: transparent;
 }
 
@@ -197,7 +197,7 @@ const handleChange = (event) => {
 }
 
 .scuba-toggle__track--disabled {
-  background: var(--primitives-color-neutral-400);
+  background: var(--semantic-color-neutral-400);
   border-color: transparent;
   cursor: not-allowed;
 }

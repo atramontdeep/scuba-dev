@@ -1,6 +1,5 @@
 import { mergeConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
@@ -25,6 +24,7 @@ const config = {
     buildStoriesJson: true
   },
   async viteFinal(config) {
+    const { default: vueJsx } = await import('@vitejs/plugin-vue-jsx');
     return mergeConfig(config, {
       plugins: [vue(), vueJsx()],
       define: {
