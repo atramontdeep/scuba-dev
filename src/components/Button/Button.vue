@@ -147,14 +147,14 @@ const handleClick = (event) => {
 
 .scuba-button--md {
   height: var(--scale-700);
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-xs);
   font-size: var(--type-font-size-base);
   line-height: var(--type-line-height-normal);
 }
 
 .scuba-button--lg {
   height: var(--scale-800);
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-xs);
   font-size: var(--type-font-size-lg);
   line-height: var(--type-line-height-normal);
   gap: var(--spacing-2xs);
