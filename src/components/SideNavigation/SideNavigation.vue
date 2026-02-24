@@ -35,7 +35,7 @@
       >
         <i class="ph ph-globe-hemisphere-west"></i>
         <transition name="fade">
-          <span v-if="isExpanded" class="scuba-sidenav__label">Emissões</span>
+          <span v-if="isExpanded" class="scuba-sidenav__label">Emissões (GHG)</span>
         </transition>
       </a>
 
