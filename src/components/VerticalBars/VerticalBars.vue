@@ -1,26 +1,45 @@
 <template>
   <div class="scuba-vertical-bars">
-    <div
-      v-for="(item, index) in items"
-      :key="index"
-      class="scuba-vertical-bars__column"
-    >
+    <!-- Row 1: bars, always bottom-aligned regardless of label height -->
+    <div class="scuba-vertical-bars__bars-row">
       <div
-        class="scuba-vertical-bars__bar"
-        :style="{
-          height: getBarHeight(item) + 'px',
-          backgroundColor: item.color,
-        }"
+        v-for="(item, index) in items"
+        :key="index"
+        class="scuba-vertical-bars__bar-wrapper"
       >
-        <span
-          class="scuba-vertical-bars__value"
-          :class="{ 'scuba-vertical-bars__value--floating': !isInline(item) }"
-          :style="{ color: item.textColor }"
+        <div
+          class="scuba-vertical-bars__bar"
+          :style="{
+            height: getBarHeight(item) + 'px',
+            backgroundColor: item.color,
+          }"
         >
-          {{ item.value }}
-        </span>
+          <span
+            v-if="isInline(item)"
+            class="scuba-vertical-bars__value"
+            :style="{ color: item.textColor }"
+          >
+            {{ item.value }}
+          </span>
+          <span
+            v-else
+            class="scuba-vertical-bars__value scuba-vertical-bars__value--floating"
+          >
+            {{ item.value }}
+          </span>
+        </div>
       </div>
-      <span class="scuba-vertical-bars__label">{{ item.label }}</span>
+    </div>
+
+    <!-- Row 2: labels, independent from bar heights -->
+    <div class="scuba-vertical-bars__labels-row">
+      <span
+        v-for="(item, index) in items"
+        :key="index"
+        class="scuba-vertical-bars__label"
+      >
+        {{ item.label }}
+      </span>
     </div>
   </div>
 </template>
@@ -58,17 +77,22 @@ function isInline(item) {
 <style scoped>
 .scuba-vertical-bars {
   display: flex;
-  align-items: flex-end;
-  gap: var(--scale-200);
+  flex-direction: column;
+  gap: var(--scale-100);
   width: 100%;
 }
 
-.scuba-vertical-bars__column {
-  flex: 1;
+/* Row 1: bars aligned at the bottom */
+.scuba-vertical-bars__bars-row {
   display: flex;
-  flex-direction: column;
-  gap: var(--scale-100);
+  align-items: flex-end;
+  gap: var(--scale-200);
+}
+
+.scuba-vertical-bars__bar-wrapper {
+  flex: 1;
   min-width: 0;
+  position: relative;
 }
 
 .scuba-vertical-bars__bar {
@@ -89,19 +113,28 @@ function isInline(item) {
   white-space: nowrap;
 }
 
+/* When bar is too small: float above using page text color, never item.textColor */
 .scuba-vertical-bars__value--floating {
   position: absolute;
   bottom: calc(100% + var(--scale-100));
   left: var(--scale-200);
+  color: var(--context-color-text-primary);
+}
+
+/* Row 2: labels below the bars, widths mirror the bar wrappers */
+.scuba-vertical-bars__labels-row {
+  display: flex;
+  gap: var(--scale-200);
 }
 
 .scuba-vertical-bars__label {
+  flex: 1;
+  min-width: 0;
   font-family: var(--type-font-family-body);
   font-size: var(--type-font-size-xs);
   font-weight: var(--type-font-weight-semibold);
   line-height: var(--type-line-height-normal);
   color: var(--context-color-text-primary);
-  width: 100%;
   word-break: break-word;
 }
 </style>
