@@ -1,25 +1,34 @@
 <template>
   <div :class="alertClasses" role="alert">
-    <div v-if="showIcon" class="scuba-alert__icon-container">
-      <i :class="iconClasses" aria-hidden="true"></i>
-    </div>
-
-    <div class="scuba-alert__content">
-      <div v-if="title" class="scuba-alert__title">{{ title }}</div>
-      <div v-if="message || $slots.default" class="scuba-alert__message">
+    <!-- Left: icon + message -->
+    <div class="scuba-alert__left">
+      <i v-if="showIcon" :class="iconClasses" class="scuba-alert__icon" aria-hidden="true"></i>
+      <span class="scuba-alert__message">
         <slot>{{ message }}</slot>
-      </div>
+      </span>
     </div>
 
-    <button
-      v-if="closable"
-      type="button"
-      class="scuba-alert__close"
-      @click="handleClose"
-      :aria-label="closeAriaLabel"
-    >
-      <i class="ph ph-x"></i>
-    </button>
+    <!-- Right: action button + close -->
+    <div class="scuba-alert__right">
+      <button
+        v-if="actionLabel"
+        type="button"
+        class="scuba-alert__action"
+        @click="handleAction"
+      >
+        {{ actionLabel }}
+      </button>
+
+      <button
+        v-if="closable"
+        type="button"
+        class="scuba-alert__close"
+        @click="handleClose"
+        :aria-label="closeAriaLabel"
+      >
+        <i class="ph ph-x" aria-hidden="true"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -32,15 +41,7 @@ const props = defineProps({
     default: 'info',
     validator: (value) => ['success', 'warning', 'error', 'info'].includes(value)
   },
-  title: {
-    type: String,
-    default: ''
-  },
   message: {
-    type: String,
-    default: ''
-  },
-  icon: {
     type: String,
     default: ''
   },
@@ -54,75 +55,59 @@ const props = defineProps({
   },
   closeAriaLabel: {
     type: String,
-    default: 'Close'
+    default: 'Fechar'
+  },
+  actionLabel: {
+    type: String,
+    default: ''
   }
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'action']);
 
-const defaultIcons = {
+const variantIcons = {
   success: 'ph-check-circle',
   warning: 'ph-warning',
   error: 'ph-x-circle',
   info: 'ph-info'
 };
 
-const alertClasses = computed(() => {
-  const classes = ['scuba-alert'];
-  classes.push('scuba-alert--' + props.variant);
+const alertClasses = computed(() => [
+  'scuba-alert',
+  `scuba-alert--${props.variant}`
+]);
 
-  if (props.closable) {
-    classes.push('scuba-alert--closable');
-  }
+const iconClasses = computed(() => `ph ${variantIcons[props.variant]}`);
 
-  return classes;
-});
-
-const iconClasses = computed(() => {
-  const icon = props.icon || defaultIcons[props.variant];
-  return 'ph ' + icon + ' scuba-alert__icon';
-});
-
-const handleClose = (event) => {
-  emit('close', event);
-};
+const handleClose = (event) => emit('close', event);
+const handleAction = (event) => emit('action', event);
 </script>
 
 <style scoped>
 .scuba-alert {
   display: flex;
-  gap: var(--spacing-2xs);
-  padding: var(--spacing-xs);
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-ga-2);
+  min-height: 56px;
+  padding: var(--spacing-py-4) var(--spacing-px-4);
   border-radius: var(--border-radius-rounded);
   font-family: var(--type-font-family-body);
 }
 
-.scuba-alert--closable {
-  padding-right: var(--spacing-2xs);
-}
-
-.scuba-alert__icon-container {
+/* Left section: icon + message */
+.scuba-alert__left {
   display: flex;
-  align-items: flex-start;
-  padding-top: 2px;
-  flex-shrink: 0;
+  align-items: center;
+  gap: var(--spacing-ga-2);
+  flex: 1;
+  min-width: 0;
 }
 
 .scuba-alert__icon {
-  font-size: var(--type-font-size-xl);
-}
-
-.scuba-alert__content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4xs);
-}
-
-.scuba-alert__title {
-  font-size: var(--type-font-size-base);
-  font-weight: var(--type-font-weight-semibold);
-  line-height: var(--type-line-height-tight);
+  font-size: var(--scale-500); /* 24px */
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .scuba-alert__message {
@@ -131,8 +116,39 @@ const handleClose = (event) => {
   line-height: var(--type-line-height-normal);
 }
 
-.scuba-alert__close {
+/* Right section: action + close */
+.scuba-alert__right {
   display: flex;
+  align-items: center;
+  gap: var(--spacing-ga-2);
+  flex-shrink: 0;
+}
+
+.scuba-alert__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: var(--spacing-py-2) var(--spacing-px-3);
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  border-radius: var(--border-radius-rounded);
+  font-family: var(--type-font-family-body);
+  font-size: var(--type-font-size-sm);
+  font-weight: var(--type-font-weight-semibold);
+  line-height: var(--type-line-height-normal);
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.scuba-alert__action:hover {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.scuba-alert__close {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: var(--scale-500);
@@ -141,40 +157,40 @@ const handleClose = (event) => {
   background: transparent;
   border: none;
   border-radius: var(--border-radius-rounded-sm);
-  cursor: pointer;
-  font-size: var(--type-font-size-lg);
-  transition: background var(--transition-fast);
-  flex-shrink: 0;
+  font-size: var(--scale-500);
   color: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
   opacity: 0.7;
+  transition: opacity var(--transition-fast);
 }
 
 .scuba-alert__close:hover {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.1);
 }
 
-/* Success Variant */
-.scuba-alert--success {
-  background: var(--semantic-color-success-light);
-  color: var(--semantic-color-success-dark);
-}
-
-/* Warning Variant */
-.scuba-alert--warning {
-  background: var(--semantic-color-warning-light);
-  color: var(--semantic-color-warning-dark);
-}
-
-/* Error Variant */
+/* Error */
 .scuba-alert--error {
-  background: var(--semantic-color-error-light);
-  color: var(--semantic-color-error-dark);
+  background: var(--context-color-surface-error);
+  color: var(--context-color-text-error);
 }
 
-/* Info Variant */
+/* Warning */
+.scuba-alert--warning {
+  background: var(--context-color-surface-warning);
+  color: var(--context-color-text-warning);
+}
+
+/* Info */
 .scuba-alert--info {
-  background: var(--semantic-color-info-light);
-  color: var(--semantic-color-info-dark);
+  background: var(--context-color-surface-info);
+  color: var(--context-color-text-information);
+}
+
+/* Success */
+.scuba-alert--success {
+  background: var(--context-color-surface-success);
+  color: var(--context-color-text-success);
 }
 </style>
