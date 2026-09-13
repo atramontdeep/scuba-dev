@@ -12,7 +12,7 @@
         :class="['scuba-sidenav__item', { 'active': activeItem === 'home' }]"
         @click.prevent="handleItemClick('home')"
       >
-        <i class="ph ph-house"></i>
+        <span class="scuba-sidenav__logo-icon" v-html="logoSvg"></span>
         <transition name="fade">
           <span v-if="isExpanded" class="scuba-sidenav__label">Início</span>
         </transition>
@@ -255,6 +255,13 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['navigate', 'menu-action', 'language-change']);
+
+const logoSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.78603 21.9961H1V1H6.78603C12.4327 1 17.0074 5.57851 17.0074 11.2213V11.7709C17.0074 17.4176 12.4289 21.9923 6.78603 21.9923" fill="#004162"/>
+<path d="M9.45651 21.9962H1C8.0516 14.3137 13.2029 1.68896 13.2029 1.68896C17.1506 3.19836 19.9565 7.02218 19.9565 11.5001C19.9565 17.2977 15.258 22.0001 9.45651 22.0001" fill="#0085CC"/>
+<path d="M11.5 21.9961H1C12.9165 18.2768 21.1369 7.32788 21.1369 7.32788C21.6904 8.60506 21.9961 10.0138 21.9961 11.4961C21.9961 17.2938 17.2976 21.9961 11.4961 21.9961" fill="#A1C517"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M21.1563 21.0595L21.4891 21.5626H21.3266L21.0131 21.0595H20.7576V21.5626H20.6338V20.4712H21.1137C21.404 20.4712 21.5007 20.5796 21.5007 20.7654C21.5007 20.9782 21.3498 21.0595 21.1563 21.0634M20.7615 20.9395H20.9744C21.1292 20.9395 21.3769 20.9666 21.3769 20.7654C21.3769 20.6222 21.2182 20.6028 21.0827 20.6028H20.7615V20.9395ZM21.0053 22C20.4519 22 20.0029 21.551 20.0029 21.0015C20.0029 20.4519 20.4519 20.0029 21.0053 20.0029C21.5588 20.0029 22 20.4519 22 21.0015C22 21.551 21.5549 22 21.0053 22ZM21.0053 21.8761C21.4891 21.8761 21.8761 21.4891 21.8761 21.0015C21.8761 20.5138 21.4891 20.1268 21.0053 20.1268C20.5215 20.1268 20.1268 20.5138 20.1268 21.0015C20.1268 21.4891 20.5177 21.8761 21.0053 21.8761Z" fill="#00305B"/>
+</svg>`;
 
 const isExpanded = ref(false);
 const showMenu = ref(false);
@@ -603,7 +610,8 @@ const handleLanguageChange = (langCode) => {
   gap: 0;
 }
 
-.scuba-sidenav__item i {
+.scuba-sidenav__item i,
+.scuba-sidenav__logo-icon {
   font-size: 24px;
   width: 24px;
   height: 24px;
@@ -614,7 +622,14 @@ const handleLanguageChange = (langCode) => {
   transition: none;
 }
 
-.scuba-sidenav:not(.scuba-sidenav--expanded) .scuba-sidenav__item i {
+.scuba-sidenav__logo-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scuba-sidenav:not(.scuba-sidenav--expanded) .scuba-sidenav__item i,
+.scuba-sidenav:not(.scuba-sidenav--expanded) .scuba-sidenav__logo-icon {
   margin-left: 16px;
 }
 
