@@ -1,168 +1,148 @@
 import Card from './Card/Card.vue';
-import Button from './Button/Button.vue';
 
 export default {
   title: 'Scuba/Card',
   component: Card,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    type: {
       control: 'select',
-      options: ['default', 'outlined', 'elevated'],
-      description: 'Estilo visual do card'
+      options: ['combined', 'helper', 'default', 'number', 'scope'],
+      description: 'Tipo/layout do card'
     },
-    padding: {
-      control: 'select',
-      options: ['none', 'sm', 'md', 'lg'],
-      description: 'Espaçamento interno'
-    },
-    header: {
+    title: {
       control: 'text',
-      description: 'Texto do cabeçalho'
+      description: 'Título'
     },
-    hoverable: {
+    subtitle: {
+      control: 'text',
+      description: 'Subtítulo'
+    },
+    icon: {
       control: 'boolean',
-      description: 'Efeito hover'
-    }
+      description: 'Exibir ícone (combined, helper, number)'
+    },
+    iconClass: {
+      control: 'text',
+      description: 'Classe do ícone Phosphor (ex.: ph-chart-pie), sem o prefixo "ph"'
+    },
+    badge: {
+      control: 'boolean',
+      description: 'Exibir badge de contagem (helper)'
+    },
+    badgeCount: {
+      control: 'text',
+      description: 'Valor do badge (helper)'
+    },
+    label: {
+      control: 'text',
+      description: 'Texto do botão de ação (combined)'
+    },
+    number: {
+      control: 'text',
+      description: 'Número em destaque (number, scope)'
+    },
+    color: {
+      control: 'color',
+      description: 'Cor do indicador e do chip (scope)'
+    },
+    percentage: {
+      control: 'text',
+      description: 'Percentual exibido no chip (scope)'
+    },
+    hint: {
+      control: 'text',
+      description: 'Texto auxiliar abaixo do número (scope)'
+    },
+    clickable: {
+      control: 'boolean',
+      description: 'Habilita cursor pointer e eventos de clique'
+    },
   },
 };
 
-export const Playground = () => ({
-  components: { Card, Button },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card header="Card Title">
-        <p style="margin: 0;">This is the card content. You can put any content here.</p>
-      </Card>
-    </div>
-  `,
+const Template = (args) => ({
+  components: { Card },
+  setup() {
+    return { args };
+  },
+  template: '<div style="padding: 40px;"><Card v-bind="args" /></div>',
 });
 
-export const Default = () => ({
+export const Playground = Template.bind({});
+Playground.args = {
+  type: 'combined',
+  title: 'Title',
+  subtitle: 'Subtitle',
+  icon: true,
+  label: 'Label',
+  clickable: true,
+};
+
+export const Combined = Template.bind({});
+Combined.args = {
+  type: 'combined',
+  title: 'Title',
+  subtitle: 'Subtitle',
+  icon: true,
+  label: 'Label',
+};
+
+export const Helper = Template.bind({});
+Helper.args = {
+  type: 'helper',
+  title: 'Title',
+  subtitle: 'Subtitle',
+  icon: true,
+  badge: true,
+  badgeCount: 1,
+};
+
+export const Default = Template.bind({});
+Default.args = {
+  type: 'default',
+  title: 'Title',
+  subtitle: 'Subtitle',
+};
+
+export const Number = Template.bind({});
+Number.args = {
+  type: 'number',
+  title: 'Title',
+  subtitle: 'Subtitle',
+  number: '142',
+  icon: true,
+  iconClass: 'ph-chart-pie',
+};
+
+export const Scope = Template.bind({});
+Scope.args = {
+  type: 'scope',
+  title: 'Escopo 1',
+  subtitle: 'Emissões diretas',
+  number: '1.250,4 tCO₂e',
+  percentage: '42%',
+  hint: 'vs. período anterior',
+  color: 'var(--primitives-color-azure)',
+};
+
+export const AllTypes = () => ({
   components: { Card },
   template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card header="Default Card">
-        <p style="margin: 0;">This is a default card with standard border.</p>
-      </Card>
-    </div>
-  `,
-});
-
-export const Outlined = () => ({
-  components: { Card },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card variant="outlined" header="Outlined Card">
-        <p style="margin: 0;">This card has a thicker border for emphasis.</p>
-      </Card>
-    </div>
-  `,
-});
-
-export const Elevated = () => ({
-  components: { Card },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card variant="elevated" header="Elevated Card">
-        <p style="margin: 0;">This card has a shadow for depth.</p>
-      </Card>
-    </div>
-  `,
-});
-
-export const WithFooter = () => ({
-  components: { Card, Button },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card header="Card with Footer">
-        <p style="margin: 0;">This card has a footer with actions.</p>
-        <template #footer>
-          <div style="display: flex; gap: 12px; justify-content: flex-end;">
-            <Button variant="text" label="Cancel" />
-            <Button variant="solid" label="Save" />
-          </div>
-        </template>
-      </Card>
-    </div>
-  `,
-});
-
-export const Hoverable = () => ({
-  components: { Card },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card variant="elevated" header="Hoverable Card" hoverable>
-        <p style="margin: 0;">Hover over this card to see the effect!</p>
-      </Card>
-    </div>
-  `,
-});
-
-export const NoPadding = () => ({
-  components: { Card },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif; max-width: 400px;">
-      <Card padding="none">
-        <img src="https://picsum.photos/400/200" alt="Sample" style="width: 100%; display: block;" />
-        <div style="padding: 24px;">
-          <h3 style="margin: 0 0 8px 0;">PhImage Card</h3>
-          <p style="margin: 0;">This card has no padding to accommodate a full-width image.</p>
-        </div>
-      </Card>
-    </div>
-  `,
-});
-
-export const AllPaddings = () => ({
-  components: { Card },
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <h2 style="margin-bottom: 32px;">Card Padding Variants</h2>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 800px;">
-        <Card padding="sm" header="Small Padding">
-          <p style="margin: 0;">Card with small padding</p>
-        </Card>
-        <Card padding="md" header="Medium Padding">
-          <p style="margin: 0;">Card with medium padding</p>
-        </Card>
-        <Card padding="lg" header="Large Padding">
-          <p style="margin: 0;">Card with large padding</p>
-        </Card>
-        <Card padding="none" header="No Padding">
-          <div style="padding: 16px;">
-            <p style="margin: 0;">Card with no padding (manual padding added to content)</p>
-          </div>
-        </Card>
-      </div>
-    </div>
-  `,
-});
-
-export const DesignTokens = () => ({
-  template: `
-    <div style="padding: 40px; font-family: Poppins, sans-serif;">
-      <h2 style="margin-bottom: 24px;">Design Tokens Utilizados</h2>
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;">
-        <div>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Spacing</h3>
-          <table style="width: 100%; font-size: 14px;">
-            <tr><td style="padding: 8px 0;"><code>--spacing-xs</code></td><td style="text-align: right;">16px (sm)</td></tr>
-            <tr><td style="padding: 8px 0;"><code>--spacing-md</code></td><td style="text-align: right;">24px (md)</td></tr>
-            <tr><td style="padding: 8px 0;"><code>--spacing-lg</code></td><td style="text-align: right;">40px (lg)</td></tr>
-          </table>
-        </div>
-        <div>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Border & Shadow</h3>
-          <table style="width: 100%; font-size: 14px;">
-            <tr><td style="padding: 8px 0;"><code>--border-width-border-sm</code></td><td style="text-align: right;">1px</td></tr>
-            <tr><td style="padding: 8px 0;"><code>--border-width-border-md</code></td><td style="text-align: right;">2px</td></tr>
-            <tr><td style="padding: 8px 0;"><code>--border-radius-rounded</code></td><td style="text-align: right;">8px</td></tr>
-            <tr><td style="padding: 8px 0;"><code>--shadow-md</code></td></tr>
-            <tr><td style="padding: 8px 0;"><code>--shadow-lg</code></td></tr>
-          </table>
-        </div>
-      </div>
+    <div style="padding: 40px; font-family: Poppins, sans-serif; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start;">
+      <Card type="combined" title="Title" subtitle="Subtitle" label="Label" clickable />
+      <Card type="helper" title="Title" subtitle="Subtitle" clickable />
+      <Card type="default" title="Title" subtitle="Subtitle" clickable />
+      <Card type="number" title="Title" subtitle="Subtitle" number="142" icon-class="ph-chart-pie" clickable />
+      <Card
+        type="scope"
+        title="Escopo 1"
+        subtitle="Emissões diretas"
+        number="1.250,4 tCO₂e"
+        percentage="42%"
+        hint="vs. período anterior"
+        style="max-width: 333px;"
+      />
     </div>
   `,
 });
