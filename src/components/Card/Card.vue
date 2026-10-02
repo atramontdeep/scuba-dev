@@ -205,7 +205,7 @@ const handleActionClick = (event) => {
   width: 333px;
   gap: var(--spacing-sm);
   padding-bottom: var(--spacing-xs);
-  border-radius: var(--border-radius-rounded-md);
+  border-radius: var(--border-radius-rounded-lg); /* 16px, "rounded-md" no Figma */
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(194, 194, 194, 0.1), 0 6px 6px rgba(194, 194, 194, 0.09);
 }
@@ -278,7 +278,7 @@ const handleActionClick = (event) => {
   gap: var(--spacing-3xs);
   padding: var(--spacing-xs);
   background: var(--context-color-surface-secondary);
-  border-radius: var(--border-radius-rounded-lg);
+  border-radius: var(--border-radius-rounded-xl); /* 20px, "rounded-lg" no Figma */
 }
 
 .scuba-card--helper.scuba-card--clickable:hover {
@@ -312,7 +312,7 @@ const handleActionClick = (event) => {
   justify-content: center;
   padding: var(--spacing-py-1) var(--spacing-2xs);
   background: var(--primitives-color-red-600);
-  border-radius: var(--border-radius-rounded-lg);
+  border-radius: var(--border-radius-rounded-xl); /* 20px, "rounded-lg" no Figma */
   font-size: var(--type-font-size-xs);
   font-weight: var(--type-font-weight-semibold);
   line-height: var(--type-line-height-tight);
@@ -343,7 +343,7 @@ const handleActionClick = (event) => {
 .scuba-card--number {
   width: 274px;
   background: var(--context-color-surface-secondary);
-  border-radius: var(--border-radius-rounded-lg);
+  border-radius: var(--border-radius-rounded-xl); /* 20px, "rounded-lg" no Figma */
 }
 
 .scuba-card--number.scuba-card--clickable:hover {
@@ -378,7 +378,7 @@ const handleActionClick = (event) => {
   flex-shrink: 0;
   padding: var(--spacing-3xs);
   background: var(--context-color-surface-action);
-  border-radius: var(--border-radius-rounded-sm);
+  border-radius: var(--border-radius-rounded-md); /* 12px, "rounded-sm" no Figma */
 }
 
 .scuba-card--number .scuba-card__icon {
@@ -450,8 +450,14 @@ const handleActionClick = (event) => {
 /* ===== Scope ===== */
 .scuba-card--scope {
   width: 100%;
+  max-width: 333px;
   background: var(--context-color-surface-secondary);
-  border-radius: var(--border-radius-rounded-lg);
+  border-radius: var(--border-radius-rounded-lg); /* 16px, "rounded-md" no Figma */
+  overflow: hidden;
+}
+
+.scuba-card--scope.scuba-card--clickable:hover {
+  box-shadow: 0 1px 1.5px rgba(194, 194, 194, 0.1), 0 6px 3px rgba(194, 194, 194, 0.09);
 }
 
 .scuba-card__scope-row {

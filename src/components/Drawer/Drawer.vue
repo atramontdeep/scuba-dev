@@ -303,7 +303,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-lg) var(--spacing-xl);
+  padding: var(--spacing-py-6) var(--spacing-px-8);
   border-bottom: var(--border-width-border-sm) solid var(--context-color-border-secondary);
   flex-shrink: 0;
 }
@@ -344,11 +344,11 @@ onUnmounted(() => {
 .scuba-drawer__body {
   flex: 1;
   overflow-y: auto;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-py-6) var(--spacing-px-8);
 }
 
 .scuba-drawer__footer {
-  padding: var(--spacing-lg) var(--spacing-xl);
+  padding: var(--spacing-py-6) var(--spacing-px-8);
   border-top: var(--border-width-border-sm) solid var(--context-color-border-secondary);
   flex-shrink: 0;
 }

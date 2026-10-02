@@ -124,6 +124,7 @@ Scope.args = {
   percentage: '42%',
   hint: 'vs. período anterior',
   color: 'var(--primitives-color-azure)',
+  clickable: true,
 };
 
 export const AllTypes = () => ({
@@ -141,6 +142,7 @@ export const AllTypes = () => ({
         number="1.250,4 tCO₂e"
         percentage="42%"
         hint="vs. período anterior"
+        clickable
         style="max-width: 333px;"
       />
     </div>

@@ -124,9 +124,11 @@
             weight="regular"
             class="scuba-combobox__option-icon"
           />
-          <span class="scuba-combobox__option-text">{{ option.label }}</span>
-          <span v-if="option.description" class="scuba-combobox__option-description">
-            {{ option.description }}
+          <span class="scuba-combobox__option-body">
+            <span class="scuba-combobox__option-text">{{ option.label }}</span>
+            <span v-if="option.description" class="scuba-combobox__option-description">
+              {{ option.description }}
+            </span>
           </span>
         </div>
 
@@ -833,14 +835,22 @@ onUnmounted(() => {
   color: var(--context-color-text-secondary);
 }
 
-.scuba-combobox__option-text {
+/* Rótulo e descrição empilham. O ícone fica à esquerda dos dois. */
+.scuba-combobox__option-body {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.scuba-combobox__option-text {
+  font-weight: var(--type-font-weight-semibold);
 }
 
 .scuba-combobox__option-description {
   font-size: var(--type-font-size-xs);
   color: var(--context-color-text-tertiary);
-  margin-left: auto;
 }
 
 .scuba-combobox__empty {
