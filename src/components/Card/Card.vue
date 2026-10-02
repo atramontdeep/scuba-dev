@@ -36,9 +36,9 @@
       </div>
     </template>
 
-    <!-- Number: título + ícone + número em destaque -->
+    <!-- Number: caixa branca com borda, título + ícone + número em destaque -->
     <template v-else-if="type === 'number'">
-      <div class="scuba-card__section scuba-card__section--number">
+      <div class="scuba-card__number-container">
         <div class="scuba-card__header scuba-card__header--number">
           <p class="scuba-card__title scuba-card__title--number">{{ title }}</p>
           <div v-if="icon" class="scuba-card__icon-circle">
@@ -342,6 +342,7 @@ const handleActionClick = (event) => {
 /* ===== Number ===== */
 .scuba-card--number {
   width: 274px;
+  gap: var(--spacing-3xs);
   background: var(--context-color-surface-secondary);
   border-radius: var(--border-radius-rounded-xl); /* 20px, "rounded-lg" no Figma */
 }
@@ -350,13 +351,16 @@ const handleActionClick = (event) => {
   box-shadow: 0 1px 3px rgba(194, 194, 194, 0.1), 0 6px 6px rgba(194, 194, 194, 0.09);
 }
 
-.scuba-card__section--number {
+.scuba-card__number-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: var(--spacing-ga-4);
   width: 100%;
   padding: var(--spacing-py-6) var(--spacing-px-6);
+  background: var(--context-color-surface-primary);
+  border: 1px solid var(--context-color-border-secondary);
+  border-radius: var(--border-radius-rounded-md); /* 12px, "rounded-sm" no Figma */
 }
 
 .scuba-card__header--number {
