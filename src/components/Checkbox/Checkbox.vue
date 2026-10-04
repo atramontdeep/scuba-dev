@@ -252,18 +252,10 @@ const handleChange = (event) => {
 }
 
 .scuba-checkbox__label {
-  font-size: var(--type-font-size-base);
+  font-size: var(--type-font-size-sm); /* 14px em todos os tamanhos: o tamanho muda só a caixa */
   font-weight: var(--type-font-weight-regular);
   line-height: var(--type-line-height-normal);
   color: var(--context-color-text-primary);
-}
-
-.scuba-checkbox--sm .scuba-checkbox__label {
-  font-size: var(--type-font-size-sm);
-}
-
-.scuba-checkbox--lg .scuba-checkbox__label {
-  font-size: var(--type-font-size-lg);
 }
 
 .scuba-checkbox--disabled .scuba-checkbox__label {

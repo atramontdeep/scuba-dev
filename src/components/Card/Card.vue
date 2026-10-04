@@ -469,12 +469,13 @@ const handleActionClick = (event) => {
   align-items: stretch;
   gap: var(--spacing-ga-3);
   width: 100%;
-  padding: var(--spacing-px-4) var(--spacing-py-6);
+  /* 24px em cima e embaixo, 16px nas laterais. Os tokens estavam em posições trocadas. */
+  padding: var(--spacing-py-6) var(--spacing-px-4);
 }
 
 .scuba-card__indicator {
   flex-shrink: 0;
-  width: var(--spacing-4xs);
+  width: var(--spacing-3xs); /* 8px, como no Figma */
   border-radius: 4px;
 }
 
@@ -492,10 +493,15 @@ const handleActionClick = (event) => {
   justify-content: space-between;
   gap: var(--spacing-3xs);
   width: 100%;
+  /* Altura reservada para o título, com ou sem subtítulo, para os números de vários
+     cards lado a lado ficarem na mesma linha. */
+  min-height: 45px;
 }
 
 .scuba-card__scope-titles {
   display: flex;
+  flex: 1;
+  min-width: 0;
   flex-direction: column;
   gap: var(--spacing-ga-2);
 }

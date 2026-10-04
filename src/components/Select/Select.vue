@@ -427,7 +427,7 @@ onUnmounted(() => {
 
 .scuba-select__container--lg {
   min-height: var(--scale-800);
-  font-size: var(--type-font-size-lg);
+  font-size: var(--type-font-size-base); /* lg muda a altura, não a fonte: 16px */
 }
 
 .scuba-select__container:hover:not(.scuba-select__container--disabled) {
@@ -516,7 +516,7 @@ onUnmounted(() => {
 }
 
 .scuba-select__dropdown--lg {
-  font-size: var(--type-font-size-lg);
+  font-size: var(--type-font-size-base);
 }
 
 .scuba-select__option {
