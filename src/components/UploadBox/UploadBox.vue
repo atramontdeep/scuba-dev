@@ -1,5 +1,5 @@
 <template>
-  <div class="scuba-upload-box">
+  <div :class="['scuba-upload-box', `scuba-upload-box--${size}`]">
     <div
       v-if="files.length"
       class="scuba-upload-box__list"
@@ -33,8 +33,8 @@
 
         <div class="scuba-upload-box__text">
           <p v-if="hasError" class="scuba-upload-box__error-message">{{ errorMessage }}</p>
-          <p class="scuba-upload-box__hint">Clique ou arraste seus arquivos aqui para enviar</p>
-          <p class="scuba-upload-box__formats">Formatos suportados: {{ acceptLabel }}</p>
+          <p class="scuba-upload-box__hint">{{ hint || 'Clique ou arraste seus arquivos aqui para enviar' }}</p>
+          <p v-if="acceptLabel" class="scuba-upload-box__formats">Formatos suportados: {{ acceptLabel }}</p>
         </div>
       </div>
     </div>
@@ -75,6 +75,17 @@ const props = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  /** Tamanho: md (padrão) ou sm, compacto e em linha (ícone ao lado do texto), para cartões e painéis estreitos. */
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['md', 'sm'].includes(value)
+  },
+  /** Texto principal da área. Vazio: "Clique ou arraste seus arquivos aqui para enviar". */
+  hint: {
+    type: String,
+    default: ''
   }
 });
 
@@ -199,11 +210,11 @@ const handleFileClick = (file) => {
 .scuba-upload-box__icon {
   font-size: var(--scale-1100); /* 72px */
   line-height: 1;
-  color: var(--semantic-color-primary-300);
+  color: var(--context-color-icon-primary);
 }
 
 .scuba-upload-box__dropzone--error .scuba-upload-box__icon {
-  color: var(--semantic-color-primary-300);
+  color: var(--context-color-icon-primary);
 }
 
 .scuba-upload-box__dropzone--disabled .scuba-upload-box__icon {
@@ -252,5 +263,30 @@ const handleFileClick = (file) => {
 
 .scuba-upload-box__input {
   display: none;
+}
+
+/* Pequeno: em linha, o ícone ao lado do texto, com menos respiro. */
+.scuba-upload-box--sm .scuba-upload-box__dropzone {
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.scuba-upload-box--sm .scuba-upload-box__dropzone-content {
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--spacing-xs);
+}
+
+.scuba-upload-box--sm .scuba-upload-box__icon {
+  font-size: 32px;
+}
+
+.scuba-upload-box--sm .scuba-upload-box__text {
+  align-items: flex-start;
+  width: auto;
+  text-align: left;
+}
+
+.scuba-upload-box--sm .scuba-upload-box__hint {
+  font-weight: var(--type-font-weight-semibold);
 }
 </style>

@@ -25,6 +25,15 @@ export default {
       control: 'boolean',
       description: 'Estado desabilitado'
     },
+    size: {
+      control: 'select',
+      options: ['md', 'sm'],
+      description: 'Tamanho: md (padrão) ou sm, compacto e em linha, para cartões e painéis estreitos'
+    },
+    hint: {
+      control: 'text',
+      description: 'Texto principal da área. Vazio: o padrão'
+    },
   },
 };
 
@@ -59,6 +68,9 @@ Uploaded.args = {
     { id: 2, name: 'balancete-empresad.pdf', uploadedBy: 'Edna Gonçalves', uploadedAt: '27/09/2026 09:50', type: 'pdf' },
   ],
 };
+
+export const Pequeno = Template.bind({});
+Pequeno.args = { files: [], size: 'sm', hint: 'Enviar arquivos', acceptLabel: '' };
 
 export const Disabled = Template.bind({});
 Disabled.args = { files: [], errorMessage: '', disabled: true };
