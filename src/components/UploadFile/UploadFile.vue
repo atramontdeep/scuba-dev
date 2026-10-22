@@ -102,6 +102,12 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  /** Tamanho: md (padrão) ou sm, mais compacto, para listas em drawers e painéis estreitos. */
+  size: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['md', 'sm'].includes(value)
+  },
   /** Sem borda nem cantos, para empilhar numa lista com divisórias. */
   flat: {
     type: Boolean,
@@ -159,6 +165,7 @@ const statusIcon = computed(() => STATUS_ICONS[props.statusVariant]);
 
 const uploadFileClasses = computed(() => [
   'scuba-upload-file',
+  `scuba-upload-file--${props.size}`,
   {
     'scuba-upload-file--flat': props.flat,
     'scuba-upload-file--disabled': props.disabled
@@ -356,6 +363,45 @@ const statusClasses = computed(() => [
 .scuba-upload-file__name--link:focus-visible {
   outline: 2px solid var(--context-color-border-focus);
   outline-offset: 2px;
+}
+
+/* Pequeno: menos respiro, selo de formato e textos menores, ação de 28px. */
+.scuba-upload-file--sm {
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-3xs) var(--spacing-xs);
+}
+
+.scuba-upload-file--sm .scuba-upload-file__format {
+  flex-basis: 40px;
+  width: 40px;
+  height: 20px;
+  margin-top: 1px;
+  font-size: 10px;
+}
+
+.scuba-upload-file--sm .scuba-upload-file__content {
+  gap: 2px;
+}
+
+.scuba-upload-file--sm .scuba-upload-file__name {
+  font-size: var(--type-font-size-sm);
+}
+
+.scuba-upload-file--sm .scuba-upload-file__detail,
+.scuba-upload-file--sm .scuba-upload-file__status {
+  font-size: var(--type-font-size-xs);
+}
+
+.scuba-upload-file--sm .scuba-upload-file__status-icon {
+  margin-top: 2px;
+  font-size: 14px;
+}
+
+.scuba-upload-file--sm .scuba-upload-file__action {
+  flex-basis: 28px;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
 }
 
 .scuba-upload-file--disabled .scuba-upload-file__format {

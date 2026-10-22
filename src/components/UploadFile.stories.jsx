@@ -51,6 +51,11 @@ export default {
       control: 'text',
       description: 'Data do envio, quando não há descrição'
     },
+    size: {
+      control: 'select',
+      options: ['md', 'sm'],
+      description: 'Tamanho: md (padrão) ou sm, mais compacto, para drawers e painéis estreitos'
+    },
     flat: {
       control: 'boolean',
       description: 'Sem borda, para empilhar numa lista'
@@ -86,6 +91,7 @@ Playground.args = {
   statusVariant: 'success',
   actionIcon: 'ph-trash',
   actionLabel: 'Remover Balancete_jan-set_2026.xlsx',
+  size: 'md',
   flat: false,
   clickable: false,
   disabled: false,
@@ -100,6 +106,36 @@ Simples.args = {
   uploadedBy: 'Edna Gonçalves',
   uploadedAt: '27/09/2026 09:50',
 };
+
+export const Pequeno = () => ({
+  components: { UploadFile },
+  template: `
+    <div style="padding: 40px; max-width: 420px;">
+      <div style="border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;">
+        <UploadFile
+          size="sm"
+          flat
+          file-name="Contas_luz_Betim_jan-set_2026.pdf"
+          caption="Enviado em 01/10/2026"
+          status="Guardado para nossa equipe"
+          status-variant="neutral"
+          action-icon="ph-trash"
+          action-label="Remover Contas_luz_Betim_jan-set_2026.pdf"
+        />
+        <div style="border-top: 1px solid #e5e5e5;"></div>
+        <UploadFile
+          size="sm"
+          flat
+          file-name="Balancete_jan-set_2026.xlsx"
+          caption="Enviado em 12/09/2026"
+          status="Cumpre: Balancete"
+          action-icon="ph-trash"
+          action-label="Remover Balancete_jan-set_2026.xlsx"
+        />
+      </div>
+    </div>
+  `,
+});
 
 export const Disabled = Template.bind({});
 Disabled.args = { ...Playground.args, disabled: true };
