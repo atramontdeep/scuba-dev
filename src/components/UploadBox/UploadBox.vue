@@ -265,23 +265,26 @@ const handleFileClick = (file) => {
   display: none;
 }
 
-/* Pequeno: em linha, o ícone ao lado do texto, com menos respiro. */
+/* Pequeno: uma linha só, baixa (cerca de 40px), com o ícone, o texto e os formatos lado a lado. */
 .scuba-upload-box--sm .scuba-upload-box__dropzone {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-3xs) var(--spacing-xs);
 }
 
 .scuba-upload-box--sm .scuba-upload-box__dropzone-content {
   flex-direction: row;
   justify-content: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-3xs);
 }
 
 .scuba-upload-box--sm .scuba-upload-box__icon {
-  font-size: 32px;
+  font-size: 20px;
 }
 
 .scuba-upload-box--sm .scuba-upload-box__text {
-  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--spacing-3xs);
   width: auto;
   text-align: left;
 }
