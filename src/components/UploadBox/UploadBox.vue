@@ -29,7 +29,7 @@
       @drop.prevent="handleDrop"
     >
       <div class="scuba-upload-box__dropzone-content">
-        <i class="ph ph-file-arrow-up scuba-upload-box__icon" aria-hidden="true"></i>
+        <i :class="['ph', size === 'sm' ? 'ph-upload-simple' : 'ph-file-arrow-up', 'scuba-upload-box__icon']" aria-hidden="true"></i>
 
         <div class="scuba-upload-box__text">
           <p v-if="hasError" class="scuba-upload-box__error-message">{{ errorMessage }}</p>
@@ -265,9 +265,18 @@ const handleFileClick = (file) => {
   display: none;
 }
 
-/* Pequeno: uma linha só, baixa (cerca de 40px), com o ícone, o texto e os formatos lado a lado. */
+/* Pequeno: uma linha só, com o ícone de upload, o texto e os formatos lado a lado. A altura acompanha o espaço que o
+   contêiner dá (no mínimo 40px), centralizando o conteúdo. */
+.scuba-upload-box--sm {
+  height: 100%;
+}
+
 .scuba-upload-box--sm .scuba-upload-box__dropzone {
+  flex: 1;
+  justify-content: center;
+  min-height: 40px;
   padding: var(--spacing-3xs) var(--spacing-xs);
+  box-sizing: border-box;
 }
 
 .scuba-upload-box--sm .scuba-upload-box__dropzone-content {
