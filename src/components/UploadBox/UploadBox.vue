@@ -29,7 +29,7 @@
       @drop.prevent="handleDrop"
     >
       <div class="scuba-upload-box__dropzone-content">
-        <i :class="['ph', size === 'sm' ? 'ph-upload-simple' : 'ph-file-arrow-up', 'scuba-upload-box__icon']" aria-hidden="true"></i>
+        <i class="ph ph-upload-simple scuba-upload-box__icon" aria-hidden="true"></i>
 
         <div class="scuba-upload-box__text">
           <p v-if="hasError" class="scuba-upload-box__error-message">{{ errorMessage }}</p>
