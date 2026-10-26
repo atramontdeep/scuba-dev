@@ -208,7 +208,7 @@ export default {
         "button-color": "#111660"
       },
       "surface": {
-        "page": "#fafafa",
+        "page": "#f6f8fb",
         "primary": "#ffffff",
         "success": "#deffc8",
         "disabled": "#e5e5e5",
