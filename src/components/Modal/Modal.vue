@@ -350,6 +350,11 @@ defineExpose({
   line-height: var(--type-line-height-normal);
 }
 
+/* Sem cabeçalho, o corpo abre o modal: o mesmo respiro dos lados também em cima. */
+.scuba-modal__body:first-child {
+  padding-top: var(--spacing-lg);
+}
+
 /* Footer */
 .scuba-modal__footer {
   display: flex;
