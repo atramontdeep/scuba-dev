@@ -24,7 +24,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'neutral',
-    validator: (value) => ['neutral', 'primary', 'success', 'warning', 'error', 'info'].includes(value)
+    validator: (value) => ['neutral', 'primary', 'success', 'warning', 'error', 'info', 'danger', 'white', 'page'].includes(value)
   },
   size: {
     type: String,
@@ -54,6 +54,12 @@ const props = defineProps({
   removeAriaLabel: {
     type: String,
     default: 'Remove'
+  },
+  // Contagem sobre o canto de um ícone ou botão (28/10/2026): quem a contém precisa de position: relative. O anel em
+  // volta usa --scuba-badge-ring (branco por padrão; num fundo escuro, a cor do fundo).
+  overlay: {
+    type: Boolean,
+    default: false
   }
 });
 
@@ -70,6 +76,10 @@ const badgeClasses = computed(() => {
 
   if (props.removable) {
     classes.push('scuba-badge--removable');
+  }
+
+  if (props.overlay) {
+    classes.push('scuba-badge--overlay');
   }
 
   return classes;
@@ -194,6 +204,37 @@ const handleRemove = (event) => {
 .scuba-badge--error {
   background: var(--semantic-color-error-light);
   color: var(--semantic-color-error-dark);
+}
+
+/* Contagem: com rounded, no mínimo um círculo. */
+.scuba-badge--rounded.scuba-badge--sm {
+  min-width: var(--scale-400);
+  padding: 0 6px;
+  box-sizing: border-box;
+}
+
+.scuba-badge--overlay {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  box-shadow: 0 0 0 2px var(--scuba-badge-ring, var(--context-color-surface-primary));
+}
+
+/* Danger: a contagem que pede atenção, no vermelho cheio (28/10/2026). */
+.scuba-badge--danger {
+  background: var(--primitives-color-red-600);
+  color: var(--primitives-color-white);
+}
+
+/* White e page: contagens e etiquetas sobre fundos coloridos ou brancos (28/10/2026). */
+.scuba-badge--white {
+  background: var(--context-color-surface-primary);
+  color: var(--primitives-color-gray-900);
+}
+
+.scuba-badge--page {
+  background: var(--context-color-surface-page);
+  color: var(--context-color-text-secondary);
 }
 
 /* Info Variant */

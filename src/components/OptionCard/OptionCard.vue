@@ -19,13 +19,16 @@
       <span class="scuba-option-card__text"><slot /></span>
       <span v-if="$slots.meta" class="scuba-option-card__meta"><slot name="meta" /></span>
     </span>
+    <span v-if="$slots.aside" class="scuba-option-card__aside"><slot name="aside" /></span>
   </button>
 </template>
 
 <script setup>
 // Uma opção do OptionCardGroup: cartão branco sem contorno; a escolhida no azul claro de seleção, com o contorno azul
 // por dentro. A variante 'ai' fica no degradê da IA, com o Dipy, para a opção que ela escreveu. O slot "meta" leva de
-// onde veio a opção (um dado, um arquivo), numa faixa no fundo da página.
+// onde veio a opção (um dado, um arquivo), numa faixa no fundo da página. A variante 'subtle' é uma linha compacta no
+// fundo da página, sem sombra, para respostas curtas (as perguntas da metodologia); o slot "aside" leva uma etiqueta à
+// direita, como "sugestão".
 import { computed, inject, onBeforeUnmount } from 'vue';
 import DipyIcon from '../Dipy/DipyIcon.vue';
 
@@ -41,7 +44,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'default',
-    validator: (value) => ['default', 'ai'].includes(value)
+    validator: (value) => ['default', 'ai', 'subtle'].includes(value)
   },
   disabled: {
     type: Boolean,
@@ -158,6 +161,45 @@ const optionClasses = computed(() => [
   font-size: var(--type-font-size-sm);
   line-height: var(--type-line-height-normal);
   color: var(--context-color-text-primary);
+}
+
+.scuba-option-card__aside {
+  flex: none;
+  align-self: center;
+}
+
+/* Subtle: uma linha no fundo da página, sem sombra; a escolhida em azul-claro, com o texto em azul. */
+.scuba-option-card--subtle {
+  align-items: center;
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-3xs) var(--spacing-xs);
+  border-radius: var(--border-radius-rounded-md);
+  background: var(--context-color-surface-page);
+  box-shadow: none;
+}
+
+.scuba-option-card--subtle:hover:not(:disabled) {
+  background: var(--context-color-surface-field);
+  box-shadow: none;
+}
+
+.scuba-option-card--subtle.scuba-option-card--selected,
+.scuba-option-card--subtle.scuba-option-card--selected:hover:not(:disabled) {
+  background: var(--context-color-surface-focus-light);
+  box-shadow: none;
+}
+
+.scuba-option-card--subtle .scuba-option-card__dot {
+  margin-top: 0;
+}
+
+.scuba-option-card--subtle .scuba-option-card__text {
+  font-size: var(--type-font-size-base);
+}
+
+.scuba-option-card--subtle.scuba-option-card--selected .scuba-option-card__text {
+  font-weight: var(--type-font-weight-semibold);
+  color: var(--context-color-text-focus);
 }
 
 .scuba-option-card__meta {

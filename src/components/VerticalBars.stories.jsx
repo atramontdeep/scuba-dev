@@ -162,3 +162,19 @@ export const FloatingLabelBehavior = () => ({
     </div>
   `,
 });
+
+// Track (28/10/2026, da jornada de carbono): trilho no fundo da página, valor em cima, mês sem dado.
+export const Track = () => ({
+  components: { VerticalBars },
+  setup() {
+    const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    const values = [98.2, 102.5, 110.1, 95.4, 0, 120.7, 130.2, 125.9, 118.3, 111.6, 104.8, 99.1];
+    const items = months.map((label, i) => ({ label, value: values[i], display: values[i].toLocaleString('pt-BR'), empty: values[i] === 0 }));
+    return { items };
+  },
+  template: `
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <VerticalBars variant="track" :items="items" :max-height="180" color="#70cdff" aria-label="Emissões por mês" />
+    </div>
+  `
+});

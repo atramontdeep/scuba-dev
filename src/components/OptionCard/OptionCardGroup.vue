@@ -1,5 +1,10 @@
 <template>
-  <div class="scuba-option-card-group" role="radiogroup" :aria-label="label" @keydown="handleKeydown">
+  <div
+    :class="['scuba-option-card-group', `scuba-option-card-group--${gap}`]"
+    role="radiogroup"
+    :aria-label="label"
+    @keydown="handleKeydown"
+  >
     <slot />
   </div>
 </template>
@@ -17,6 +22,12 @@ const props = defineProps({
   label: {
     type: String,
     default: ''
+  },
+  // Espaço entre as opções: 'md' (16px) para cartões; 'sm' (6px) para as linhas da variante subtle.
+  gap: {
+    type: String,
+    default: 'md',
+    validator: (value) => ['sm', 'md'].includes(value)
   }
 });
 
@@ -53,5 +64,9 @@ const handleKeydown = (event) => {
   flex-direction: column;
   gap: var(--spacing-xs);
   font-family: var(--type-font-family-body);
+}
+
+.scuba-option-card-group--sm {
+  gap: 6px;
 }
 </style>

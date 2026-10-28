@@ -226,3 +226,21 @@ export const DesignTokens = () => ({
     </div>
   `,
 });
+
+// Contagens (28/10/2026): danger no vermelho cheio, white e page sobre fundos coloridos; overlay sobre o canto de um ícone.
+export const Counts = () => ({
+  components: { Badge },
+  template: `
+    <div style="padding: 40px; display: flex; gap: 24px; align-items: center; background: var(--context-color-surface-page); font-family: Poppins, sans-serif;">
+      <Badge size="sm" rounded variant="danger" label="3" />
+      <Badge size="sm" rounded variant="primary" label="12" />
+      <Badge size="sm" rounded variant="white" label="2" />
+      <Badge size="sm" rounded variant="page" label="5" />
+      <Badge size="sm" rounded variant="page" icon-left="ph-calendar-blank" label="14/03/2025" />
+      <span style="position: relative; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--primitives-color-gray-900); color: white; --scuba-badge-ring: var(--primitives-color-gray-900);">
+        <i class="ph ph-bell-ringing" style="font-size: 22px;"></i>
+        <Badge size="sm" rounded overlay variant="danger" label="2" />
+      </span>
+    </div>
+  `
+});
