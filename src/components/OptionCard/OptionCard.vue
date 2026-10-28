@@ -10,8 +10,10 @@
   >
     <span class="scuba-option-card__dot" aria-hidden="true"></span>
     <span class="scuba-option-card__body">
-      <span v-if="label || $slots.icon" class="scuba-option-card__label">
-        <span v-if="$slots.icon" class="scuba-option-card__icon" aria-hidden="true"><slot name="icon" /></span>
+      <span v-if="label || $slots.icon || variant === 'ai'" class="scuba-option-card__label">
+        <span v-if="$slots.icon || variant === 'ai'" class="scuba-option-card__icon" aria-hidden="true">
+          <slot name="icon"><DipyIcon /></slot>
+        </span>
         {{ label }}
       </span>
       <span class="scuba-option-card__text"><slot /></span>
@@ -22,9 +24,10 @@
 
 <script setup>
 // Uma opção do OptionCardGroup: cartão branco sem contorno; a escolhida no azul claro de seleção, com o contorno azul
-// por dentro. A variante 'ai' fica no degradê da IA, para a opção que ela escreveu. O slot "meta" leva de onde veio a
-// opção (um dado, um arquivo), numa faixa no fundo da página.
+// por dentro. A variante 'ai' fica no degradê da IA, com o Dipy, para a opção que ela escreveu. O slot "meta" leva de
+// onde veio a opção (um dado, um arquivo), numa faixa no fundo da página.
 import { computed, inject, onBeforeUnmount } from 'vue';
+import DipyIcon from '../Dipy/DipyIcon.vue';
 
 const props = defineProps({
   value: {

@@ -1,15 +1,17 @@
 <template>
-  <button type="button" :class="['scuba-ai-button', `scuba-ai-button--${size}`]" :disabled="disabled">
+  <button type="button" :class="['scuba-ai-button', 'scuba-dipy-host', `scuba-ai-button--${size}`]" :disabled="disabled">
     <span class="scuba-ai-button__icon" aria-hidden="true">
-      <slot name="icon"><i class="ph ph-sparkle"></i></slot>
+      <slot name="icon"><DipyIcon /></slot>
     </span>
     <slot>{{ label }}</slot>
   </button>
 </template>
 
 <script setup>
-// Botão de ação feita pela IA (ler um arquivo, sugerir uma resposta), no degradê da IA e sem contorno (28/10/2026,
-// da jornada de carbono). O ícone vem pelo slot "icon": cada produto põe o do seu assistente.
+// Botão de ação feita pela IA (ler um arquivo, sugerir uma resposta), no degradê da IA e sem contorno, com o Dipy
+// (28/10/2026, da jornada de carbono). No hover, a folha do Dipy balança. O slot "icon" troca o ícone.
+import DipyIcon from '../Dipy/DipyIcon.vue';
+
 defineProps({
   label: {
     type: String,

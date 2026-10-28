@@ -1,8 +1,8 @@
 <template>
   <div :class="['scuba-ai-steps', `scuba-ai-steps--${size}`]" role="status">
     <p class="scuba-ai-steps__title">
-      <span v-if="$slots.icon" class="scuba-ai-steps__icon" aria-hidden="true">
-        <slot name="icon" :working="working" />
+      <span v-if="icon || $slots.icon" class="scuba-ai-steps__icon" aria-hidden="true">
+        <slot name="icon" :working="working"><DipyIcon :animate="working" /></slot>
       </span>
       {{ working ? title : (doneTitle || title) }}
     </p>
@@ -28,8 +28,10 @@
 <script setup>
 // Etapas de um trabalho da IA (ler um arquivo, buscar respostas), que se marcam uma a uma, no degradê da IA
 // (28/10/2026, da jornada de carbono e da resposta do indicador). current é a etapa em andamento, de 1 ao número de
-// etapas; acima disso, todas terminaram e o título passa a doneTitle, quando houver. O slot "icon" recebe working.
+// etapas; acima disso, todas terminaram e o título passa a doneTitle, quando houver. Ao lado do título, o Dipy, que se
+// mexe enquanto a IA trabalha; icon: false tira o ícone. O slot "icon" (recebe working) troca o ícone.
 import { computed } from 'vue';
+import DipyIcon from '../Dipy/DipyIcon.vue';
 
 const props = defineProps({
   title: {
@@ -52,6 +54,10 @@ const props = defineProps({
     type: String,
     default: 'md',
     validator: (value) => ['sm', 'md'].includes(value)
+  },
+  icon: {
+    type: Boolean,
+    default: true
   }
 });
 

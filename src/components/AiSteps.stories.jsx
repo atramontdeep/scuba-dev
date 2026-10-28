@@ -44,9 +44,9 @@ export const Running = () => ({
         done-title="Busca concluída"
         :steps="['Procurando em respostas anteriores', 'Procurando em indicadores similares']"
         :current="current"
-      >
-        <template #icon="{ working }"><i :class="['ph', working ? 'ph-circle-notch' : 'ph-sparkle']" style="font-size: 22px;"></i></template>
-      </AiSteps>
+      />
+      <p style="margin: 24px 0 8px; font-family: Poppins, sans-serif; font-size: 14px;">Sem o ícone (icon: false):</p>
+      <AiSteps title="Lendo Filiais.xlsx" :icon="false" :steps="['Arquivo recebido', 'Lendo linhas e colunas']" :current="2" />
     </div>
   `
 });

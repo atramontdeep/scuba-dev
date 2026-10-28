@@ -2,7 +2,7 @@
   <div class="scuba-ai-message" role="note">
     <div class="scuba-ai-message__row">
       <span class="scuba-ai-message__icon" aria-hidden="true">
-        <slot name="icon"><i class="ph ph-sparkle"></i></slot>
+        <slot name="icon"><DipyIcon /></slot>
       </span>
       <p class="scuba-ai-message__text"><slot /></p>
     </div>
@@ -14,8 +14,9 @@
 
 <script setup>
 // Recado da IA: o que ela vai fazer ou o que fez, no degradê da IA, sem contorno, título nem negrito (28/10/2026, da
-// jornada de carbono). Fora da paleta do Alert, que fala do sistema. O ícone vem pelo slot "icon"; o slot "extra" leva
-// o que faz parte do recado, como um UploadBox.
+// jornada de carbono), com o Dipy. Fora da paleta do Alert, que fala do sistema. O slot "icon" troca o ícone; o slot
+// "extra" leva o que faz parte do recado, como um UploadBox.
+import DipyIcon from '../Dipy/DipyIcon.vue';
 </script>
 
 <style scoped>

@@ -175,7 +175,8 @@ export default {
       },
       "ai": {
         "gradient": "linear-gradient(100deg, #e4eefb 0%, #e3f4f6 50%, #eaf7e4 100%)",
-        "gradient-hover": "linear-gradient(100deg, #d3e3f8 0%, #d1ecef 50%, #d9f0cf 100%)"
+        "gradient-hover": "linear-gradient(100deg, #d3e3f8 0%, #d1ecef 50%, #d9f0cf 100%)",
+        "gradient-done": "linear-gradient(100deg, #eaf7e4 0%, #dff5d6 100%)"
       }
     }
   },

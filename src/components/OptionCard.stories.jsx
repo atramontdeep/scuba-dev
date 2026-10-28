@@ -19,7 +19,6 @@ export const Default = () => ({
     <div style="padding: 40px; background: var(--context-color-surface-page); max-width: 640px; font-family: Poppins, sans-serif;">
       <OptionCardGroup v-model="choice" label="Sugestões de resposta">
         <OptionCard value="ia" variant="ai" label="Sugestão da IA">
-          <template #icon><i class="ph ph-sparkle"></i></template>
           Em 2025, 2.410.500 horas trabalhadas, sem óbitos.
         </OptionCard>
         <OptionCard value="g0">
