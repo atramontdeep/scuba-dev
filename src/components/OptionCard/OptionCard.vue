@@ -66,7 +66,7 @@ const optionClasses = computed(() => [
   align-items: flex-start;
   gap: var(--spacing-xs);
   width: 100%;
-  padding: var(--spacing-2xs) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
   border-radius: var(--border-radius-rounded-lg);
   background: var(--context-color-surface-primary);

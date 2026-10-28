@@ -69,7 +69,7 @@ const working = computed(() => props.current <= props.steps.length);
 }
 
 .scuba-ai-steps--sm {
-  padding: var(--spacing-2xs) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .scuba-ai-steps--md {
