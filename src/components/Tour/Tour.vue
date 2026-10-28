@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="scuba-tour">
+    <div class="scuba-tour" v-bind="$attrs">
       <div v-if="!ring" class="scuba-tour__dim" aria-hidden="true"></div>
       <div
         v-else
@@ -36,6 +36,9 @@
 // o contorno azul e o resto da tela escurece, sem bloquear: o clique passa para a tela. Sem elemento, a tela toda
 // escurece. Esc fecha. O balão fica embaixo do elemento quando cabe; se não, em cima.
 import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+
+// Os atributos (classe, data-*) vão para o contêiner do guia, que fica no body.
+defineOptions({ inheritAttrs: false });
 
 const props = defineProps({
   target: {
