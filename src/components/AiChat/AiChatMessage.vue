@@ -16,7 +16,7 @@
         {{ thinkingLabel }}<span>.</span><span>.</span><span>.</span>
       </p>
       <div v-else class="scuba-ai-chat-message__answer">
-        <p class="scuba-ai-chat-message__text"><slot>{{ text }}</slot></p>
+        <div class="scuba-ai-chat-message__text"><slot>{{ text }}</slot></div>
       </div>
     </template>
   </div>
@@ -118,6 +118,15 @@ defineProps({
   font-size: var(--type-font-size-sm);
   line-height: var(--type-line-height-normal);
   color: var(--context-color-text-primary);
+}
+
+/* A resposta pode ter parágrafos e listas: sem a margem de cima do primeiro nem a de baixo do último. */
+.scuba-ai-chat-message__text > :deep(:first-child) {
+  margin-top: 0;
+}
+
+.scuba-ai-chat-message__text > :deep(:last-child) {
+  margin-bottom: 0;
 }
 
 .scuba-ai-chat-message__thinking {
