@@ -60,7 +60,7 @@ const headerClasses = computed(() => {
 .scuba-header__title {
   font-size: 32px;
   font-weight: 600;
-  color: #111827;
+  color: var(--semantic-color-neutral-900);
   margin: 0 0 4px 0;
   line-height: 1.25;
 }
@@ -68,7 +68,7 @@ const headerClasses = computed(() => {
 .scuba-header__description {
   margin: 0;
   font-size: 16px;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
   line-height: 1.5;
 }
 </style>

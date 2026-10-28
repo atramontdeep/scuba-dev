@@ -159,7 +159,7 @@ onMounted(() => {
 .scuba-button-toggle {
   display: inline-flex;
   position: relative;
-  background: #FFFFFF;
+  background: var(--context-color-surface-primary);
   border-radius: 64px;
   font-family: var(--type-font-family-body);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -170,14 +170,14 @@ onMounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  background: #374151;
+  background: var(--semantic-color-neutral-700);
   border-radius: 64px;
   pointer-events: none;
   z-index: 0;
 }
 
 .scuba-button-toggle:has(.scuba-button-toggle__button:disabled) .scuba-button-toggle__slider {
-  background: #F3F4F6;
+  background: var(--context-color-surface-action);
 }
 
 .scuba-button-toggle__button {
@@ -192,7 +192,7 @@ onMounted(() => {
   font-family: var(--type-font-family-body);
   font-weight: 400;
   font-size: 14px;
-  color: #1F2937;
+  color: var(--context-color-text-primary);
   flex-shrink: 0;
   border-radius: 64px;
   padding: 0 24px;
@@ -202,17 +202,17 @@ onMounted(() => {
 }
 
 .scuba-button-toggle__button:hover:not(:disabled):not(.scuba-button-toggle__button--selected) {
-  background: var(--context-color-surface-action, #F3F4F6);
+  background: var(--context-color-surface-action);
 }
 
 .scuba-button-toggle__button:disabled {
   cursor: not-allowed;
   opacity: 0.4;
-  color: #9CA3AF;
+  color: var(--context-color-text-disabled);
 }
 
 .scuba-button-toggle__button--selected {
-  color: #FFFFFF;
+  color: var(--primitives-color-white);
   font-weight: 600;
 }
 

@@ -154,8 +154,8 @@ const handleCheckboxChange = () => {
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
+  background: var(--context-color-surface-primary);
+  border: 1px solid var(--context-color-border-secondary);
   border-radius: 8px;
   font-family: var(--type-font-family-body);
   transition: all 0.2s ease;
@@ -166,8 +166,8 @@ const handleCheckboxChange = () => {
 }
 
 .scuba-action-box--clickable:hover {
-  background: #F9FAFB;
-  border-color: #D1D5DB;
+  background: var(--context-color-surface-secondary);
+  border-color: var(--semantic-color-neutral-400);
 }
 
 .scuba-action-box__checkbox {
@@ -187,7 +187,7 @@ const handleCheckboxChange = () => {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: #111827;
+  color: var(--semantic-color-neutral-900);
   line-height: 1.5;
 }
 
@@ -195,7 +195,7 @@ const handleCheckboxChange = () => {
   margin: 4px 0 0 0;
   font-size: 14px;
   font-weight: 400;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
   line-height: 1.4;
 }
 
@@ -205,6 +205,6 @@ const handleCheckboxChange = () => {
 
 .scuba-action-box__icon {
   flex-shrink: 0;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
 }
 </style>

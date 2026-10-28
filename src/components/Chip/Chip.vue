@@ -216,8 +216,8 @@ const handleRemove = (event) => {
 
 /* Default State */
 .scuba-chip {
-  background: #E5E7EB;
-  color: #374151;
+  background: var(--semantic-color-neutral-300);
+  color: var(--semantic-color-neutral-700);
 }
 
 /* Hover State */
@@ -235,8 +235,8 @@ const handleRemove = (event) => {
 
 /* Disabled State */
 .scuba-chip--disabled {
-  background: #E5E7EB;
-  color: #9CA3AF;
+  background: var(--semantic-color-neutral-300);
+  color: var(--context-color-text-disabled);
   cursor: not-allowed !important;
   pointer-events: none;
 }

@@ -112,8 +112,8 @@ const handleBlur = () => {
 
 /* Focused state with blue border */
 .scuba-accordion-item--focused {
-  border-color: #60A5FA;
-  box-shadow: 0 0 0 1px #60A5FA;
+  border-color: var(--context-color-border-focus);
+  box-shadow: 0 0 0 1px var(--context-color-border-focus);
 }
 
 .scuba-accordion-item__header {

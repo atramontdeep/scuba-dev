@@ -219,6 +219,25 @@ export const InCard = () => ({
   `,
 });
 
+// Variante card: cada item num cartão branco com sombra, sem contorno, sobre o fundo da página.
+export const CardVariant = () => ({
+  components: { Accordion, AccordionItem },
+  template: `
+    <div style="padding: 40px; background: var(--context-color-surface-page); font-family: Poppins, sans-serif;">
+      <div style="max-width: 600px;">
+        <Accordion variant="card" default-open="q1">
+          <AccordionItem id="q1" title="Respostas anteriores">
+            Em 2024, 0 óbitos resultantes de acidentes de trabalho.
+          </AccordionItem>
+          <AccordionItem id="q2" title="Informações adicionais">
+            Metodologia de cálculo e premissas usadas na coleta.
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  `,
+});
+
 // Design Tokens
 export const DesignTokens = () => ({
   template: `

@@ -208,16 +208,16 @@ const handlePerPageChange = (event) => {
 
 .scuba-pagination__label {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
   white-space: nowrap;
 }
 
 .scuba-pagination__select {
   padding: 8px 32px 8px 12px;
-  background: #F3F4F6;
+  background: var(--context-color-surface-action);
   border: none;
   border-radius: 4px;
-  color: #1F2937;
+  color: var(--context-color-text-primary);
   font-family: var(--type-font-family-body);
   font-size: 14px;
   font-weight: 500;
@@ -230,17 +230,17 @@ const handlePerPageChange = (event) => {
 }
 
 .scuba-pagination__select:hover {
-  background: #E5E7EB;
+  background: var(--semantic-color-neutral-300);
 }
 
 .scuba-pagination__select:focus {
-  outline: 2px solid #3B82F6;
+  outline: 2px solid var(--context-color-border-focus);
   outline-offset: 2px;
 }
 
 .scuba-pagination__info {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
   white-space: nowrap;
 }
 
@@ -260,7 +260,7 @@ const handlePerPageChange = (event) => {
   background: transparent;
   border: none;
   border-radius: 50%;
-  color: #1F2937;
+  color: var(--context-color-text-primary);
   font-family: var(--type-font-family-body);
   font-size: 14px;
   font-weight: 500;
@@ -274,26 +274,26 @@ const handlePerPageChange = (event) => {
 }
 
 .scuba-pagination__button:hover:not(:disabled):not(.scuba-pagination__button--active) {
-  background: #F3F4F6;
+  background: var(--context-color-surface-action);
 }
 
 .scuba-pagination__button:focus-visible {
-  outline: 2px solid #3B82F6;
+  outline: 2px solid var(--context-color-border-focus);
   outline-offset: 2px;
 }
 
 .scuba-pagination__button:disabled {
-  color: #D1D5DB;
+  color: var(--semantic-color-neutral-400);
   cursor: not-allowed;
 }
 
 .scuba-pagination__button--active {
-  background: #1F2937;
-  color: #FFFFFF;
+  background: var(--semantic-color-neutral-800);
+  color: var(--primitives-color-white);
 }
 
 .scuba-pagination__button--active:hover {
-  background: #111827;
+  background: var(--semantic-color-neutral-900);
 }
 
 .scuba-pagination__ellipsis {
@@ -302,7 +302,7 @@ const handlePerPageChange = (event) => {
   justify-content: center;
   min-width: 40px;
   height: 40px;
-  color: #6B7280;
+  color: var(--context-color-text-secondary);
   font-size: 14px;
   user-select: none;
 }

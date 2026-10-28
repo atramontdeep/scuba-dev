@@ -131,6 +131,13 @@ const props = defineProps({
     type: String,
     default: 'Confirmar'
   },
+  // Fundo do drawer (28/10/2026): 'primary', branco; 'page', no fundo da página, com cabeçalho e rodapé
+  // transparentes, para conteúdo em Panels, como na jornada de carbono.
+  surface: {
+    type: String,
+    default: 'primary',
+    validator: (value) => ['primary', 'page'].includes(value)
+  },
   buttonSize: {
     type: String,
     default: 'md',
@@ -148,7 +155,8 @@ const drawerClasses = computed(() => {
   return [
     'scuba-drawer',
     `scuba-drawer--${props.placement}`,
-    `scuba-drawer--${props.size}`
+    `scuba-drawer--${props.size}`,
+    `scuba-drawer--surface-${props.surface}`
   ];
 });
 
@@ -208,7 +216,7 @@ onUnmounted(() => {
   position: fixed;
   inset: 0;
   z-index: 1000;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--context-color-surface-overlay);
   backdrop-filter: blur(2px);
 }
 
@@ -304,7 +312,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-py-6) var(--spacing-px-8);
-  border-bottom: var(--border-width-border-sm) solid var(--context-color-border-secondary);
   flex-shrink: 0;
 }
 
@@ -338,7 +345,7 @@ onUnmounted(() => {
 
 .scuba-drawer__close:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #BFDBFE;
+  box-shadow: 0 0 0 2px var(--context-color-border-focus);
 }
 
 .scuba-drawer__body {
@@ -364,6 +371,17 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  /* Sem o botão terciário, os outros continuam à direita. */
+  margin-left: auto;
+}
+
+/* No fundo da página: cabeçalho e rodapé sem borda, no mesmo fundo. */
+.scuba-drawer--surface-page {
+  background: var(--context-color-surface-page);
+}
+
+.scuba-drawer--surface-page .scuba-drawer__footer {
+  border-top: none;
 }
 
 /* Backdrop transitions */

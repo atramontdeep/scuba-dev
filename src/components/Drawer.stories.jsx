@@ -3,6 +3,7 @@ import Drawer from './Drawer/Drawer.vue';
 import Button from './Button/Button.vue';
 import Input from './Input/Input.vue';
 import Select from './Select/Select.vue';
+import Panel from './Panel/Panel.vue';
 
 export default {
   title: 'Scuba/Drawer',
@@ -54,6 +55,11 @@ export default {
     primaryButtonLabel: {
       control: 'text',
       description: 'Texto do botão primário'
+    },
+    surface: {
+      control: 'select',
+      options: ['primary', 'page'],
+      description: "Fundo: 'primary' (branco) ou 'page' (fundo da página, cabeçalho e rodapé transparentes, para Panels)"
     },
     buttonSize: {
       control: 'select',
@@ -455,6 +461,29 @@ export const WithActionButtons = () => ({
             </div>
           </div>
         </div>
+      </Drawer>
+    </div>
+  `,
+});
+
+// No fundo da página, com o conteúdo em Panels.
+export const SurfacePage = () => ({
+  components: { Drawer, Button, Panel },
+  setup() {
+    const isOpen = ref(false);
+    return { isOpen };
+  },
+  template: `
+    <div style="padding: 40px; font-family: Poppins, sans-serif;">
+      <Button @click="isOpen = true">Abrir drawer</Button>
+      <Drawer v-model="isOpen" title="Envio de dados" size="lg" surface="page" show-secondary-button show-primary-button
+        primary-button-label="Concluir envio">
+        <Panel title="Arquivos" subtitle="Planilhas e notas fiscais do período." style="margin-bottom: 24px;">
+          <p style="margin: 0; font-size: 14px;">Conteúdo do bloco.</p>
+        </Panel>
+        <Panel title="Observações">
+          <p style="margin: 0; font-size: 14px;">Outro bloco.</p>
+        </Panel>
       </Drawer>
     </div>
   `,

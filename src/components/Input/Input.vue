@@ -532,7 +532,7 @@ onUnmounted(() => {
   align-items: center;
   gap: var(--spacing-2xs);
   padding: 0 var(--spacing-xs);
-  background: var(--context-color-surface-action);
+  background: var(--context-color-surface-field);
   border: var(--border-width-border-md) solid transparent;
   border-radius: var(--border-radius-rounded);
   transition: all var(--transition-base);

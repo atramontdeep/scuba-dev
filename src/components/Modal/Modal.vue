@@ -250,7 +250,7 @@ defineExpose({
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--context-color-surface-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,8 +262,9 @@ defineExpose({
 .scuba-modal {
   position: relative;
   background: var(--context-color-surface-primary);
-  border-radius: var(--border-radius-rounded-lg);
-  box-shadow: var(--shadow-2xl);
+  /* Cantos, sombra e véu da jornada de carbono (28/10/2026). */
+  border-radius: var(--border-radius-rounded-xl);
+  box-shadow: var(--shadow-modal);
   display: flex;
   flex-direction: column;
   max-height: calc(100vh - var(--spacing-md) * 2);
@@ -300,16 +301,16 @@ defineExpose({
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-bottom: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-3xs) var(--spacing-lg);
   flex-shrink: 0;
 }
 
 .scuba-modal__title {
   margin: 0;
-  font-size: var(--type-font-size-xl);
-  font-weight: var(--type-font-weight-semibold);
-  color: var(--context-color-text-primary);
+  font-size: var(--type-font-size-2xl);
+  font-weight: var(--type-font-weight-bold);
+  letter-spacing: -0.01em;
+  color: var(--primitives-color-gray-900);
   line-height: var(--type-line-height-tight);
 }
 
@@ -342,7 +343,7 @@ defineExpose({
 
 /* Body */
 .scuba-modal__body {
-  padding: var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-lg) var(--spacing-md);
   overflow-y: auto;
   flex: 1;
   color: var(--context-color-text-primary);
@@ -355,8 +356,7 @@ defineExpose({
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-xs);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-top: var(--border-width-border-sm) solid var(--context-color-border-secondary);
+  padding: var(--spacing-3xs) var(--spacing-lg) var(--spacing-md);
   flex-shrink: 0;
 }
 

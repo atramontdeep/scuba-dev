@@ -629,7 +629,7 @@ onUnmounted(() => {
   align-items: center;
   flex-wrap: wrap;
   gap: var(--spacing-2xs);
-  background: var(--context-color-surface-action);
+  background: var(--context-color-surface-field);
   border: var(--border-width-border-md) solid transparent;
   border-radius: var(--border-radius-rounded);
   transition: all var(--transition-base);
