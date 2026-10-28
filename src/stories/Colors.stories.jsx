@@ -33,7 +33,7 @@ const ColorCard = ({ name, value, cssVar }) => (
       width: '100%',
       height: '100px',
       background: value,
-      border: value === '#ffffff' || value === '#fafafa' || value === '#f6f6f6' ? '1px solid #e5e7eb' : 'none'
+      border: value === '#ffffff' || value === '#fafbfd' || value === '#f6f8fb' ? '1px solid #e5e7eb' : 'none'
     }} />
 
     <div style={{ padding: '16px' }}>
