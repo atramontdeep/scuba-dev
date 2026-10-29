@@ -170,7 +170,7 @@ onMounted(() => {
   position: absolute;
   top: 0;
   left: 0;
-  background: var(--semantic-color-neutral-700);
+  background: var(--semantic-color-neutral-800);
   border-radius: 64px;
   pointer-events: none;
   z-index: 0;

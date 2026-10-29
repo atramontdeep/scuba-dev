@@ -1,5 +1,7 @@
 import Accordion from './Accordion/Accordion.vue';
 import AccordionItem from './Accordion/AccordionItem.vue';
+import Button from './Button/Button.vue';
+import Badge from './Badge/Badge.vue';
 
 export default {
   title: 'Scuba/Accordion',
@@ -231,6 +233,41 @@ export const CardVariant = () => ({
           </AccordionItem>
           <AccordionItem id="q2" title="Informações adicionais">
             Metodologia de cálculo e premissas usadas na coleta.
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  `,
+});
+
+// Variante inset (29/10/2026, das respostas anteriores): bandeja no fundo da página dentro de um cartão branco; a linha
+// aberta vira um cartão; etiquetas no slot chip.
+export const InsetVariant = () => ({
+  components: { Accordion, AccordionItem, Badge, Button },
+  template: `
+    <div style="padding: 40px; background: var(--context-color-surface-page); font-family: Poppins, sans-serif;">
+      <div style="max-width: 640px; padding: 40px; border-radius: 16px; background: white; box-shadow: var(--shadow-card);">
+        <Accordion variant="inset" :default-open="0">
+          <AccordionItem :id="0" title="Coleta 2024">
+            <template #chip><Badge variant="success" size="sm" rounded label="Mesmo indicador" /></template>
+            <div style="display: flex; gap: 24px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <p style="margin: 0;">Em 2024, não houve óbitos resultantes de acidentes de trabalho entre os empregados.</p>
+                <div style="display: flex; gap: 4px; margin-top: 12px;">
+                  <Badge variant="page" size="sm" rounded icon-left="ph-calendar-blank" label="14/03/2025" />
+                  <Badge variant="page" size="sm" rounded icon-left="ph-user" label="Paula Andrade" />
+                </div>
+              </div>
+              <Button variant="outline" size="sm" label="Usar resposta" />
+            </div>
+          </AccordionItem>
+          <AccordionItem :id="1" title="Coleta 2023">
+            <template #chip><Badge variant="success" size="sm" rounded label="Mesmo indicador" /></template>
+            Em 2023, houve 1 óbito resultante de acidente de trabalho.
+          </AccordionItem>
+          <AccordionItem :id="2" title="GRI 403-9.b.i Óbitos de trabalhadores que não são empregados">
+            <template #chip><Badge variant="warning" size="sm" rounded label="Indicador similar" /></template>
+            Nenhum óbito de terceiros em 2024.
           </AccordionItem>
         </Accordion>
       </div>
