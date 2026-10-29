@@ -9,11 +9,13 @@ export default {
   component: Note,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['card', 'inset'] },
+    variant: { control: 'select', options: ['card', 'inset', 'message'] },
     byline: { control: 'select', options: ['top', 'bottom'] },
     author: { control: 'text' },
     date: { control: 'text' },
-    title: { control: 'text' }
+    title: { control: 'text' },
+    role: { control: 'text' },
+    recipient: { control: 'text' }
   },
   args: {
     variant: 'card',
@@ -84,6 +86,29 @@ export const Bylines = () => ({
       </Note>
       <Note title="Sem autor">
         Enquanto alguém escreve, por exemplo.
+      </Note>
+    </div>
+  `
+});
+
+// Recado de alguém para outra pessoa: o avatar fora, o balão ao lado, com o cargo e para quem é.
+export const Message = () => ({
+  components: { Note },
+  template: `
+    <div style="${page} display: flex; flex-direction: column; gap: 24px; max-width: 880px;">
+      <Note
+        variant="message"
+        title="Orientação da Empresa D"
+        author="Ana Ribeiro"
+        role="Gerente de SSMA"
+        date="02/10/2026"
+        recipient="quem responde esta pergunta"
+      >
+        Aqui na Empresa D, o SESMT de cada planta guarda as CATs. Peça a planilha consolidada à Marina Costa, do SESMT de Betim.
+        <template #actions>${edit}</template>
+      </Note>
+      <Note variant="message" author="Carlos Mendes" role="Validação" date="28/09/2026" recipient="Paula Andrade">
+        Faltou a taxa. Informe também a base de horas usada.
       </Note>
     </div>
   `
