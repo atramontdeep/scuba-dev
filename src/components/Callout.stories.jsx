@@ -38,8 +38,8 @@ export const Tones = () => ({
   components: { Callout },
   template: `
     <div style="${page} display: flex; flex-direction: column; gap: 24px;">
-      <Callout tone="neutral" icon="ph-buildings" title="Orientação da Empresa D" title-tag="h3">
-        <p>Aqui na Empresa D, o SESMT de cada planta guarda as CATs. Peça a planilha consolidada à Marina Costa.</p>
+      <Callout tone="neutral" icon="ph-info" title="Aviso" title-tag="h3">
+        <p>Tom neutro, para avisos e orientações gerais.</p>
       </Callout>
       <Callout tone="info" icon="ph-info" title="Situação"><p>A DEEP está conferindo os dados e o cálculo.</p></Callout>
       <Callout tone="success" icon="ph-seal-check" title="Situação"><p>Categoria validada pela metodologia da DEEP.</p></Callout>
