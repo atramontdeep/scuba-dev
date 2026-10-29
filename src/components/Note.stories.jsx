@@ -9,7 +9,7 @@ export default {
   component: Note,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['card', 'inset', 'message'] },
+    variant: { control: 'select', options: ['card', 'inset', 'floor'] },
     byline: { control: 'select', options: ['top', 'bottom'] },
     author: { control: 'text' },
     date: { control: 'text' },
@@ -91,25 +91,18 @@ export const Bylines = () => ({
   `
 });
 
-// Recado de alguém para outra pessoa: o avatar fora, o balão ao lado, com o cargo e para quem é.
-export const Message = () => ({
-  components: { Note },
+// No chão da página, sem borda nem sombra: uma anotação, como a orientação da empresa, distinta dos cartões.
+export const Floor = () => ({
+  components: { Note, Panel, Overline },
   template: `
     <div style="${page} display: flex; flex-direction: column; gap: 24px; max-width: 880px;">
-      <Note
-        variant="message"
-        title="Orientação da Empresa D"
-        author="Ana Ribeiro"
-        role="Gerente de SSMA"
-        date="02/10/2026"
-        recipient="quem responde esta pergunta"
-      >
+      <Note variant="floor" title="Orientação da Empresa D" author="Ana Ribeiro" role="Gerente de SSMA" date="02/10/2026">
         Aqui na Empresa D, o SESMT de cada planta guarda as CATs. Peça a planilha consolidada à Marina Costa, do SESMT de Betim.
         <template #actions>${edit}</template>
       </Note>
-      <Note variant="message" author="Carlos Mendes" role="Validação" date="28/09/2026" recipient="Paula Andrade">
-        Faltou a taxa. Informe também a base de horas usada.
-      </Note>
+      <Panel padding="lg">
+        <Overline as="h2" label="Sua resposta" />
+      </Panel>
     </div>
   `
 });

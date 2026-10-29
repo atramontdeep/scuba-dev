@@ -1,35 +1,28 @@
 <template>
-  <component
-    :is="as"
-    :class="['scuba-note', `scuba-note--${variant}`, `scuba-note--byline-${place}`, { 'scuba-note--face': face }]"
-  >
-    <Avatar v-if="face" class="scuba-note__face" :src="avatar" :initials="initialsFor" size="sm" />
-
-    <div class="scuba-note__box">
-      <div v-if="hasTitle || (!author && $slots.actions)" class="scuba-note__head">
-        <Overline v-if="hasTitle" :as="titleTag" class="scuba-note__title">
-          <slot name="title">{{ title }}</slot>
-        </Overline>
-        <div v-if="$slots.actions" class="scuba-note__actions"><slot name="actions" /></div>
-      </div>
-
-      <div v-if="author" class="scuba-note__byline">
-        <Avatar v-if="!face" :src="avatar" :initials="initialsFor" :size="bigAvatar ? 'sm' : 'xs'" />
-        <span class="scuba-note__author">{{ author }}</span>
-        <span v-if="role" class="scuba-note__role">{{ role }}</span>
-        <span v-if="date" class="scuba-note__date">{{ date }}</span>
-        <div v-if="!hasTitle && $slots.actions" class="scuba-note__actions"><slot name="actions" /></div>
-      </div>
-
-      <p v-if="recipient" class="scuba-note__to">
-        <i class="ph ph-arrow-bend-down-right" aria-hidden="true"></i>
-        Para {{ recipient }}
-      </p>
-
-      <div class="scuba-note__text"><slot /></div>
-
-      <div v-if="$slots.meta" class="scuba-note__meta"><slot name="meta" /></div>
+  <component :is="as" :class="['scuba-note', `scuba-note--${variant}`, `scuba-note--byline-${byline}`]">
+    <div v-if="hasTitle || (!author && $slots.actions)" class="scuba-note__head">
+      <Overline v-if="hasTitle" :as="titleTag" class="scuba-note__title">
+        <slot name="title">{{ title }}</slot>
+      </Overline>
+      <div v-if="$slots.actions" class="scuba-note__actions"><slot name="actions" /></div>
     </div>
+
+    <div v-if="author" class="scuba-note__byline">
+      <Avatar :src="avatar" :initials="initialsFor" :size="bigAvatar ? 'sm' : 'xs'" />
+      <span class="scuba-note__author">{{ author }}</span>
+      <span v-if="role" class="scuba-note__role">{{ role }}</span>
+      <span v-if="date" class="scuba-note__date">{{ date }}</span>
+      <div v-if="!hasTitle && $slots.actions" class="scuba-note__actions"><slot name="actions" /></div>
+    </div>
+
+    <p v-if="recipient" class="scuba-note__to">
+      <i class="ph ph-arrow-bend-down-right" aria-hidden="true"></i>
+      Para {{ recipient }}
+    </p>
+
+    <div class="scuba-note__text"><slot /></div>
+
+    <div v-if="$slots.meta" class="scuba-note__meta"><slot name="meta" /></div>
   </component>
 </template>
 
@@ -37,10 +30,10 @@
 // Nota de uma pessoa (29/10/2026, da resposta do indicador): o que alguém escreveu, com quem escreveu e quando. Serve
 // para orientações da empresa, validações, comentários de ajuste e observações. Variantes:
 // 'card', um cartão branco solto na página; 'inset', um bloco no fundo da página, para listas dentro de um Panel;
-// 'message', um recado de alguém para outra pessoa: o avatar fora, à esquerda, e a nota num balão branco com o canto de
-// cima mais fechado, como numa conversa, com o cargo de quem escreveu e para quem é (recipient).
-// O título opcional é uma legenda em caixa alta. O autor fica embaixo do texto ('bottom') ou em cima ('top', como num
-// comentário, com o avatar maior quando não há título); no 'message', sempre em cima. Slots: default (o texto ou um
+// 'floor', uma anotação no chão da página, num cinza-azulado um tom mais escuro que o fundo, sem borda nem sombra, para
+// se distinguir dos cartões (como a orientação da empresa). O cargo de quem escreveu (role) e para quem é (recipient)
+// são opcionais. O título opcional é uma legenda em caixa alta. O autor fica embaixo do texto ('bottom') ou em cima
+// ('top', como num comentário, com o avatar maior quando não há título). Slots: default (o texto ou um
 // formulário de edição), actions (à direita, na primeira linha: editar, uma situação), meta (embaixo do texto: anexos,
 // etiquetas).
 import { computed, useSlots } from 'vue';
@@ -89,7 +82,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'card',
-    validator: (value) => ['card', 'inset', 'message'].includes(value)
+    validator: (value) => ['card', 'inset', 'floor'].includes(value)
   },
   byline: {
     type: String,
@@ -104,11 +97,8 @@ const props = defineProps({
 
 const slots = useSlots();
 const hasTitle = computed(() => Boolean(props.title || slots.title));
-// No recado, o autor sempre em cima, com o avatar fora do balão.
-const place = computed(() => (props.variant === 'message' ? 'top' : props.byline));
-const face = computed(() => props.variant === 'message' && Boolean(props.author));
 // Sem título, com o autor em cima: o autor abre a nota, com o avatar maior.
-const bigAvatar = computed(() => place.value === 'top' && !hasTitle.value);
+const bigAvatar = computed(() => props.byline === 'top' && !hasTitle.value);
 
 const initialsFor = computed(() => {
   if (props.initials) return props.initials;
@@ -120,24 +110,14 @@ const initialsFor = computed(() => {
 
 <style scoped>
 .scuba-note {
-  margin: 0;
-  font-family: var(--type-font-family-body);
-  color: var(--context-color-text-primary);
-  box-sizing: border-box;
-}
-
-/* Em 'card' e 'inset', a caixa não existe para o layout: as partes ficam direto na nota. */
-.scuba-note--card,
-.scuba-note--inset {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: var(--spacing-3xs);
-}
-
-.scuba-note--card .scuba-note__box,
-.scuba-note--inset .scuba-note__box {
-  display: contents;
+  margin: 0;
+  font-family: var(--type-font-family-body);
+  color: var(--context-color-text-primary);
+  box-sizing: border-box;
 }
 
 .scuba-note--card {
@@ -154,28 +134,13 @@ const initialsFor = computed(() => {
   background: var(--context-color-surface-page);
 }
 
-/* Recado: o avatar fora e o balão ao lado, com o canto de cima, junto do avatar, mais fechado. */
-.scuba-note--message {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: start;
-  gap: var(--spacing-2xs);
-}
-
-.scuba-note--message.scuba-note--face {
-  grid-template-columns: auto minmax(0, 1fr);
-}
-
-.scuba-note--message .scuba-note__box {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3xs);
-  min-width: 0;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: var(--border-width-border-sm) solid var(--context-color-border-subtle);
-  border-radius: 6px var(--border-radius-rounded-lg) var(--border-radius-rounded-lg) var(--border-radius-rounded-lg);
-  background: var(--context-color-surface-primary);
-  box-shadow: var(--shadow-card);
+/* No chão: sem borda nem sombra, um tom abaixo do fundo da página; o mesmo respiro do cartão, para o texto alinhar. */
+.scuba-note--floor {
+  padding: var(--spacing-md) var(--spacing-lg);
+  /* Borda transparente da mesma largura da do cartão, para o texto alinhar com o dos cartões ao lado. */
+  border: var(--border-width-border-sm) solid transparent;
+  border-radius: var(--border-radius-rounded-lg);
+  background: var(--context-color-surface-tertiary);
 }
 
 /* A ordem na tela: título, autor, para quem, texto, anexos; com o autor embaixo, ele vai para o fim. */
